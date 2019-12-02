@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
+    <generated>
+      <config projectName="libcrypto-mktdata" targetName="libcrypto-mktdata" />
+      <config projectName="libcrypto-mktdata" targetName="print_client_tls" />
+      <config projectName="libcrypto-mktdata" targetName="libcrypto-mktdata_test" />
+    </generated>
+  </component>
+  <component name="CMakeSettings" AUTO_RELOAD="true">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="4dbdfda1-26d5-4728-bcaa-6471e7e13f2f" name="Default Changelist" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="$PROJECT_DIR$/.idea" />
+      </set>
+    </option>
+  </component>
+  <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
+  <component name="OCResolveContextSettings">
+    <option name="configuration" value="0-libcrypto-mktdata" />
+  </component>
+  <component name="ProjectId" id="1OWi36IjTAYtRsGXxpZTKMh6WQP" />
+  <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="cf.advertisement.text.has.clang-format" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../serenity/serenity-fh" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="settings.editor.selected.configurable" value="preferences.editor" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/test" />
+      <recent name="$PROJECT_DIR$/src" />
+      <recent name="$PROJECT_DIR$/include/cloudwall/crypto-mktdata" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/cmake" />
+      <recent name="$PROJECT_DIR$/include/cloudwall/crypto-mktdata" />
+      <recent name="$PROJECT_DIR$/include/cryptomd" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="CMake Application.print_client_tls">
+    <configuration name="libcrypto-mktdata" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="libcrypto-mktdata" TARGET_NAME="libcrypto-mktdata" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="libcrypto-mktdata_test" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="libcrypto-mktdata" TARGET_NAME="libcrypto-mktdata_test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="libcrypto-mktdata" RUN_TARGET_NAME="libcrypto-mktdata_test">
+      <envs>
+        <env name="LD_LIBRARY_PATH" value="/usr/local/lib64" />
+      </envs>
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="print_client_tls" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="libcrypto-mktdata" TARGET_NAME="print_client_tls" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="libcrypto-mktdata" RUN_TARGET_NAME="print_client_tls">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="CMake Application.libcrypto-mktdata" />
+      <item itemvalue="CMake Application.libcrypto-mktdata_test" />
+      <item itemvalue="CMake Application.print_client_tls" />
+    </list>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4dbdfda1-26d5-4728-bcaa-6471e7e13f2f" name="Default Changelist" comment="" />
+      <created>1563750610240</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1563750610240</updated>
+      <workItem from="1563750611352" duration="57000" />
+      <workItem from="1563750670585" duration="3987000" />
+      <workItem from="1563841171712" duration="979000" />
+      <workItem from="1563850335935" duration="7510000" />
+      <workItem from="1564099505940" duration="26000" />
+      <workItem from="1564099554664" duration="4541000" />
+      <workItem from="1564179395561" duration="3804000" />
+      <workItem from="1564186366462" duration="720000" />
+      <workItem from="1564187095827" duration="1781000" />
+      <workItem from="1564231886429" duration="98000" />
+      <workItem from="1564231986685" duration="23333000" />
+      <workItem from="1566338527022" duration="4772000" />
+      <workItem from="1566345403499" duration="2631000" />
+      <workItem from="1566600039402" duration="33000" />
+      <workItem from="1566600084920" duration="6287000" />
+      <workItem from="1566943140342" duration="2410000" />
+      <workItem from="1566951076776" duration="3596000" />
+      <workItem from="1567030792289" duration="6540000" />
+      <workItem from="1567353377394" duration="210000" />
+      <workItem from="1567444777540" duration="9196000" />
+      <workItem from="1567949518962" duration="13000" />
+      <workItem from="1570973282748" duration="21000" />
+      <workItem from="1570973328360" duration="2415000" />
+      <workItem from="1574546179566" duration="23000" />
+      <workItem from="1574546217251" duration="1335000" />
+    </task>
+    <task id="LOCAL-00001" summary="Restructure library to allow for multiple exchanges">
+      <created>1563755332644</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1563755332644</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Switch to RapidJSON; construct subscription programatically">
+      <created>1564103492854</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1564103492854</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Add in spdlog; switch to using callbacks; fix warnings">
+      <created>1564188167797</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1564188167797</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Switch to raw API so consumer can choose parsing strategy">
+      <created>1564232531288</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1564232531288</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Refactor to put more in core; fix warnings; add BitMEX raw feed handler">
+      <created>1564236651118</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1564236651118</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Add Bitstamp raw feed handler">
+      <created>1564244118073</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1564244118073</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Refactor to move Channel and Subscription into core API">
+      <created>1564256606097</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1564256606097</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Refactor to move RawFeedClient into core API as base class">
+      <created>1564258063809</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1564258063809</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Add Kraken support; clean up includes and copyright headers">
+      <created>1564259990771</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1564259990771</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Add Bitfinex support; clean up inconsistent variable names">
+      <created>1564264908376</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1564264908376</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Drop Poloniex for now">
+      <created>1564265481467</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1564265481467</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Fix documentation error">
+      <created>1564265502523</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1564265502523</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Switch to gcc 9.2.x for compiler">
+      <created>1566659286637</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1566659286638</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Initial dependency on websocketpp for testing">
+      <created>1567036505847</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1567036505847</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Small code clean up; add simple Websocket client wrapper">
+      <created>1567455956128</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1567455956128</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="1">
+          <value>
+            <State>
+              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="roots">
+                    <value>
+                      <list>
+                        <option value="$PROJECT_DIR$" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+        <entry key="2">
+          <value>
+            <State>
+              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="roots">
+                    <value>
+                      <list>
+                        <option value="$PROJECT_DIR$" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="OPEN_TABS">
+      <set>
+        <option value="1" />
+        <option value="2" />
+      </set>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Restructure library to allow for multiple exchanges" />
+    <MESSAGE value="Switch to RapidJSON; construct subscription programatically" />
+    <MESSAGE value="Add in spdlog; switch to using callbacks; fix warnings" />
+    <MESSAGE value="Switch to raw API so consumer can choose parsing strategy" />
+    <MESSAGE value="Refactor to put more in core; add BitMEX raw feed handler" />
+    <MESSAGE value="Refactor to put more in core; fix warnings; add BitMEX raw feed handler" />
+    <MESSAGE value="Add Bitstamp raw feed handler" />
+    <MESSAGE value="Refactor to move Channel and Subscription into core API" />
+    <MESSAGE value="Refactor to move RawFeedClient into core API as base class" />
+    <MESSAGE value="Add Kraken support; clean up includes and copyright headers" />
+    <MESSAGE value="Add Bitfinex support; clean up inconsistent variable names" />
+    <MESSAGE value="Drop Poloniex for now" />
+    <MESSAGE value="Fix documentation error" />
+    <MESSAGE value="Switch to gcc 9.2.x for compiler" />
+    <MESSAGE value="Initial dependency on websocketpp for testing" />
+    <MESSAGE value="Small code clean up; add simple Websocket client wrapper" />
+    <option name="LAST_COMMIT_MESSAGE" value="Small code clean up; add simple Websocket client wrapper" />
+  </component>
+</project>

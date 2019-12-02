@@ -1,0 +1,9 @@
+/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/CMakeFiles/install/strip.dir
+/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/CMakeFiles/install/local.dir
+/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/CMakeFiles/install.dir
+/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/CMakeFiles/libcrypto-mktdata_test.dir
+/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/CMakeFiles/print_client_tls.dir
+/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/CMakeFiles/libcrypto-mktdata.dir
+/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/CMakeFiles/list_install_components.dir

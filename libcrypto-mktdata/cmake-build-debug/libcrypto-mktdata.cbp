@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="libcrypto-mktdata"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\cmake-build-debug\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install/strip">
+				<Option working_dir="/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 install/strip"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install/local">
+				<Option working_dir="/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 install/local"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install">
+				<Option working_dir="/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 install"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="libcrypto-mktdata_test">
+				<Option output="/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/bin/libcrypto-mktdata_test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/kdowney/.conan/data/date/2.4.1/bincrafters/stable/package/2784a32ae7a359b63d78b388c991f76ec81a8565/include"/>
+					<Add directory="/home/kdowney/.conan/data/gtest/1.8.1/bincrafters/stable/package/ec1caa886f1802381c5ecbb31ff59dda4dcdd8ce/include"/>
+					<Add directory="/home/kdowney/.conan/data/rapidjson/1.1.0/bincrafters/stable/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/include"/>
+					<Add directory="/home/kdowney/.conan/data/spdlog/1.3.1/bincrafters/stable/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/include"/>
+					<Add directory="/home/kdowney/.conan/data/websocketpp/0.8.1/bincrafters/stable/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/include"/>
+					<Add directory="/home/kdowney/.conan/data/IXWebSocket/5.0.6/LunarWatcher/stable/package/dc965101cec58e7d3e61df8bcda85707536b2ab4/include"/>
+					<Add directory="/home/kdowney/.conan/data/fmt/5.3.0/bincrafters/stable/package/038baac88f4c7bfa972ce5adac1616bed8fe2ef4/include"/>
+					<Add directory="/home/kdowney/.conan/data/OpenSSL/1.1.1c/conan/stable/package/acc1bd9feeca12810ba1313c4fd8867e201d928f/include"/>
+					<Add directory="/home/kdowney/.conan/data/boost/1.69.0/conan/stable/package/d5cc425d91019d84ae3a89ec6041f7cb35673f1c/include"/>
+					<Add directory="/home/kdowney/.conan/data/zlib/1.2.11/conan/stable/package/23b828d52c0630e6b0b96d2945419feb7843c4f8/include"/>
+					<Add directory="/home/kdowney/.conan/data/bzip2/1.0.6/conan/stable/package/1d984b241c5c01f748cafe0b37dc9567ed236fef/include"/>
+					<Add directory="/home/kdowney/dev/shadows/libcrypto-mktdata/include}"/>
+					<Add directory="/home/kdowney/dev/shadows/libcrypto-mktdata/./include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0/backward"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 libcrypto-mktdata_test"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="libcrypto-mktdata_test/fast">
+				<Option output="/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/bin/libcrypto-mktdata_test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/kdowney/.conan/data/date/2.4.1/bincrafters/stable/package/2784a32ae7a359b63d78b388c991f76ec81a8565/include"/>
+					<Add directory="/home/kdowney/.conan/data/gtest/1.8.1/bincrafters/stable/package/ec1caa886f1802381c5ecbb31ff59dda4dcdd8ce/include"/>
+					<Add directory="/home/kdowney/.conan/data/rapidjson/1.1.0/bincrafters/stable/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/include"/>
+					<Add directory="/home/kdowney/.conan/data/spdlog/1.3.1/bincrafters/stable/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/include"/>
+					<Add directory="/home/kdowney/.conan/data/websocketpp/0.8.1/bincrafters/stable/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/include"/>
+					<Add directory="/home/kdowney/.conan/data/IXWebSocket/5.0.6/LunarWatcher/stable/package/dc965101cec58e7d3e61df8bcda85707536b2ab4/include"/>
+					<Add directory="/home/kdowney/.conan/data/fmt/5.3.0/bincrafters/stable/package/038baac88f4c7bfa972ce5adac1616bed8fe2ef4/include"/>
+					<Add directory="/home/kdowney/.conan/data/OpenSSL/1.1.1c/conan/stable/package/acc1bd9feeca12810ba1313c4fd8867e201d928f/include"/>
+					<Add directory="/home/kdowney/.conan/data/boost/1.69.0/conan/stable/package/d5cc425d91019d84ae3a89ec6041f7cb35673f1c/include"/>
+					<Add directory="/home/kdowney/.conan/data/zlib/1.2.11/conan/stable/package/23b828d52c0630e6b0b96d2945419feb7843c4f8/include"/>
+					<Add directory="/home/kdowney/.conan/data/bzip2/1.0.6/conan/stable/package/1d984b241c5c01f748cafe0b37dc9567ed236fef/include"/>
+					<Add directory="/home/kdowney/dev/shadows/libcrypto-mktdata/include}"/>
+					<Add directory="/home/kdowney/dev/shadows/libcrypto-mktdata/./include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0/backward"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 libcrypto-mktdata_test/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="print_client_tls">
+				<Option output="/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/bin/print_client_tls" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/kdowney/.conan/data/date/2.4.1/bincrafters/stable/package/2784a32ae7a359b63d78b388c991f76ec81a8565/include"/>
+					<Add directory="/home/kdowney/.conan/data/gtest/1.8.1/bincrafters/stable/package/ec1caa886f1802381c5ecbb31ff59dda4dcdd8ce/include"/>
+					<Add directory="/home/kdowney/.conan/data/rapidjson/1.1.0/bincrafters/stable/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/include"/>
+					<Add directory="/home/kdowney/.conan/data/spdlog/1.3.1/bincrafters/stable/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/include"/>
+					<Add directory="/home/kdowney/.conan/data/websocketpp/0.8.1/bincrafters/stable/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/include"/>
+					<Add directory="/home/kdowney/.conan/data/IXWebSocket/5.0.6/LunarWatcher/stable/package/dc965101cec58e7d3e61df8bcda85707536b2ab4/include"/>
+					<Add directory="/home/kdowney/.conan/data/fmt/5.3.0/bincrafters/stable/package/038baac88f4c7bfa972ce5adac1616bed8fe2ef4/include"/>
+					<Add directory="/home/kdowney/.conan/data/OpenSSL/1.1.1c/conan/stable/package/acc1bd9feeca12810ba1313c4fd8867e201d928f/include"/>
+					<Add directory="/home/kdowney/.conan/data/boost/1.69.0/conan/stable/package/d5cc425d91019d84ae3a89ec6041f7cb35673f1c/include"/>
+					<Add directory="/home/kdowney/.conan/data/zlib/1.2.11/conan/stable/package/23b828d52c0630e6b0b96d2945419feb7843c4f8/include"/>
+					<Add directory="/home/kdowney/.conan/data/bzip2/1.0.6/conan/stable/package/1d984b241c5c01f748cafe0b37dc9567ed236fef/include"/>
+					<Add directory="/home/kdowney/dev/shadows/libcrypto-mktdata/include}"/>
+					<Add directory="/home/kdowney/dev/shadows/libcrypto-mktdata/./include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0/backward"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 print_client_tls"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="print_client_tls/fast">
+				<Option output="/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/bin/print_client_tls" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/kdowney/.conan/data/date/2.4.1/bincrafters/stable/package/2784a32ae7a359b63d78b388c991f76ec81a8565/include"/>
+					<Add directory="/home/kdowney/.conan/data/gtest/1.8.1/bincrafters/stable/package/ec1caa886f1802381c5ecbb31ff59dda4dcdd8ce/include"/>
+					<Add directory="/home/kdowney/.conan/data/rapidjson/1.1.0/bincrafters/stable/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/include"/>
+					<Add directory="/home/kdowney/.conan/data/spdlog/1.3.1/bincrafters/stable/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/include"/>
+					<Add directory="/home/kdowney/.conan/data/websocketpp/0.8.1/bincrafters/stable/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/include"/>
+					<Add directory="/home/kdowney/.conan/data/IXWebSocket/5.0.6/LunarWatcher/stable/package/dc965101cec58e7d3e61df8bcda85707536b2ab4/include"/>
+					<Add directory="/home/kdowney/.conan/data/fmt/5.3.0/bincrafters/stable/package/038baac88f4c7bfa972ce5adac1616bed8fe2ef4/include"/>
+					<Add directory="/home/kdowney/.conan/data/OpenSSL/1.1.1c/conan/stable/package/acc1bd9feeca12810ba1313c4fd8867e201d928f/include"/>
+					<Add directory="/home/kdowney/.conan/data/boost/1.69.0/conan/stable/package/d5cc425d91019d84ae3a89ec6041f7cb35673f1c/include"/>
+					<Add directory="/home/kdowney/.conan/data/zlib/1.2.11/conan/stable/package/23b828d52c0630e6b0b96d2945419feb7843c4f8/include"/>
+					<Add directory="/home/kdowney/.conan/data/bzip2/1.0.6/conan/stable/package/1d984b241c5c01f748cafe0b37dc9567ed236fef/include"/>
+					<Add directory="/home/kdowney/dev/shadows/libcrypto-mktdata/include}"/>
+					<Add directory="/home/kdowney/dev/shadows/libcrypto-mktdata/./include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0/backward"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 print_client_tls/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="libcrypto-mktdata">
+				<Option output="/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/lib/liblibcrypto-mktdata.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/kdowney/.conan/data/date/2.4.1/bincrafters/stable/package/2784a32ae7a359b63d78b388c991f76ec81a8565/include"/>
+					<Add directory="/home/kdowney/.conan/data/gtest/1.8.1/bincrafters/stable/package/ec1caa886f1802381c5ecbb31ff59dda4dcdd8ce/include"/>
+					<Add directory="/home/kdowney/.conan/data/rapidjson/1.1.0/bincrafters/stable/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/include"/>
+					<Add directory="/home/kdowney/.conan/data/spdlog/1.3.1/bincrafters/stable/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/include"/>
+					<Add directory="/home/kdowney/.conan/data/websocketpp/0.8.1/bincrafters/stable/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/include"/>
+					<Add directory="/home/kdowney/.conan/data/IXWebSocket/5.0.6/LunarWatcher/stable/package/dc965101cec58e7d3e61df8bcda85707536b2ab4/include"/>
+					<Add directory="/home/kdowney/.conan/data/fmt/5.3.0/bincrafters/stable/package/038baac88f4c7bfa972ce5adac1616bed8fe2ef4/include"/>
+					<Add directory="/home/kdowney/.conan/data/OpenSSL/1.1.1c/conan/stable/package/acc1bd9feeca12810ba1313c4fd8867e201d928f/include"/>
+					<Add directory="/home/kdowney/.conan/data/boost/1.69.0/conan/stable/package/d5cc425d91019d84ae3a89ec6041f7cb35673f1c/include"/>
+					<Add directory="/home/kdowney/.conan/data/zlib/1.2.11/conan/stable/package/23b828d52c0630e6b0b96d2945419feb7843c4f8/include"/>
+					<Add directory="/home/kdowney/.conan/data/bzip2/1.0.6/conan/stable/package/1d984b241c5c01f748cafe0b37dc9567ed236fef/include"/>
+					<Add directory="/home/kdowney/dev/shadows/libcrypto-mktdata/include}"/>
+					<Add directory="/home/kdowney/dev/shadows/libcrypto-mktdata/./include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0/backward"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 libcrypto-mktdata"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="libcrypto-mktdata/fast">
+				<Option output="/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/lib/liblibcrypto-mktdata.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/kdowney/.conan/data/date/2.4.1/bincrafters/stable/package/2784a32ae7a359b63d78b388c991f76ec81a8565/include"/>
+					<Add directory="/home/kdowney/.conan/data/gtest/1.8.1/bincrafters/stable/package/ec1caa886f1802381c5ecbb31ff59dda4dcdd8ce/include"/>
+					<Add directory="/home/kdowney/.conan/data/rapidjson/1.1.0/bincrafters/stable/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/include"/>
+					<Add directory="/home/kdowney/.conan/data/spdlog/1.3.1/bincrafters/stable/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/include"/>
+					<Add directory="/home/kdowney/.conan/data/websocketpp/0.8.1/bincrafters/stable/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/include"/>
+					<Add directory="/home/kdowney/.conan/data/IXWebSocket/5.0.6/LunarWatcher/stable/package/dc965101cec58e7d3e61df8bcda85707536b2ab4/include"/>
+					<Add directory="/home/kdowney/.conan/data/fmt/5.3.0/bincrafters/stable/package/038baac88f4c7bfa972ce5adac1616bed8fe2ef4/include"/>
+					<Add directory="/home/kdowney/.conan/data/OpenSSL/1.1.1c/conan/stable/package/acc1bd9feeca12810ba1313c4fd8867e201d928f/include"/>
+					<Add directory="/home/kdowney/.conan/data/boost/1.69.0/conan/stable/package/d5cc425d91019d84ae3a89ec6041f7cb35673f1c/include"/>
+					<Add directory="/home/kdowney/.conan/data/zlib/1.2.11/conan/stable/package/23b828d52c0630e6b0b96d2945419feb7843c4f8/include"/>
+					<Add directory="/home/kdowney/.conan/data/bzip2/1.0.6/conan/stable/package/1d984b241c5c01f748cafe0b37dc9567ed236fef/include"/>
+					<Add directory="/home/kdowney/dev/shadows/libcrypto-mktdata/include}"/>
+					<Add directory="/home/kdowney/dev/shadows/libcrypto-mktdata/./include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0/backward"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 libcrypto-mktdata/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="list_install_components">
+				<Option working_dir="/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 list_install_components"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/kdowney/dev/shadows/libcrypto-mktdata/include/cloudwall/crypto-mktdata/binance.h">
+			<Option target="libcrypto-mktdata"/>
+		</Unit>
+		<Unit filename="/home/kdowney/dev/shadows/libcrypto-mktdata/include/cloudwall/crypto-mktdata/bitfinex.h">
+			<Option target="libcrypto-mktdata"/>
+		</Unit>
+		<Unit filename="/home/kdowney/dev/shadows/libcrypto-mktdata/include/cloudwall/crypto-mktdata/bitmex.h">
+			<Option target="libcrypto-mktdata"/>
+		</Unit>
+		<Unit filename="/home/kdowney/dev/shadows/libcrypto-mktdata/include/cloudwall/crypto-mktdata/bitstamp.h">
+			<Option target="libcrypto-mktdata"/>
+		</Unit>
+		<Unit filename="/home/kdowney/dev/shadows/libcrypto-mktdata/include/cloudwall/crypto-mktdata/coinbase.h">
+			<Option target="libcrypto-mktdata"/>
+		</Unit>
+		<Unit filename="/home/kdowney/dev/shadows/libcrypto-mktdata/include/cloudwall/crypto-mktdata/core.h">
+			<Option target="libcrypto-mktdata"/>
+		</Unit>
+		<Unit filename="/home/kdowney/dev/shadows/libcrypto-mktdata/include/cloudwall/crypto-mktdata/kraken.h">
+			<Option target="libcrypto-mktdata"/>
+		</Unit>
+		<Unit filename="/home/kdowney/dev/shadows/libcrypto-mktdata/include/cloudwall/crypto-mktdata/websocket_client.h">
+			<Option target="libcrypto-mktdata"/>
+		</Unit>
+		<Unit filename="/home/kdowney/dev/shadows/libcrypto-mktdata/src/binance.cpp">
+			<Option target="libcrypto-mktdata"/>
+		</Unit>
+		<Unit filename="/home/kdowney/dev/shadows/libcrypto-mktdata/src/bitfinex.cpp">
+			<Option target="libcrypto-mktdata"/>
+		</Unit>
+		<Unit filename="/home/kdowney/dev/shadows/libcrypto-mktdata/src/bitmex.cpp">
+			<Option target="libcrypto-mktdata"/>
+		</Unit>
+		<Unit filename="/home/kdowney/dev/shadows/libcrypto-mktdata/src/bitstamp.cpp">
+			<Option target="libcrypto-mktdata"/>
+		</Unit>
+		<Unit filename="/home/kdowney/dev/shadows/libcrypto-mktdata/src/coinbase.cpp">
+			<Option target="libcrypto-mktdata"/>
+		</Unit>
+		<Unit filename="/home/kdowney/dev/shadows/libcrypto-mktdata/src/core.cpp">
+			<Option target="libcrypto-mktdata"/>
+		</Unit>
+		<Unit filename="/home/kdowney/dev/shadows/libcrypto-mktdata/src/kraken.cpp">
+			<Option target="libcrypto-mktdata"/>
+		</Unit>
+		<Unit filename="/home/kdowney/dev/shadows/libcrypto-mktdata/src/print_client_tls.cpp">
+			<Option target="print_client_tls"/>
+		</Unit>
+		<Unit filename="/home/kdowney/dev/shadows/libcrypto-mktdata/src/websocket_client.cpp">
+			<Option target="libcrypto-mktdata"/>
+		</Unit>
+		<Unit filename="/home/kdowney/dev/shadows/libcrypto-mktdata/test/binance_test.cpp">
+			<Option target="libcrypto-mktdata_test"/>
+		</Unit>
+		<Unit filename="/home/kdowney/dev/shadows/libcrypto-mktdata/test/bitfinex_test.cpp">
+			<Option target="libcrypto-mktdata_test"/>
+		</Unit>
+		<Unit filename="/home/kdowney/dev/shadows/libcrypto-mktdata/test/bitmex_test.cpp">
+			<Option target="libcrypto-mktdata_test"/>
+		</Unit>
+		<Unit filename="/home/kdowney/dev/shadows/libcrypto-mktdata/test/bitstamp_test.cpp">
+			<Option target="libcrypto-mktdata_test"/>
+		</Unit>
+		<Unit filename="/home/kdowney/dev/shadows/libcrypto-mktdata/test/coinbase_test.cpp">
+			<Option target="libcrypto-mktdata_test"/>
+		</Unit>
+		<Unit filename="/home/kdowney/dev/shadows/libcrypto-mktdata/test/core_test.cpp">
+			<Option target="libcrypto-mktdata_test"/>
+		</Unit>
+		<Unit filename="/home/kdowney/dev/shadows/libcrypto-mktdata/test/kraken_test.cpp">
+			<Option target="libcrypto-mktdata_test"/>
+		</Unit>
+		<Unit filename="/home/kdowney/dev/shadows/libcrypto-mktdata/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/kdowney/dev/shadows/libcrypto-mktdata/conan.cmake">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/kdowney/dev/shadows/libcrypto-mktdata/cmake-build-debug/conanbuildinfo.cmake">
+			<Option virtualFolder="CMake Files\cmake-build-debug\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
