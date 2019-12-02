@@ -1,8 +1,0 @@
-/usr/local/lib/liblibcrypto-mktdata.a
-/usr/local/include/cloudwall/crypto-mktdata/core.h
-/usr/local/include/cloudwall/crypto-mktdata/coinbase.h
-/usr/local/include/cloudwall/crypto-mktdata/bitmex.h
-/usr/local/include/cloudwall/crypto-mktdata/bitstamp.h
-/usr/local/include/cloudwall/crypto-mktdata/kraken.h
-/usr/local/include/cloudwall/crypto-mktdata/bitfinex.h
-/usr/local/include/cloudwall/crypto-mktdata/binance.h

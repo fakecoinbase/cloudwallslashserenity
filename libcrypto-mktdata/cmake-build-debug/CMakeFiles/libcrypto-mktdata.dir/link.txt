@@ -1,2 +1,0 @@
-/usr/bin/ar qc lib/liblibcrypto-mktdata.a  CMakeFiles/libcrypto-mktdata.dir/src/core.cpp.o CMakeFiles/libcrypto-mktdata.dir/src/coinbase.cpp.o CMakeFiles/libcrypto-mktdata.dir/src/bitmex.cpp.o CMakeFiles/libcrypto-mktdata.dir/src/bitstamp.cpp.o CMakeFiles/libcrypto-mktdata.dir/src/kraken.cpp.o CMakeFiles/libcrypto-mktdata.dir/src/bitfinex.cpp.o CMakeFiles/libcrypto-mktdata.dir/src/binance.cpp.o CMakeFiles/libcrypto-mktdata.dir/src/websocket_client.cpp.o
-/usr/bin/ranlib lib/liblibcrypto-mktdata.a
