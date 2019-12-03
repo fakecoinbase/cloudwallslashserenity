@@ -109,7 +109,6 @@ TEST(MatchEvent, parse) {
     ASSERT_DOUBLE_EQ(0.01671111, event.get_size());
     ASSERT_DOUBLE_EQ(11730.37, event.get_price());
     ASSERT_EQ("2019-08-08T16:09:40.587000Z", event.get_unparsed_timestamp());
-    ASSERT_EQ(1565280580587000L, event.parse_timstamp()->time_since_epoch().count());
 }
 
 TEST(TickerEvent, parse) {
@@ -139,7 +138,6 @@ TEST(TickerEvent, parse) {
     ASSERT_DOUBLE_EQ(16759.18480858, event.get_volume_24h());
     ASSERT_DOUBLE_EQ(610078.3142738, event.get_volume_30d());
     ASSERT_EQ("2019-08-08T16:09:40.587000Z", *event.get_unparsed_timestamp().value());
-    ASSERT_EQ(1565280580587000L, event.parse_timstamp()->time_since_epoch().count());
 }
 
 TEST(TickerEvent, parse_no_trade) {

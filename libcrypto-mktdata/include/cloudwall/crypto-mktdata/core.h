@@ -22,6 +22,8 @@
 
 #include <boost/algorithm/string.hpp>
 #include <boost/assign.hpp>
+#include <boost/filesystem.hpp>
+#include <boost/filesystem/path.hpp>
 #include <boost/spirit/include/qi.hpp>
 #include <boost/spirit/include/phoenix_core.hpp>
 #include <boost/spirit/include/phoenix_operator.hpp>
@@ -141,7 +143,25 @@ namespace cloudwall::core::marketdata {
     class RawFeedClient {
     public:
         RawFeedClient(ix::WebSocket* websocket, const OnRawFeedMessageCallback& callback)
-            : websocket_(websocket), callback_(callback) { }
+            : websocket_(websocket), callback_(callback) {
+
+            // Optional heart beat, sent every 45 seconds when there is not any traffic
+            // to make sure that load balancers do not kill an idle connection.
+            websocket_->setHeartBeatPeriod(45);
+
+            // reconnection with exponential backoff
+            websocket_->enableAutomaticReconnection();
+
+            // turn on SSL certificate verification
+            ix::SocketTLSOptions socket_ops = ix::SocketTLSOptions();
+            boost::filesystem::path pem_path = boost::filesystem::path("/etc/ssl/certs/ca-certificates.crt");
+            if (boost::filesystem::exists(pem_path)) {
+                socket_ops.caFile = pem_path.string();
+            } else {
+                socket_ops.caFile = "/etc/ssl/cert.pem";
+            }
+            websocket_->setTLSOptions(socket_ops);
+        }
 
         void connect() {
             websocket_->start();

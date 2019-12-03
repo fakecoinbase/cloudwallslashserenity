@@ -26,10 +26,6 @@ KrakenRawFeedClient::KrakenRawFeedClient(const Subscription& subscription,
     std::string url("wss://ws.kraken.com/");
     websocket_->setUrl(url);
 
-    // Optional heart beat, sent every 45 seconds when there is not any traffic
-    // to make sure that load balancers do not kill an idle connection.
-    websocket_->setHeartBeatPeriod(45);
-
     // Setup a callback to be fired when a message or an event (open, close, error) is received
     websocket_->setOnMessageCallback(
             [this, subscription](const ix::WebSocketMessagePtr& msg)
