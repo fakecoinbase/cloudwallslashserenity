@@ -1,6 +1,7 @@
 beakerx
 cufflinks
 dask
+jupyterlab-git
 pandas
 py4j
 quandl

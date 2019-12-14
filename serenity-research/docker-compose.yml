@@ -9,4 +9,3 @@ services:
             - 8888:8888
         volumes:
             - ${BEHEMOTH_HOME:-/mnt/raid/data/behemoth}:/behemoth
-            - ${USER_HOME?USER_HOME is required}:${USER_HOME}
