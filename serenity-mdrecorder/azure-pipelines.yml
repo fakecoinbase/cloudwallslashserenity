@@ -23,6 +23,7 @@ steps:
     script: |
       # Run the unit tests in
       python -m tox
+    workingDirectory: '$(System.DefaultWorkingDirectory)/serenity-mdrecorder'
 - task: PublishTestResults@2
   condition: succeededOrFailed()
   inputs:
@@ -31,11 +32,5 @@ steps:
 - task: PublishCodeCoverageResults@1
   inputs:
     codeCoverageTool: Cobertura
-    summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/coverage.xml'
-    reportDirectory: '$(System.DefaultWorkingDirectory)/**/htmlcov'
-- task: DockerCompose@0
-  inputs:
-    containerregistrytype: 'Container Registry'
-    dockerComposeFile: '**/docker-compose.yml'
-    action: 'Build services'
-  displayName: 'Build with Docker Compose'
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)/serenity-mdrecorder/**/coverage.xml'
+    reportDirectory: '$(System.DefaultWorkingDirectory)/serenity-mdrecorder/**/htmlcov'
