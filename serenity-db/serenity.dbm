@@ -3,7 +3,7 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.9.2_snapshot20191127" last-position="0,82" last-zoom="1" max-obj-count="30"
+<dbmodel pgmodeler-ver="0.9.2_snapshot20191127" last-position="0,25" last-zoom="1" max-obj-count="43"
 	 default-schema="public" default-owner="postgres">
 <database name="serenity" is-template="false" allow-conns="true">
 </database>
@@ -18,7 +18,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="exchange_trade" layer="0" collapse-mode="2" max-obj-count="10">
 	<schema name="serenity"/>
 	<role name="postgres"/>
-	<position x="698" y="531"/>
+	<position x="699" y="532"/>
 	<column name="exchange_trade_id" not-null="true">
 		<type name="bigint" length="0"/>
 	</column>
@@ -67,7 +67,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="exchange" layer="0" collapse-mode="2" max-obj-count="2">
 	<schema name="serenity"/>
 	<role name="postgres"/>
-	<position x="560" y="1163"/>
+	<position x="561" y="1164"/>
 	<column name="exchange_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
@@ -91,7 +91,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="exchange_order" layer="0" collapse-mode="2" max-obj-count="13">
 	<schema name="serenity"/>
 	<role name="postgres"/>
-	<position x="1720" y="1303"/>
+	<position x="1721" y="1304"/>
 	<column name="exchange_order_id" not-null="true" sequence="serenity.exchange_order_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -156,7 +156,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="exchange_account" layer="0" collapse-mode="2" max-obj-count="3">
 	<schema name="serenity"/>
 	<role name="postgres"/>
-	<position x="1000" y="1643"/>
+	<position x="1001" y="1644"/>
 	<column name="exchange_account_id" not-null="true" sequence="serenity.exchange_account_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -189,7 +189,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="order" layer="0" collapse-mode="2" max-obj-count="13">
 	<schema name="serenity"/>
 	<role name="postgres"/>
-	<position x="1360" y="484"/>
+	<position x="1361" y="485"/>
 	<column name="order_id" not-null="true" sequence="serenity.order_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -244,7 +244,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="exchange_fill" layer="0" collapse-mode="2" max-obj-count="8">
 	<schema name="serenity"/>
 	<role name="postgres"/>
-	<position x="1840" y="1663"/>
+	<position x="1841" y="1664"/>
 	<column name="exchange_fill_id" not-null="true" sequence="serenity.exchange_fill_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -289,7 +289,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="instrument" layer="0" collapse-mode="2" max-obj-count="3">
 	<schema name="serenity"/>
 	<role name="postgres"/>
-	<position x="1780" y="623"/>
+	<position x="1781" y="624"/>
 	<column name="instrument_id" not-null="true" sequence="serenity.instrument_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -325,7 +325,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="exchange_instrument" layer="0" collapse-mode="2" max-obj-count="3">
 	<schema name="serenity"/>
 	<role name="postgres"/>
-	<position x="1980" y="863"/>
+	<position x="2056" y="905"/>
 	<column name="exchange_instrument_id" not-null="true" sequence="serenity.exchange_instrument_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -349,7 +349,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="currency" layer="0" collapse-mode="2" max-obj-count="2">
 	<schema name="serenity"/>
 	<role name="postgres"/>
-	<position x="2199" y="763"/>
+	<position x="2655" y="789"/>
 	<column name="currency_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
@@ -378,7 +378,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="currency_pair" layer="0" collapse-mode="2" max-obj-count="6">
 	<schema name="serenity"/>
 	<role name="postgres"/>
-	<position x="2240" y="483"/>
+	<position x="2510" y="457"/>
 	<column name="currency_pair_id" not-null="true" sequence="serenity.currency_pair_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -410,7 +410,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="trading_account" layer="0" collapse-mode="2" max-obj-count="3">
 	<schema name="serenity"/>
 	<role name="postgres"/>
-	<position x="1480" y="903"/>
+	<position x="1481" y="904"/>
 	<column name="trading_account_id" not-null="true" sequence="serenity.trading_account_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -433,7 +433,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="time_in_force" layer="0" collapse-mode="2" max-obj-count="2">
 	<schema name="serenity"/>
 	<role name="postgres"/>
-	<position x="1680" y="783"/>
+	<position x="1681" y="784"/>
 	<column name="tif_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
@@ -459,14 +459,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 dst-table="serenity.&quot;order&quot;"
 	 src-required="true" dst-required="false">
 	<label ref-type="name-label">
-		<position x="43.9747" y="35.6411"/>
+		<position x="23.7671" y="1.752"/>
 	</label>
 </relationship>
 
 <table name="order_type" layer="0" collapse-mode="2" max-obj-count="2">
 	<schema name="serenity"/>
 	<role name="postgres"/>
-	<position x="1200" y="943"/>
+	<position x="1201" y="944"/>
 	<column name="order_type_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
@@ -500,7 +500,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="side" layer="0" collapse-mode="2" max-obj-count="2">
 	<schema name="serenity"/>
 	<role name="postgres"/>
-	<position x="1040" y="363"/>
+	<position x="1041" y="364"/>
 	<column name="side_id" not-null="true">
 		<type name="smallint" length="0"/>
 	</column>
@@ -582,7 +582,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="portfolio" layer="0" collapse-mode="2" max-obj-count="2">
 	<schema name="serenity"/>
 	<role name="postgres"/>
-	<position x="1440" y="1123"/>
+	<position x="1441" y="1124"/>
 	<column name="portfolio_id" not-null="true" sequence="serenity.portfolio_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -597,7 +597,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="instrument_type" layer="0" collapse-mode="2" max-obj-count="2">
 	<schema name="serenity"/>
 	<role name="postgres"/>
-	<position x="1980" y="423"/>
+	<position x="2119" y="415"/>
 	<column name="instrument_type_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
@@ -622,14 +622,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 dst-table="serenity.instrument"
 	 src-required="false" dst-required="false">
 	<label ref-type="name-label">
-		<position x="-4.25103" y="-19.1357"/>
+		<position x="55.0859" y="-32.6357"/>
 	</label>
 </relationship>
 
 <table name="destrination_type" layer="0" collapse-mode="2" max-obj-count="2">
 	<schema name="serenity"/>
 	<role name="postgres"/>
-	<position x="880" y="883"/>
+	<position x="881" y="884"/>
 	<column name="destination_type_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
@@ -655,8 +655,8 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="exchange_destination" layer="0" collapse-mode="2" max-obj-count="6">
 	<schema name="serenity"/>
 	<role name="postgres"/>
-	<position x="1000" y="1363"/>
-	<column name="exchange_destination_id" not-null="true" sequence="serenity.exchange_destination_seq">
+	<position x="1001" y="1364"/>
+	<column name="exchange_destination_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
 	<constraint name="exchange_destination_pk" type="pk-constr" table="serenity.exchange_destination">
@@ -685,7 +685,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 dst-table="serenity.currency_pair"
 	 src-required="true" dst-required="false">
 	<label ref-type="name-label">
-		<position x="2.54576" y="-18.0304"/>
+		<position x="111.019" y="-57.6739"/>
 	</label>
 </relationship>
 
@@ -705,7 +705,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="fill" layer="0" collapse-mode="2" max-obj-count="7">
 	<schema name="serenity"/>
 	<role name="postgres"/>
-	<position x="1740" y="424"/>
+	<position x="1741" y="425"/>
 	<column name="fill_id" not-null="true" sequence="serenity.fill_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -737,7 +737,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="destination" layer="0" collapse-mode="2" max-obj-count="2">
 	<schema name="serenity"/>
 	<role name="postgres"/>
-	<position x="820" y="1083"/>
+	<position x="821" y="1084"/>
 	<column name="destination_id" not-null="true" sequence="serenity.destination_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -798,7 +798,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 dst-table="serenity.destination"
 	 src-required="false" dst-required="false">
 	<label ref-type="name-label">
-		<position x="24.6105" y="-19.1357"/>
+		<position x="23.3822" y="-26.1357"/>
 	</label>
 </relationship>
 
@@ -850,7 +850,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 dst-table="serenity.exchange_trade"
 	 src-required="true" dst-required="false">
 	<label ref-type="name-label">
-		<position x="-299.498" y="-43.5641"/>
+		<position x="-256.498" y="-34.1104"/>
 	</label>
 </relationship>
 
@@ -876,7 +876,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 dst-table="serenity.exchange_order"
 	 src-required="true" dst-required="false">
 	<label ref-type="name-label">
-		<position x="0" y="0"/>
+		<position x="-68.3975" y="65.4643"/>
 	</label>
 </relationship>
 
@@ -889,7 +889,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 dst-table="serenity.exchange_order"
 	 src-required="true" dst-required="false">
 	<label ref-type="name-label">
-		<position x="0" y="0"/>
+		<position x="173.39" y="39.4825"/>
 	</label>
 </relationship>
 
@@ -1038,6 +1038,374 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		</idxelement>
 </index>
 
+<sequence name="position_seq" cycle="false" start="1" increment="1" min-value="0" max-value="2147483647" cache="1">
+	<schema name="serenity"/>
+	<role name="postgres"/>
+</sequence>
+
+<sequence name="cash_instrument_seq" cycle="false" start="1" increment="1" min-value="0" max-value="2147483647" cache="1">
+	<schema name="serenity"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="position" layer="0" collapse-mode="2" max-obj-count="7">
+	<schema name="serenity"/>
+	<role name="postgres"/>
+	<position x="2245" y="1252"/>
+	<column name="position_id" not-null="true" sequence="serenity.position_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="position_date" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="quantity" not-null="true">
+		<type name="decimal" length="20" precision="16"/>
+	</column>
+	<column name="update_time" not-null="true">
+		<type name="timestamp" length="0"/>
+	</column>
+	<constraint name="position_pk" type="pk-constr" table="serenity.&quot;position&quot;">
+		<columns names="position_id" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="instrument_id" index="2"/>
+		<object name="trading_account_id" index="1"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="instrument_fk" index="2"/>
+		<object name="trading_account_fk" index="1"/>
+	</customidxs>
+</table>
+
+<relationship name="instrument_has_many_positions" type="rel1n" layer="0"
+	 src-col-pattern="{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#0b5c1a"
+	 src-table="serenity.instrument"
+	 dst-table="serenity.&quot;position&quot;"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="179.046" y="100.264"/>
+	</label>
+</relationship>
+
+<table name="cash_instrument" layer="0" collapse-mode="2" max-obj-count="4">
+	<schema name="serenity"/>
+	<role name="postgres"/>
+	<position x="2233" y="717"/>
+	<column name="cash_instrument_id" not-null="true" sequence="serenity.cash_instrument_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="cash_instrument_pk" type="pk-constr" table="serenity.cash_instrument">
+		<columns names="cash_instrument_id" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="currency_id" index="2"/>
+		<object name="instrument_id" index="1"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="cash_instrument_uq" index="3"/>
+		<object name="currency_fk" index="2"/>
+		<object name="instrument_fk" index="1"/>
+	</customidxs>
+</table>
+
+<relationship name="cash_instrument_has_one_currency" type="rel11" layer="0"
+	 src-col-pattern="{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#6575f3"
+	 src-table="serenity.currency"
+	 dst-table="serenity.cash_instrument"
+	 src-required="true" dst-required="false">
+	<label ref-type="name-label">
+		<position x="7.63609" y="-22.0665"/>
+	</label>
+</relationship>
+
+<relationship name="trading_account_has_many_positions" type="rel1n" layer="0"
+	 src-col-pattern="{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#fed3ad"
+	 src-table="serenity.trading_account"
+	 dst-table="serenity.&quot;position&quot;"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="-5.2936" y="-34.013"/>
+	</label>
+</relationship>
+
+<relationship name="instrument_has_many_cash_instruments" type="rel1n" layer="0"
+	 src-col-pattern="{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#31c5f6"
+	 src-table="serenity.instrument"
+	 dst-table="serenity.cash_instrument"
+	 src-required="true" dst-required="false"/>
+
+<index name="position_idx" table="serenity.&quot;position&quot;"
+	 concurrent="false" unique="true" fast-update="false" buffering="false"
+	 index-type="btree" factor="0">
+		<idxelement use-sorting="false">
+			<column name="position_date"/>
+		</idxelement>
+		<idxelement use-sorting="false">
+			<column name="trading_account_id"/>
+		</idxelement>
+		<idxelement use-sorting="false">
+			<column name="instrument_id"/>
+		</idxelement>
+</index>
+
+<relationship name="position_has_many_position_fills" type="rel1n" layer="0"
+	 src-col-pattern="{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#4e7575"
+	 src-table="serenity.&quot;position&quot;"
+	 dst-table="serenity.position_fill"
+	 src-required="true" dst-required="false">
+	<label ref-type="name-label">
+		<position x="11.9477" y="-24.7393"/>
+	</label>
+</relationship>
+
+<relationship name="position_fill_has_one_fill" type="rel11" layer="0"
+	 src-col-pattern="{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#0b1e69"
+	 src-table="serenity.fill"
+	 dst-table="serenity.position_fill"
+	 src-required="true" dst-required="false">
+	<label ref-type="name-label">
+		<position x="19.2078" y="-19.1662"/>
+	</label>
+</relationship>
+
+<table name="exchange_transfer_type" layer="0" collapse-mode="2" max-obj-count="2">
+	<schema name="serenity"/>
+	<role name="postgres"/>
+	<position x="2377" y="1662"/>
+	<column name="exchange_transfer_type_id" not-null="true">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="exchange_transfer_type_code" not-null="true">
+		<type name="varchar" length="32"/>
+	</column>
+	<constraint name="exchange_transfer_type_pk" type="pk-constr" table="serenity.exchange_transfer_type">
+		<columns names="exchange_transfer_type_id" ref-type="src-columns"/>
+	</constraint>
+	<initial-data>
+<![CDATA[exchange_transfer_type_id•exchange_transfer_type_code⸣
+1•Deposit⸣
+2•Withdrawal]]>
+	</initial-data>
+</table>
+
+<sequence name="exchange_transfer_seq" cycle="false" start="1" increment="1" min-value="0" max-value="2147483647" cache="1">
+	<schema name="serenity"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="exchange_transfer" layer="0" collapse-mode="2" max-obj-count="10">
+	<schema name="serenity"/>
+	<role name="postgres"/>
+	<position x="2965" y="1496"/>
+	<column name="exchange_transfer_id" not-null="true" sequence="serenity.exchange_transfer_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="quantity" not-null="true">
+		<type name="decimal" length="20" precision="16"/>
+	</column>
+	<column name="transfer_ref">
+		<type name="varchar" length="64"/>
+	</column>
+	<column name="cost_basis">
+		<type name="decimal" length="20" precision="16"/>
+	</column>
+	<column name="transfer_time" not-null="true">
+		<type name="timestamp" length="0"/>
+	</column>
+	<constraint name="exchange_transfer_pk" type="pk-constr" table="serenity.exchange_transfer">
+		<columns names="exchange_transfer_id" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="currency_id_currency" index="1"/>
+		<object name="exchange_transfer_destination_id" index="4"/>
+		<object name="exchange_transfer_method_id" index="3"/>
+		<object name="exchange_transfer_type_id" index="2"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="currency_fk" index="2"/>
+		<object name="exchange_transfer_destination_fk" index="4"/>
+		<object name="exchange_transfer_method_fk" index="3"/>
+		<object name="exchange_transfer_type_fk" index="1"/>
+	</customidxs>
+</table>
+
+<relationship name="currency_has_many_exchange_transfers" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#c4af79"
+	 src-table="serenity.currency"
+	 dst-table="serenity.exchange_transfer"
+	 src-required="true" dst-required="false"/>
+
+<table name="exchange_transfer_method" layer="0" collapse-mode="2" max-obj-count="2">
+	<schema name="serenity"/>
+	<role name="postgres"/>
+	<position x="2374" y="1502"/>
+	<column name="exchange_transfer_method_id" not-null="true">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="exchange_transfer_method_code" not-null="true">
+		<type name="varchar" length="32"/>
+	</column>
+	<constraint name="exchange_transfer_method_pk" type="pk-constr" table="serenity.exchange_transfer_method">
+		<columns names="exchange_transfer_method_id" ref-type="src-columns"/>
+	</constraint>
+	<initial-data>
+<![CDATA[exchange_transfer_method_id•exchange_transfer_method_code⸣
+1•ACH⸣
+2•Blockchain]]>
+	</initial-data>
+</table>
+
+<relationship name="exchange_transfer_method_has_many_exchange_transfers" type="rel1n" layer="0"
+	 src-col-pattern="{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#048bfc"
+	 src-table="serenity.exchange_transfer_method"
+	 dst-table="serenity.exchange_transfer"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="-6.37954" y="-24.1937"/>
+	</label>
+</relationship>
+
+<index name="exchange_transfer_method_code_idx" table="serenity.exchange_transfer_method"
+	 concurrent="false" unique="true" fast-update="false" buffering="false"
+	 index-type="btree" factor="0">
+		<idxelement use-sorting="false">
+			<column name="exchange_transfer_method_code"/>
+		</idxelement>
+</index>
+
+<relationship name="exchange_transfer_type_has_many_exchange_transfers" type="rel1n" layer="0"
+	 src-col-pattern="{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#5acf79"
+	 src-table="serenity.exchange_transfer_type"
+	 dst-table="serenity.exchange_transfer"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="22.4755" y="-21.1271"/>
+	</label>
+</relationship>
+
+<table name="exchange_transfer_destination_type" layer="0" collapse-mode="2" max-obj-count="2">
+	<schema name="serenity"/>
+	<role name="postgres"/>
+	<position x="2381" y="1849"/>
+	<column name="exchange_transfer_destination_type_id" not-null="true">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="exchange_transfer_destination_type_code" not-null="true">
+		<type name="varchar" length="32"/>
+	</column>
+	<constraint name="exchange_transfer_destination_type_pk" type="pk-constr" table="serenity.exchange_transfer_destination_type">
+		<columns names="exchange_transfer_destination_type_id" ref-type="src-columns"/>
+	</constraint>
+	<initial-data>
+<![CDATA[exchange_transfer_destination_type_id•exchange_transfer_destination_type_code⸣
+1•Exchange⸣
+2•Wallet⸣
+3•Bank]]>
+	</initial-data>
+</table>
+
+<sequence name="exchange_transfer_destination_seq" cycle="false" start="1" increment="1" min-value="0" max-value="2147483647" cache="1">
+	<schema name="serenity"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="exchange_transfer_destination" layer="0" collapse-mode="2" max-obj-count="4">
+	<schema name="serenity"/>
+	<role name="postgres"/>
+	<position x="3122" y="1834"/>
+	<column name="exchange_transfer_destination_id" not-null="true" sequence="serenity.exchange_transfer_destination_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="destination_name" not-null="true">
+		<type name="varchar" length="256"/>
+	</column>
+	<column name="destination_address" not-null="true">
+		<type name="varchar" length="64"/>
+	</column>
+	<constraint name="exchange_transfer_destination_pk" type="pk-constr" table="serenity.exchange_transfer_destination">
+		<columns names="exchange_transfer_destination_id" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="exchange_transfer_destination_type_id" index="1"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="exchange_transfer_destination_type_fk" index="1"/>
+	</customidxs>
+</table>
+
+<relationship name="exchange_transfer_destination_has_many_exchange_transfers" type="rel1n" layer="0"
+	 src-col-pattern="{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#7da760"
+	 src-table="serenity.exchange_transfer_destination"
+	 dst-table="serenity.exchange_transfer"
+	 src-required="true" dst-required="false"/>
+
+<index name="exchange_transfer_destination_type_code_idx" table="serenity.exchange_transfer_destination_type"
+	 concurrent="false" unique="true" fast-update="false" buffering="false"
+	 index-type="btree" factor="0">
+		<idxelement use-sorting="false">
+			<column name="exchange_transfer_destination_type_code"/>
+		</idxelement>
+</index>
+
+<index name="exchange_transfer_type_code_idx" table="serenity.exchange_transfer_type"
+	 concurrent="false" unique="true" fast-update="false" buffering="false"
+	 index-type="btree" factor="0">
+		<idxelement use-sorting="false">
+			<column name="exchange_transfer_type_code"/>
+		</idxelement>
+</index>
+
+<relationship name="exchange_xer_destination_type_has_many_exchange_xfer_dests" type="rel1n" layer="0"
+	 src-col-pattern="{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#a0639c"
+	 src-table="serenity.exchange_transfer_destination_type"
+	 dst-table="serenity.exchange_transfer_destination"
+	 src-required="true" dst-required="false">
+	<label ref-type="name-label">
+		<position x="-0.482361" y="-21.0789"/>
+	</label>
+</relationship>
+
 <constraint name="parent_order_fk" type="fk-constr" alias="parent_order_fk" comparison-type="MATCH FULL"
 	 upd-action="CASCADE" del-action="RESTRICT" ref-table="serenity.&quot;order&quot;" table="serenity.&quot;order&quot;">
 	<columns names="parent_order_id" ref-type="src-columns"/>
@@ -1079,9 +1447,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 dst-table="serenity.&quot;order&quot;" reference-fk="parent_order_fk"
 	 src-required="false" dst-required="false">
 	<line>
-		<position x="1602.89" y="581.25"/>
-	<position x="1602.89" y="461"/>
-	<position x="1506.6" y="461"/>
+		<position x="1603.89" y="582.25"/>
+	<position x="1603.89" y="462"/>
+	<position x="1507.6" y="462"/>
 	</line>
 	<label ref-type="name-label">
 		<position x="-13.0273" y="-8.15"/>
