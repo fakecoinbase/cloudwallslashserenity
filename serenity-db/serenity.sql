@@ -525,7 +525,9 @@ CREATE TABLE serenity.instrument_type (
 -- ALTER TABLE serenity.instrument_type OWNER TO postgres;
 -- ddl-end --
 
-INSERT INTO serenity.instrument_type (instrument_type_id) VALUES (E'1');
+INSERT INTO serenity.instrument_type (instrument_type_id, instrument_type_code) VALUES (E'1', E'CurrencyPair');
+-- ddl-end --
+INSERT INTO serenity.instrument_type (instrument_type_id, instrument_type_code) VALUES (E'2', E'Cash');
 -- ddl-end --
 
 -- object: instrument_type_fk | type: CONSTRAINT --

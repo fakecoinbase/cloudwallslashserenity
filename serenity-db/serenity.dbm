@@ -518,8 +518,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<columns names="instrument_type_id" ref-type="src-columns"/>
 	</constraint>
 	<initial-data>
-<![CDATA[instrument_type_id•instrument_code⸣
-1•CurrencyPair]]>
+<![CDATA[instrument_type_id•instrument_type_code⸣
+1•CurrencyPair⸣
+2•Cash]]>
 	</initial-data>
 </table>
 
