@@ -3,8 +3,8 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.9.2_snapshot20191127" last-position="0,25" last-zoom="1" max-obj-count="43"
-	 default-schema="public" default-owner="postgres">
+<dbmodel pgmodeler-ver="0.9.2_snapshot20191127" last-position="0,0" last-zoom="1" max-obj-count="43"
+	 default-owner="postgres">
 <database name="serenity" is-template="false" allow-conns="true">
 </database>
 
@@ -43,14 +43,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 	<customidxs object-type="column">
 		<object name="exchange_id" index="1"/>
-		<object name="instrument_id" index="3"/>
-		<object name="side_id" index="2"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
 		<object name="exchange_fk" index="1"/>
-		<object name="instrument_fk" index="3"/>
-		<object name="side_fk" index="2"/>
 	</customidxs>
 </table>
 
@@ -110,24 +106,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<constraint name="exchange_order_pk" type="pk-constr" table="serenity.exchange_order">
 		<columns names="exchange_order_id" ref-type="src-columns"/>
 	</constraint>
-
-	<customidxs object-type="column">
-		<object name="exchange_account_id" index="6"/>
-		<object name="exchange_id" index="1"/>
-		<object name="exchange_instrument_id" index="2"/>
-		<object name="order_type_id" index="4"/>
-		<object name="side_id" index="3"/>
-		<object name="tif_id" index="5"/>
-	</customidxs>
-
-	<customidxs object-type="constraint">
-		<object name="exchange_account_fk" index="2"/>
-		<object name="exchange_fk" index="1"/>
-		<object name="exchange_instrument_fk" index="3"/>
-		<object name="order_type_fk" index="5"/>
-		<object name="side_fk" index="4"/>
-		<object name="time_in_force_fk" index="6"/>
-	</customidxs>
 </table>
 
 <relationship name="exchange_has_many_exchange_trades" type="rel1n" layer="0"
@@ -166,14 +144,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<constraint name="exchange_account_pk" type="pk-constr" table="serenity.exchange_account">
 		<columns names="exchange_account_id" ref-type="src-columns"/>
 	</constraint>
-
-	<customidxs object-type="column">
-		<object name="exchange_id" index="1"/>
-	</customidxs>
-
-	<customidxs object-type="constraint">
-		<object name="exchange_fk" index="1"/>
-	</customidxs>
 </table>
 
 <sequence name="order_seq" cycle="false" start="1" increment="1" min-value="0" max-value="2147483647" cache="1">
@@ -208,24 +178,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<constraint name="order_pk" type="pk-constr" table="serenity.&quot;order&quot;">
 		<columns names="order_id" ref-type="src-columns"/>
 	</constraint>
-
-	<customidxs object-type="column">
-		<object name="destination_id" index="6"/>
-		<object name="instrument_id" index="1"/>
-		<object name="order_type_id" index="4"/>
-		<object name="side_id" index="5"/>
-		<object name="tif_id" index="3"/>
-		<object name="trading_account_id" index="2"/>
-	</customidxs>
-
-	<customidxs object-type="constraint">
-		<object name="destination_fk" index="6"/>
-		<object name="instrument_fk" index="1"/>
-		<object name="order_type_fk" index="4"/>
-		<object name="side_fk" index="5"/>
-		<object name="time_in_force_fk" index="3"/>
-		<object name="trading_account_fk" index="2"/>
-	</customidxs>
 </table>
 
 <relationship name="exchange_account_has_many_exchange_orders" type="rel1n" layer="0"
@@ -266,14 +218,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<constraint name="exchange_fill_pk" type="pk-constr" table="serenity.exchange_fill">
 		<columns names="exchange_fill_id" ref-type="src-columns"/>
 	</constraint>
-
-	<customidxs object-type="column">
-		<object name="exchange_order_id" index="1"/>
-	</customidxs>
-
-	<customidxs object-type="constraint">
-		<object name="exchange_order_fk" index="1"/>
-	</customidxs>
 </table>
 
 <sequence name="instrument_seq" cycle="false" start="1" increment="1" min-value="0" max-value="2147483647" cache="1">
@@ -299,14 +243,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<constraint name="instrument_pk" type="pk-constr" table="serenity.instrument">
 		<columns names="instrument_id" ref-type="src-columns"/>
 	</constraint>
-
-	<customidxs object-type="column">
-		<object name="instrument_type_id" index="2"/>
-	</customidxs>
-
-	<customidxs object-type="constraint">
-		<object name="instrument_type_fk" index="1"/>
-	</customidxs>
 </table>
 
 <relationship name="instrument_has_many_orders" type="rel1n" layer="0"
@@ -335,15 +271,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<constraint name="exchange_instrument_pk" type="pk-constr" table="serenity.exchange_instrument">
 		<columns names="exchange_instrument_id" ref-type="src-columns"/>
 	</constraint>
-
-	<customidxs object-type="column">
-		<object name="instrument_id" index="1"/>
-	</customidxs>
-
-	<customidxs object-type="constraint">
-		<object name="exchange_instrument_uq" index="2"/>
-		<object name="instrument_fk" index="1"/>
-	</customidxs>
 </table>
 
 <table name="currency" layer="0" collapse-mode="2" max-obj-count="2">
@@ -391,15 +318,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<constraint name="currency_pair_pk" type="pk-constr" table="serenity.currency_pair">
 		<columns names="currency_pair_id" ref-type="src-columns"/>
 	</constraint>
-
-	<customidxs object-type="column">
-		<object name="instrument_id" index="3"/>
-	</customidxs>
-
-	<customidxs object-type="constraint">
-		<object name="currency_pair_uq" index="4"/>
-		<object name="instrument_fk" index="1"/>
-	</customidxs>
 </table>
 
 <sequence name="trading_account_seq" cycle="false" start="1" increment="1" min-value="0" max-value="2147483647" cache="1">
@@ -420,14 +338,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<constraint name="trading_account_pk" type="pk-constr" table="serenity.trading_account">
 		<columns names="trading_account_id" ref-type="src-columns"/>
 	</constraint>
-
-	<customidxs object-type="column">
-		<object name="portfolio_id" index="2"/>
-	</customidxs>
-
-	<customidxs object-type="constraint">
-		<object name="portfolio_fk" index="1"/>
-	</customidxs>
 </table>
 
 <table name="time_in_force" layer="0" collapse-mode="2" max-obj-count="2">
@@ -662,18 +572,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<constraint name="exchange_destination_pk" type="pk-constr" table="serenity.exchange_destination">
 		<columns names="exchange_destination_id" ref-type="src-columns"/>
 	</constraint>
-
-	<customidxs object-type="column">
-		<object name="destination_id" index="2"/>
-		<object name="exchange_id" index="1"/>
-	</customidxs>
-
-	<customidxs object-type="constraint">
-		<object name="destination_fk" index="2"/>
-		<object name="exchange_destination_uq" index="3"/>
-		<object name="exchange_exchange_destination_uq" index="4"/>
-		<object name="exchange_fk" index="1"/>
-	</customidxs>
 </table>
 
 <relationship name="currency_pair_has_one_instrument" type="rel11" layer="0"
@@ -724,14 +622,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<constraint name="fill_pk" type="pk-constr" table="serenity.fill">
 		<columns names="fill_id" ref-type="src-columns"/>
 	</constraint>
-
-	<customidxs object-type="column">
-		<object name="order_id" index="1"/>
-	</customidxs>
-
-	<customidxs object-type="constraint">
-		<object name="order_fk" index="1"/>
-	</customidxs>
 </table>
 
 <table name="destination" layer="0" collapse-mode="2" max-obj-count="2">
@@ -744,14 +634,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<constraint name="destination_pk" type="pk-constr" table="serenity.destination">
 		<columns names="destination_id" ref-type="src-columns"/>
 	</constraint>
-
-	<customidxs object-type="column">
-		<object name="destination_type_id" index="1"/>
-	</customidxs>
-
-	<customidxs object-type="constraint">
-		<object name="destrination_type_fk" index="1"/>
-	</customidxs>
 </table>
 
 <relationship name="exchange_has_many_exchange_accounts" type="rel1n" layer="0"
@@ -1070,12 +952,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 	<customidxs object-type="column">
 		<object name="instrument_id" index="2"/>
-		<object name="trading_account_id" index="1"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
-		<object name="instrument_fk" index="2"/>
-		<object name="trading_account_fk" index="1"/>
+		<object name="instrument_fk" index="1"/>
 	</customidxs>
 </table>
 
@@ -1104,14 +984,12 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 
 	<customidxs object-type="column">
-		<object name="currency_id" index="2"/>
-		<object name="instrument_id" index="1"/>
+		<object name="currency_id" index="1"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
-		<object name="cash_instrument_uq" index="3"/>
-		<object name="currency_fk" index="2"/>
-		<object name="instrument_fk" index="1"/>
+		<object name="cash_instrument_uq" index="2"/>
+		<object name="currency_fk" index="1"/>
 	</customidxs>
 </table>
 
@@ -1164,32 +1042,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		</idxelement>
 </index>
 
-<relationship name="position_has_many_position_fills" type="rel1n" layer="0"
-	 src-col-pattern="{sc}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 custom-color="#4e7575"
-	 src-table="serenity.&quot;position&quot;"
-	 dst-table="serenity.position_fill"
-	 src-required="true" dst-required="false">
-	<label ref-type="name-label">
-		<position x="11.9477" y="-24.7393"/>
-	</label>
-</relationship>
-
-<relationship name="position_fill_has_one_fill" type="rel11" layer="0"
-	 src-col-pattern="{sc}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 custom-color="#0b1e69"
-	 src-table="serenity.fill"
-	 dst-table="serenity.position_fill"
-	 src-required="true" dst-required="false">
-	<label ref-type="name-label">
-		<position x="19.2078" y="-19.1662"/>
-	</label>
-</relationship>
-
 <table name="exchange_transfer_type" layer="0" collapse-mode="2" max-obj-count="2">
 	<schema name="serenity"/>
 	<role name="postgres"/>
@@ -1240,16 +1092,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 	<customidxs object-type="column">
 		<object name="currency_id_currency" index="1"/>
-		<object name="exchange_transfer_destination_id" index="4"/>
-		<object name="exchange_transfer_method_id" index="3"/>
-		<object name="exchange_transfer_type_id" index="2"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
-		<object name="currency_fk" index="2"/>
-		<object name="exchange_transfer_destination_fk" index="4"/>
-		<object name="exchange_transfer_method_fk" index="3"/>
-		<object name="exchange_transfer_type_fk" index="1"/>
+		<object name="currency_fk" index="1"/>
 	</customidxs>
 </table>
 
@@ -1358,14 +1204,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<constraint name="exchange_transfer_destination_pk" type="pk-constr" table="serenity.exchange_transfer_destination">
 		<columns names="exchange_transfer_destination_id" ref-type="src-columns"/>
 	</constraint>
-
-	<customidxs object-type="column">
-		<object name="exchange_transfer_destination_type_id" index="1"/>
-	</customidxs>
-
-	<customidxs object-type="constraint">
-		<object name="exchange_transfer_destination_type_fk" index="1"/>
-	</customidxs>
 </table>
 
 <relationship name="exchange_transfer_destination_has_many_exchange_transfers" type="rel1n" layer="0"
@@ -1406,6 +1244,30 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</label>
 </relationship>
 
+<table name="position_fill" layer="0" collapse-mode="2" max-obj-count="3">
+	<schema name="serenity"/>
+	<role name="postgres"/>
+	<position x="2541.5" y="1123.18"/>
+</table>
+
+<relationship name="position_has_many_position_fills" type="rel1n" layer="0"
+	 src-col-pattern="{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#d0b65f"
+	 src-table="serenity.&quot;position&quot;"
+	 dst-table="serenity.position_fill"
+	 src-required="true" dst-required="false"/>
+
+<relationship name="position_fill_has_one_fill" type="rel11" layer="0"
+	 src-col-pattern="{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#37f74b"
+	 src-table="serenity.fill"
+	 dst-table="serenity.position_fill"
+	 src-required="true" dst-required="false"/>
+
 <constraint name="parent_order_fk" type="fk-constr" alias="parent_order_fk" comparison-type="MATCH FULL"
 	 upd-action="CASCADE" del-action="RESTRICT" ref-table="serenity.&quot;order&quot;" table="serenity.&quot;order&quot;">
 	<columns names="parent_order_id" ref-type="src-columns"/>
@@ -1424,25 +1286,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<columns names="currency_id" ref-type="dst-columns"/>
 </constraint>
 
-<relationship name="rel_base_currency_currency" type="relfk" layer="0"
-	 src-table="serenity.currency_pair"
-	 dst-table="serenity.currency" reference-fk="base_currency_fk"
-	 src-required="false" dst-required="false">
-	<label ref-type="name-label">
-		<position x="-5.24166" y="4.52344"/>
-	</label>
-</relationship>
-
-<relationship name="rel_quote_currency_currency" type="relfk" layer="0"
-	 src-table="serenity.currency_pair"
-	 dst-table="serenity.currency" reference-fk="quote_currency_fk"
-	 src-required="false" dst-required="false">
-	<label ref-type="name-label">
-		<position x="61.4871" y="-35.4766"/>
-	</label>
-</relationship>
-
-<relationship name="rel_order_parent_order" type="relfk" layer="0"
+<relationship name="rel_order_order" type="relfk" layer="0"
 	 src-table="serenity.&quot;order&quot;"
 	 dst-table="serenity.&quot;order&quot;" reference-fk="parent_order_fk"
 	 src-required="false" dst-required="false">
@@ -1451,9 +1295,16 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<position x="1603.89" y="462"/>
 	<position x="1507.6" y="462"/>
 	</line>
-	<label ref-type="name-label">
-		<position x="-13.0273" y="-8.15"/>
-	</label>
 </relationship>
+
+<relationship name="rel_currency_pair_currency" type="relfk" layer="0"
+	 src-table="serenity.currency_pair"
+	 dst-table="serenity.currency" reference-fk="base_currency_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_currency_pair_currency1" type="relfk" layer="0"
+	 src-table="serenity.currency_pair"
+	 dst-table="serenity.currency" reference-fk="quote_currency_fk"
+	 src-required="false" dst-required="false"/>
 
 </dbmodel>
