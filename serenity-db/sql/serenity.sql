@@ -284,8 +284,9 @@ ON DELETE RESTRICT ON UPDATE CASCADE;
 -- DROP TABLE IF EXISTS serenity.exchange_instrument CASCADE;
 CREATE TABLE serenity.exchange_instrument (
 	exchange_instrument_id integer NOT NULL DEFAULT nextval('serenity.exchange_instrument_seq'::regclass),
-	exchange_instrument_code varchar(32) NOT NULL,
 	instrument_id integer,
+	exchange_id integer NOT NULL,
+	exchange_instrument_code varchar(32) NOT NULL,
 	CONSTRAINT exchange_instrument_pk PRIMARY KEY (exchange_instrument_id)
 
 );
@@ -293,29 +294,18 @@ CREATE TABLE serenity.exchange_instrument (
 -- ALTER TABLE serenity.exchange_instrument OWNER TO postgres;
 -- ddl-end --
 
--- object: serenity.currency | type: TABLE --
--- DROP TABLE IF EXISTS serenity.currency CASCADE;
-CREATE TABLE serenity.currency (
-	currency_id integer NOT NULL,
-	currency_code varchar(8) NOT NULL,
-	CONSTRAINT currency_pk PRIMARY KEY (currency_id)
-
-);
+-- object: serenity.currency_seq | type: SEQUENCE --
+-- DROP SEQUENCE IF EXISTS serenity.currency_seq CASCADE;
+CREATE SEQUENCE serenity.currency_seq
+	INCREMENT BY 1
+	MINVALUE 0
+	MAXVALUE 2147483647
+	START WITH 1
+	CACHE 1
+	NO CYCLE
+	OWNED BY NONE;
 -- ddl-end --
--- ALTER TABLE serenity.currency OWNER TO postgres;
--- ddl-end --
-
-INSERT INTO serenity.currency (currency_id, currency_code) VALUES (E'1', E'USD');
--- ddl-end --
-INSERT INTO serenity.currency (currency_id, currency_code) VALUES (E'2', E'USDT');
--- ddl-end --
-INSERT INTO serenity.currency (currency_id, currency_code) VALUES (E'3', E'BTC');
--- ddl-end --
-INSERT INTO serenity.currency (currency_id, currency_code) VALUES (E'4', E'LTC');
--- ddl-end --
-INSERT INTO serenity.currency (currency_id, currency_code) VALUES (E'5', E'ETH');
--- ddl-end --
-INSERT INTO serenity.currency (currency_id, currency_code) VALUES (E'6', E'ZEC');
+-- ALTER SEQUENCE serenity.currency_seq OWNER TO postgres;
 -- ddl-end --
 
 -- object: serenity.currency_pair_seq | type: SEQUENCE --
@@ -837,15 +827,6 @@ CREATE UNIQUE INDEX instrument_type_code_idx ON serenity.instrument_type
 	);
 -- ddl-end --
 
--- object: currency_code_idx | type: INDEX --
--- DROP INDEX IF EXISTS serenity.currency_code_idx CASCADE;
-CREATE UNIQUE INDEX currency_code_idx ON serenity.currency
-	USING btree
-	(
-	  currency_code
-	);
--- ddl-end --
-
 -- object: exchange_instrument_code_idx | type: INDEX --
 -- DROP INDEX IF EXISTS serenity.exchange_instrument_code_idx CASCADE;
 CREATE UNIQUE INDEX exchange_instrument_code_idx ON serenity.exchange_instrument
@@ -946,16 +927,16 @@ CREATE TABLE serenity.cash_instrument (
 -- ALTER TABLE serenity.cash_instrument OWNER TO postgres;
 -- ddl-end --
 
--- object: currency_fk | type: CONSTRAINT --
--- ALTER TABLE serenity.cash_instrument DROP CONSTRAINT IF EXISTS currency_fk CASCADE;
-ALTER TABLE serenity.cash_instrument ADD CONSTRAINT currency_fk FOREIGN KEY (currency_id)
-REFERENCES serenity.currency (currency_id) MATCH FULL
-ON DELETE RESTRICT ON UPDATE CASCADE;
--- ddl-end --
+-- object: serenity.currency | type: TABLE --
+-- DROP TABLE IF EXISTS serenity.currency CASCADE;
+CREATE TABLE serenity.currency (
+	currency_id integer NOT NULL DEFAULT nextval('serenity.currency_seq'::regclass),
+	currency_code varchar(8) NOT NULL,
+	CONSTRAINT currency_pk PRIMARY KEY (currency_id)
 
--- object: cash_instrument_uq | type: CONSTRAINT --
--- ALTER TABLE serenity.cash_instrument DROP CONSTRAINT IF EXISTS cash_instrument_uq CASCADE;
-ALTER TABLE serenity.cash_instrument ADD CONSTRAINT cash_instrument_uq UNIQUE (currency_id);
+);
+-- ddl-end --
+-- ALTER TABLE serenity.currency OWNER TO postgres;
 -- ddl-end --
 
 -- object: trading_account_fk | type: CONSTRAINT --
@@ -1237,6 +1218,34 @@ ON DELETE RESTRICT ON UPDATE CASCADE;
 -- object: mark_uq | type: CONSTRAINT --
 -- ALTER TABLE serenity.instrument_mark DROP CONSTRAINT IF EXISTS mark_uq CASCADE;
 ALTER TABLE serenity.instrument_mark ADD CONSTRAINT mark_uq UNIQUE (instrument_id,mark_type_id,mark_time);
+-- ddl-end --
+
+-- object: exchange_fk | type: CONSTRAINT --
+-- ALTER TABLE serenity.exchange_instrument DROP CONSTRAINT IF EXISTS exchange_fk CASCADE;
+ALTER TABLE serenity.exchange_instrument ADD CONSTRAINT exchange_fk FOREIGN KEY (exchange_id)
+REFERENCES serenity.exchange (exchange_id) MATCH FULL
+ON DELETE RESTRICT ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: currency_fk | type: CONSTRAINT --
+-- ALTER TABLE serenity.cash_instrument DROP CONSTRAINT IF EXISTS currency_fk CASCADE;
+ALTER TABLE serenity.cash_instrument ADD CONSTRAINT currency_fk FOREIGN KEY (currency_id)
+REFERENCES serenity.currency (currency_id) MATCH FULL
+ON DELETE RESTRICT ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: cash_instrument_uq | type: CONSTRAINT --
+-- ALTER TABLE serenity.cash_instrument DROP CONSTRAINT IF EXISTS cash_instrument_uq CASCADE;
+ALTER TABLE serenity.cash_instrument ADD CONSTRAINT cash_instrument_uq UNIQUE (currency_id);
+-- ddl-end --
+
+-- object: currency_code_idx | type: INDEX --
+-- DROP INDEX IF EXISTS serenity.currency_code_idx CASCADE;
+CREATE UNIQUE INDEX currency_code_idx ON serenity.currency
+	USING btree
+	(
+	  currency_code
+	);
 -- ddl-end --
 
 -- object: parent_order_fk | type: CONSTRAINT --
