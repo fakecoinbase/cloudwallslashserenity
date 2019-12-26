@@ -3,7 +3,7 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.9.2_snapshot20191127" last-position="0,0" last-zoom="1" max-obj-count="43"
+<dbmodel pgmodeler-ver="0.9.2_snapshot20191127" last-position="0,0" last-zoom="1" max-obj-count="45"
 	 default-owner="postgres">
 <database name="serenity" is-template="false" allow-conns="true">
 </database>
@@ -1268,6 +1268,85 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 src-table="serenity.fill"
 	 dst-table="serenity.position_fill"
 	 src-required="true" dst-required="false"/>
+
+<table name="instrument_mark" layer="0" collapse-mode="2" max-obj-count="6">
+	<schema name="serenity"/>
+	<role name="postgres"/>
+	<position x="3066.5" y="1050.17"/>
+	<column name="mark_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="mark_time" not-null="true">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="mark" not-null="true">
+		<type name="decimal" length="20" precision="16"/>
+	</column>
+	<constraint name="instrument_mark_pk" type="pk-constr" table="serenity.instrument_mark">
+		<columns names="mark_id" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="instrument_id" index="1"/>
+		<object name="mark_type_id" index="2"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="instrument_fk" index="1"/>
+		<object name="mark_type_fk" index="2"/>
+	</customidxs>
+</table>
+
+<table name="mark_type" layer="0" collapse-mode="2" max-obj-count="3">
+	<schema name="serenity"/>
+	<role name="postgres"/>
+	<position x="2985.5" y="823.175"/>
+	<column name="mark_type_id" not-null="true">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="mark_code" not-null="true">
+		<type name="varchar" length="32"/>
+	</column>
+	<column name="snap_time" not-null="true">
+		<type name="time" length="0"/>
+	</column>
+	<constraint name="mark_type_pk" type="pk-constr" table="serenity.mark_type">
+		<columns names="mark_type_id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="mark_code_uq" type="uq-constr" table="serenity.mark_type">
+		<columns names="mark_code" ref-type="src-columns"/>
+	</constraint>
+	<initial-data>
+<![CDATA[mark_type_id•mark_code•snap_time⸣
+1•YahooDailyClose•12:00:00]]>
+	</initial-data>
+</table>
+
+<relationship name="instrument_has_many_instrument_marks" type="rel1n" layer="0"
+	 src-col-pattern="{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#cfa3d7"
+	 src-table="serenity.instrument"
+	 dst-table="serenity.instrument_mark"
+	 src-required="true" dst-required="false"/>
+
+<relationship name="mark_type_has_many_instrument_marks" type="rel1n" layer="0"
+	 src-col-pattern="{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#f51e3b"
+	 src-table="serenity.mark_type"
+	 dst-table="serenity.instrument_mark"
+	 src-required="true" dst-required="false">
+	<label ref-type="name-label">
+		<position x="-7.62531" y="-18.6107"/>
+	</label>
+</relationship>
+
+<constraint name="mark_uq" type="uq-constr" table="serenity.instrument_mark">
+	<columns names="instrument_id,mark_type_id,mark_time" ref-type="src-columns"/>
+</constraint>
 
 <constraint name="parent_order_fk" type="fk-constr" alias="parent_order_fk" comparison-type="MATCH FULL"
 	 upd-action="CASCADE" del-action="RESTRICT" ref-table="serenity.&quot;order&quot;" table="serenity.&quot;order&quot;">

@@ -1188,6 +1188,57 @@ ON DELETE RESTRICT ON UPDATE CASCADE;
 ALTER TABLE serenity.position_fill ADD CONSTRAINT position_fill_uq UNIQUE (fill_id);
 -- ddl-end --
 
+-- object: serenity.instrument_mark | type: TABLE --
+-- DROP TABLE IF EXISTS serenity.instrument_mark CASCADE;
+CREATE TABLE serenity.instrument_mark (
+	mark_id integer NOT NULL,
+	instrument_id integer NOT NULL,
+	mark_type_id smallint NOT NULL,
+	mark_time timestamp NOT NULL,
+	mark decimal(20,16) NOT NULL,
+	CONSTRAINT instrument_mark_pk PRIMARY KEY (mark_id)
+
+);
+-- ddl-end --
+-- ALTER TABLE serenity.instrument_mark OWNER TO postgres;
+-- ddl-end --
+
+-- object: serenity.mark_type | type: TABLE --
+-- DROP TABLE IF EXISTS serenity.mark_type CASCADE;
+CREATE TABLE serenity.mark_type (
+	mark_type_id smallint NOT NULL,
+	mark_code varchar(32) NOT NULL,
+	snap_time time NOT NULL,
+	CONSTRAINT mark_type_pk PRIMARY KEY (mark_type_id),
+	CONSTRAINT mark_code_uq UNIQUE (mark_code)
+
+);
+-- ddl-end --
+-- ALTER TABLE serenity.mark_type OWNER TO postgres;
+-- ddl-end --
+
+INSERT INTO serenity.mark_type (mark_type_id, mark_code, snap_time) VALUES (E'1', E'YahooDailyClose', E'12:00:00');
+-- ddl-end --
+
+-- object: instrument_fk | type: CONSTRAINT --
+-- ALTER TABLE serenity.instrument_mark DROP CONSTRAINT IF EXISTS instrument_fk CASCADE;
+ALTER TABLE serenity.instrument_mark ADD CONSTRAINT instrument_fk FOREIGN KEY (instrument_id)
+REFERENCES serenity.instrument (instrument_id) MATCH FULL
+ON DELETE RESTRICT ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: mark_type_fk | type: CONSTRAINT --
+-- ALTER TABLE serenity.instrument_mark DROP CONSTRAINT IF EXISTS mark_type_fk CASCADE;
+ALTER TABLE serenity.instrument_mark ADD CONSTRAINT mark_type_fk FOREIGN KEY (mark_type_id)
+REFERENCES serenity.mark_type (mark_type_id) MATCH FULL
+ON DELETE RESTRICT ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: mark_uq | type: CONSTRAINT --
+-- ALTER TABLE serenity.instrument_mark DROP CONSTRAINT IF EXISTS mark_uq CASCADE;
+ALTER TABLE serenity.instrument_mark ADD CONSTRAINT mark_uq UNIQUE (instrument_id,mark_type_id,mark_time);
+-- ddl-end --
+
 -- object: parent_order_fk | type: CONSTRAINT --
 -- ALTER TABLE serenity."order" DROP CONSTRAINT IF EXISTS parent_order_fk CASCADE;
 ALTER TABLE serenity."order" ADD CONSTRAINT parent_order_fk FOREIGN KEY (parent_order_id)
