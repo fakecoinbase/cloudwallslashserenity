@@ -1168,8 +1168,7 @@ CREATE TABLE serenity.mark_type (
 	mark_type_id smallint NOT NULL,
 	mark_code varchar(32) NOT NULL,
 	snap_time time NOT NULL,
-	CONSTRAINT mark_type_pk PRIMARY KEY (mark_type_id),
-	CONSTRAINT mark_code_uq UNIQUE (mark_code)
+	CONSTRAINT mark_type_pk PRIMARY KEY (mark_type_id)
 
 );
 -- ddl-end --
@@ -1253,9 +1252,33 @@ REFERENCES serenity.instrument (instrument_id) MATCH FULL
 ON DELETE RESTRICT ON UPDATE CASCADE;
 -- ddl-end --
 
--- object: mark_uq | type: CONSTRAINT --
--- ALTER TABLE serenity.instrument_mark DROP CONSTRAINT IF EXISTS mark_uq CASCADE;
-ALTER TABLE serenity.instrument_mark ADD CONSTRAINT mark_uq UNIQUE (instrument_id,mark_type_id,mark_time);
+-- object: mark_code_idx | type: INDEX --
+-- DROP INDEX IF EXISTS serenity.mark_code_idx CASCADE;
+CREATE UNIQUE INDEX mark_code_idx ON serenity.mark_type
+	USING btree
+	(
+	  mark_code
+	);
+-- ddl-end --
+
+-- object: mark_idx | type: INDEX --
+-- DROP INDEX IF EXISTS serenity.mark_idx CASCADE;
+CREATE UNIQUE INDEX mark_idx ON serenity.instrument_mark
+	USING btree
+	(
+	  mark_time,
+	  instrument_id,
+	  mark_type_id
+	);
+-- ddl-end --
+
+-- object: instrument_idx | type: INDEX --
+-- DROP INDEX IF EXISTS serenity.instrument_idx CASCADE;
+CREATE INDEX instrument_idx ON serenity.instrument_mark
+	USING btree
+	(
+	  instrument_id
+	);
 -- ddl-end --
 
 -- object: parent_order_fk | type: CONSTRAINT --

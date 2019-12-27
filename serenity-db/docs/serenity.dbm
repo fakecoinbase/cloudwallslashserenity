@@ -1326,9 +1326,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<constraint name="mark_type_pk" type="pk-constr" table="serenity.mark_type">
 		<columns names="mark_type_id" ref-type="src-columns"/>
 	</constraint>
-	<constraint name="mark_code_uq" type="uq-constr" table="serenity.mark_type">
-		<columns names="mark_code" ref-type="src-columns"/>
-	</constraint>
 	<initial-data>
 <![CDATA[mark_type_id•mark_code•snap_time⸣
 1•YahooDailyClose•12:00:00]]>
@@ -1443,9 +1440,35 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 dst-table="serenity.instrument_mark"
 	 src-required="true" dst-required="false"/>
 
-<constraint name="mark_uq" type="uq-constr" table="serenity.instrument_mark">
-	<columns names="instrument_id,mark_type_id,mark_time" ref-type="src-columns"/>
-</constraint>
+<index name="mark_code_idx" table="serenity.mark_type"
+	 concurrent="false" unique="true" fast-update="false" buffering="false"
+	 index-type="btree" factor="0">
+		<idxelement use-sorting="false">
+			<column name="mark_code"/>
+		</idxelement>
+</index>
+
+<index name="mark_idx" table="serenity.instrument_mark"
+	 concurrent="false" unique="true" fast-update="false" buffering="false"
+	 index-type="btree" factor="0">
+		<idxelement use-sorting="false">
+			<column name="mark_time"/>
+		</idxelement>
+		<idxelement use-sorting="false">
+			<column name="instrument_id"/>
+		</idxelement>
+		<idxelement use-sorting="false">
+			<column name="mark_type_id"/>
+		</idxelement>
+</index>
+
+<index name="instrument_idx" table="serenity.instrument_mark"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="0">
+		<idxelement use-sorting="false">
+			<column name="instrument_id"/>
+		</idxelement>
+</index>
 
 <constraint name="parent_order_fk" type="fk-constr" alias="parent_order_fk" comparison-type="MATCH FULL"
 	 upd-action="CASCADE" del-action="RESTRICT" ref-table="serenity.&quot;order&quot;" table="serenity.&quot;order&quot;">
