@@ -1,15 +1,29 @@
-import psycopg2
 import yfinance
 
-conn = psycopg2.connect(host="localhost", dbname="serenity", user="postgres", password="password")
+from cloudwall.serenity.db import connect_serenity_db
+
+conn = connect_serenity_db()
+conn.autocommit = True
 cur = conn.cursor()
 
-ticker = yfinance.Ticker("BTC-USD")
-marks = ticker.history(period="max")
 
-cur.execute("SELECT mark_type_id FROM serenity.mark_type WHERE mark_code = %s", ("YahooDailyClose",))
-print(cur.fetchone())
+def backfill_symbol(symbol):
+    ticker = yfinance.Ticker(symbol)
+    marks = ticker.history(period="max")
+
+    cur.execute("SELECT instrument_id FROM serenity.instrument WHERE instrument_code = %s", (symbol,))
+    instrument_id = cur.fetchone()[0]
+
+    cur.execute("SELECT mark_type_id FROM serenity.mark_type WHERE mark_code = %s", ("YahooDailyClose",))
+    mark_type_id = cur.fetchone()[0]
+
+    for index, row in marks.iterrows():
+        cur.execute("INSERT INTO serenity.instrument_mark (instrument_id, mark_type_id, mark_time, mark) "
+                    "VALUES (%s, %s, %s, %s)", (instrument_id, mark_type_id, index, float(row['Close'])))
+
+    conn.commit()
 
 
-
-
+backfill_symbol("BTC-USD")
+backfill_symbol("ETH-USD")
+backfill_symbol("ZEC-USD")
