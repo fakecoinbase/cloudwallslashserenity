@@ -1148,19 +1148,18 @@ ON DELETE RESTRICT ON UPDATE CASCADE;
 ALTER TABLE serenity.position_fill ADD CONSTRAINT position_fill_uq UNIQUE (fill_id);
 -- ddl-end --
 
--- object: serenity.instrument_mark | type: TABLE --
--- DROP TABLE IF EXISTS serenity.instrument_mark CASCADE;
-CREATE TABLE serenity.instrument_mark (
-	mark_id integer NOT NULL,
-	instrument_id integer NOT NULL,
-	mark_type_id smallint NOT NULL,
-	mark_time timestamp NOT NULL,
-	mark decimal(20,16) NOT NULL,
-	CONSTRAINT instrument_mark_pk PRIMARY KEY (mark_id)
-
-);
+-- object: serenity.mark_seq | type: SEQUENCE --
+-- DROP SEQUENCE IF EXISTS serenity.mark_seq CASCADE;
+CREATE SEQUENCE serenity.mark_seq
+	INCREMENT BY 1
+	MINVALUE 0
+	MAXVALUE 2147483647
+	START WITH 1
+	CACHE 1
+	NO CYCLE
+	OWNED BY NONE;
 -- ddl-end --
--- ALTER TABLE serenity.instrument_mark OWNER TO postgres;
+-- ALTER SEQUENCE serenity.mark_seq OWNER TO postgres;
 -- ddl-end --
 
 -- object: serenity.mark_type | type: TABLE --
@@ -1180,11 +1179,19 @@ CREATE TABLE serenity.mark_type (
 INSERT INTO serenity.mark_type (mark_type_id, mark_code, snap_time) VALUES (E'1', E'YahooDailyClose', E'12:00:00');
 -- ddl-end --
 
--- object: instrument_fk | type: CONSTRAINT --
--- ALTER TABLE serenity.instrument_mark DROP CONSTRAINT IF EXISTS instrument_fk CASCADE;
-ALTER TABLE serenity.instrument_mark ADD CONSTRAINT instrument_fk FOREIGN KEY (instrument_id)
-REFERENCES serenity.instrument (instrument_id) MATCH FULL
-ON DELETE RESTRICT ON UPDATE CASCADE;
+-- object: serenity.instrument_mark | type: TABLE --
+-- DROP TABLE IF EXISTS serenity.instrument_mark CASCADE;
+CREATE TABLE serenity.instrument_mark (
+	mark_id integer NOT NULL DEFAULT nextval('serenity.mark_seq'::regclass),
+	instrument_id integer NOT NULL,
+	mark_type_id smallint NOT NULL,
+	mark_time timestamp NOT NULL,
+	mark decimal(20,16) NOT NULL,
+	CONSTRAINT instrument_mark_pk PRIMARY KEY (mark_id)
+
+);
+-- ddl-end --
+-- ALTER TABLE serenity.instrument_mark OWNER TO postgres;
 -- ddl-end --
 
 -- object: mark_type_fk | type: CONSTRAINT --
@@ -1192,11 +1199,6 @@ ON DELETE RESTRICT ON UPDATE CASCADE;
 ALTER TABLE serenity.instrument_mark ADD CONSTRAINT mark_type_fk FOREIGN KEY (mark_type_id)
 REFERENCES serenity.mark_type (mark_type_id) MATCH FULL
 ON DELETE RESTRICT ON UPDATE CASCADE;
--- ddl-end --
-
--- object: mark_uq | type: CONSTRAINT --
--- ALTER TABLE serenity.instrument_mark DROP CONSTRAINT IF EXISTS mark_uq CASCADE;
-ALTER TABLE serenity.instrument_mark ADD CONSTRAINT mark_uq UNIQUE (instrument_id,mark_type_id,mark_time);
 -- ddl-end --
 
 -- object: exchange_fk | type: CONSTRAINT --
@@ -1242,6 +1244,18 @@ CREATE UNIQUE INDEX exchange_instrument_idx ON serenity.exchange_instrument
 	  exchange_id,
 	  exchange_instrument_code
 	);
+-- ddl-end --
+
+-- object: instrument_fk | type: CONSTRAINT --
+-- ALTER TABLE serenity.instrument_mark DROP CONSTRAINT IF EXISTS instrument_fk CASCADE;
+ALTER TABLE serenity.instrument_mark ADD CONSTRAINT instrument_fk FOREIGN KEY (instrument_id)
+REFERENCES serenity.instrument (instrument_id) MATCH FULL
+ON DELETE RESTRICT ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: mark_uq | type: CONSTRAINT --
+-- ALTER TABLE serenity.instrument_mark DROP CONSTRAINT IF EXISTS mark_uq CASCADE;
+ALTER TABLE serenity.instrument_mark ADD CONSTRAINT mark_uq UNIQUE (instrument_id,mark_type_id,mark_time);
 -- ddl-end --
 
 -- object: parent_order_fk | type: CONSTRAINT --
