@@ -282,13 +282,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 	<customidxs object-type="column">
 		<object name="exchange_id" index="2"/>
-		<object name="instrument_id" index="1"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
-		<object name="exchange_fk" index="3"/>
-		<object name="exchange_instrument_uq" index="2"/>
-		<object name="instrument_fk" index="1"/>
+		<object name="exchange_fk" index="1"/>
 	</customidxs>
 </table>
 
@@ -588,19 +585,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</label>
 </relationship>
 
-<relationship name="exchange_instrument_has_one_instrument" type="rel11" layer="0"
-	 src-col-pattern="{sc}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 custom-color="#40ec8e"
-	 src-table="serenity.instrument"
-	 dst-table="serenity.exchange_instrument"
-	 src-required="false" dst-required="false">
-	<label ref-type="name-label">
-		<position x="0" y="0"/>
-	</label>
-</relationship>
-
 <table name="fill" layer="0" collapse-mode="2" max-obj-count="7">
 	<schema name="serenity"/>
 	<role name="postgres"/>
@@ -878,14 +862,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 index-type="btree" factor="0">
 		<idxelement use-sorting="false">
 			<column name="instrument_type_code"/>
-		</idxelement>
-</index>
-
-<index name="exchange_instrument_code_idx" table="serenity.exchange_instrument"
-	 concurrent="false" unique="true" fast-update="false" buffering="false"
-	 index-type="btree" factor="0">
-		<idxelement use-sorting="false">
-			<column name="exchange_instrument_code"/>
 		</idxelement>
 </index>
 
@@ -1373,6 +1349,30 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 index-type="btree" factor="0">
 		<idxelement use-sorting="false">
 			<column name="currency_code"/>
+		</idxelement>
+</index>
+
+<relationship name="instrument_has_many_exchange_instruments" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#a3236d"
+	 src-table="serenity.instrument"
+	 dst-table="serenity.exchange_instrument"
+	 src-required="true" dst-required="false">
+	<label ref-type="name-label">
+		<position x="57.4572" y="-1.23566"/>
+	</label>
+</relationship>
+
+<index name="exchange_instrument_idx" table="serenity.exchange_instrument"
+	 concurrent="false" unique="true" fast-update="false" buffering="false"
+	 index-type="btree" factor="0">
+		<idxelement use-sorting="false">
+			<column name="exchange_id"/>
+		</idxelement>
+		<idxelement use-sorting="false">
+			<column name="exchange_instrument_code"/>
 		</idxelement>
 </index>
 

@@ -284,9 +284,9 @@ ON DELETE RESTRICT ON UPDATE CASCADE;
 -- DROP TABLE IF EXISTS serenity.exchange_instrument CASCADE;
 CREATE TABLE serenity.exchange_instrument (
 	exchange_instrument_id integer NOT NULL DEFAULT nextval('serenity.exchange_instrument_seq'::regclass),
-	instrument_id integer,
-	exchange_id integer NOT NULL,
 	exchange_instrument_code varchar(32) NOT NULL,
+	exchange_id integer NOT NULL,
+	instrument_id_instrument integer NOT NULL,
 	CONSTRAINT exchange_instrument_pk PRIMARY KEY (exchange_instrument_id)
 
 );
@@ -585,18 +585,6 @@ ON DELETE RESTRICT ON UPDATE CASCADE;
 ALTER TABLE serenity.currency_pair ADD CONSTRAINT currency_pair_uq UNIQUE (instrument_id);
 -- ddl-end --
 
--- object: instrument_fk | type: CONSTRAINT --
--- ALTER TABLE serenity.exchange_instrument DROP CONSTRAINT IF EXISTS instrument_fk CASCADE;
-ALTER TABLE serenity.exchange_instrument ADD CONSTRAINT instrument_fk FOREIGN KEY (instrument_id)
-REFERENCES serenity.instrument (instrument_id) MATCH FULL
-ON DELETE SET NULL ON UPDATE CASCADE;
--- ddl-end --
-
--- object: exchange_instrument_uq | type: CONSTRAINT --
--- ALTER TABLE serenity.exchange_instrument DROP CONSTRAINT IF EXISTS exchange_instrument_uq CASCADE;
-ALTER TABLE serenity.exchange_instrument ADD CONSTRAINT exchange_instrument_uq UNIQUE (instrument_id);
--- ddl-end --
-
 -- object: serenity.fill | type: TABLE --
 -- DROP TABLE IF EXISTS serenity.fill CASCADE;
 CREATE TABLE serenity.fill (
@@ -824,15 +812,6 @@ CREATE UNIQUE INDEX instrument_type_code_idx ON serenity.instrument_type
 	USING btree
 	(
 	  instrument_type_code
-	);
--- ddl-end --
-
--- object: exchange_instrument_code_idx | type: INDEX --
--- DROP INDEX IF EXISTS serenity.exchange_instrument_code_idx CASCADE;
-CREATE UNIQUE INDEX exchange_instrument_code_idx ON serenity.exchange_instrument
-	USING btree
-	(
-	  exchange_instrument_code
 	);
 -- ddl-end --
 
@@ -1245,6 +1224,23 @@ CREATE UNIQUE INDEX currency_code_idx ON serenity.currency
 	USING btree
 	(
 	  currency_code
+	);
+-- ddl-end --
+
+-- object: instrument_fk | type: CONSTRAINT --
+-- ALTER TABLE serenity.exchange_instrument DROP CONSTRAINT IF EXISTS instrument_fk CASCADE;
+ALTER TABLE serenity.exchange_instrument ADD CONSTRAINT instrument_fk FOREIGN KEY (instrument_id_instrument)
+REFERENCES serenity.instrument (instrument_id) MATCH FULL
+ON DELETE RESTRICT ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: exchange_instrument_idx | type: INDEX --
+-- DROP INDEX IF EXISTS serenity.exchange_instrument_idx CASCADE;
+CREATE UNIQUE INDEX exchange_instrument_idx ON serenity.exchange_instrument
+	USING btree
+	(
+	  exchange_id,
+	  exchange_instrument_code
 	);
 -- ddl-end --
 
