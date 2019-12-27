@@ -29,8 +29,8 @@ CREATE TABLE serenity.exchange_trade (
 	exchange_trade_id bigint NOT NULL,
 	exchange_id integer NOT NULL,
 	trade_id bigint NOT NULL,
-	trade_price decimal(20,16) NOT NULL,
-	quantity decimal(20,16) NOT NULL,
+	trade_price decimal(24,10) NOT NULL,
+	quantity decimal(24,10) NOT NULL,
 	is_auction_fill bool NOT NULL,
 	trade_time timestamp NOT NULL,
 	side_id smallint NOT NULL,
@@ -95,8 +95,8 @@ INSERT INTO serenity.exchange (exchange_id, exchange_code) VALUES (E'3', E'Binan
 CREATE TABLE serenity.exchange_order (
 	exchange_order_id integer NOT NULL DEFAULT nextval('serenity.exchange_order_seq'::regclass),
 	exchange_order_uuid varchar(64) NOT NULL,
-	price decimal(20,16),
-	quantity decimal(20,16) NOT NULL,
+	price decimal(24,10),
+	quantity decimal(24,10) NOT NULL,
 	create_time timestamp NOT NULL,
 	exchange_account_id integer NOT NULL,
 	side_id smallint NOT NULL,
@@ -192,8 +192,8 @@ CREATE SEQUENCE serenity.fill_seq
 CREATE TABLE serenity."order" (
 	order_id integer NOT NULL DEFAULT nextval('serenity.order_seq'::regclass),
 	parent_order_id integer,
-	price decimal(20,16),
-	quantity decimal(20,16) NOT NULL,
+	price decimal(24,10),
+	quantity decimal(24,10) NOT NULL,
 	create_time timestamp NOT NULL,
 	instrument_id integer NOT NULL,
 	tif_id integer NOT NULL,
@@ -219,9 +219,9 @@ ON DELETE RESTRICT ON UPDATE CASCADE;
 -- DROP TABLE IF EXISTS serenity.exchange_fill CASCADE;
 CREATE TABLE serenity.exchange_fill (
 	exchange_fill_id integer NOT NULL DEFAULT nextval('serenity.exchange_fill_seq'::regclass),
-	fill_price decimal(20,16) NOT NULL,
-	quantity decimal(20,16) NOT NULL,
-	fees decimal(20,16) NOT NULL,
+	fill_price decimal(24,10) NOT NULL,
+	quantity decimal(24,10) NOT NULL,
+	fees decimal(24,10) NOT NULL,
 	trade_id bigint NOT NULL,
 	create_time timestamp NOT NULL,
 	exchange_order_id integer NOT NULL,
@@ -590,8 +590,8 @@ ALTER TABLE serenity.currency_pair ADD CONSTRAINT currency_pair_uq UNIQUE (instr
 CREATE TABLE serenity.fill (
 	fill_id integer NOT NULL DEFAULT nextval('serenity.fill_seq'::regclass),
 	trade_id bigint NOT NULL,
-	fill_price decimal(20,16) NOT NULL,
-	quantity decimal(20,16) NOT NULL,
+	fill_price decimal(24,10) NOT NULL,
+	quantity decimal(24,10) NOT NULL,
 	create_time timestamp NOT NULL,
 	order_id integer,
 	CONSTRAINT fill_pk PRIMARY KEY (fill_id)
@@ -874,11 +874,11 @@ CREATE SEQUENCE serenity.cash_instrument_seq
 -- DROP TABLE IF EXISTS serenity."position" CASCADE;
 CREATE TABLE serenity."position" (
 	position_id integer NOT NULL DEFAULT nextval('serenity.position_seq'::regclass),
-	position_date date NOT NULL,
 	instrument_id integer,
-	quantity decimal(20,16) NOT NULL,
-	update_time timestamp NOT NULL,
 	trading_account_id integer,
+	position_date date NOT NULL,
+	quantity decimal(24,10) NOT NULL,
+	update_time timestamp NOT NULL,
 	CONSTRAINT position_pk PRIMARY KEY (position_id)
 
 );
@@ -978,14 +978,14 @@ CREATE SEQUENCE serenity.exchange_transfer_seq
 -- DROP TABLE IF EXISTS serenity.exchange_transfer CASCADE;
 CREATE TABLE serenity.exchange_transfer (
 	exchange_transfer_id integer NOT NULL DEFAULT nextval('serenity.exchange_transfer_seq'::regclass),
-	currency_id_currency integer NOT NULL,
-	quantity decimal(20,16) NOT NULL,
-	transfer_ref varchar(64),
-	cost_basis decimal(20,16),
-	transfer_time timestamp NOT NULL,
 	exchange_transfer_method_id smallint,
 	exchange_transfer_type_id smallint,
 	exchange_transfer_destination_id integer NOT NULL,
+	currency_id_currency integer NOT NULL,
+	quantity decimal(24,10) NOT NULL,
+	transfer_ref varchar(64),
+	cost_basis decimal(24,10),
+	transfer_time timestamp NOT NULL,
 	CONSTRAINT exchange_transfer_pk PRIMARY KEY (exchange_transfer_id)
 
 );
@@ -1186,7 +1186,7 @@ CREATE TABLE serenity.instrument_mark (
 	instrument_id integer NOT NULL,
 	mark_type_id smallint NOT NULL,
 	mark_time timestamp NOT NULL,
-	mark decimal(20,16) NOT NULL,
+	mark decimal(24,10) NOT NULL,
 	CONSTRAINT instrument_mark_pk PRIMARY KEY (mark_id)
 
 );
