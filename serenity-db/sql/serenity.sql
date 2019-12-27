@@ -284,9 +284,9 @@ ON DELETE RESTRICT ON UPDATE CASCADE;
 -- DROP TABLE IF EXISTS serenity.exchange_instrument CASCADE;
 CREATE TABLE serenity.exchange_instrument (
 	exchange_instrument_id integer NOT NULL DEFAULT nextval('serenity.exchange_instrument_seq'::regclass),
-	exchange_instrument_code varchar(32) NOT NULL,
 	exchange_id integer NOT NULL,
-	instrument_id_instrument integer NOT NULL,
+	instrument_id integer NOT NULL,
+	exchange_instrument_code varchar(32) NOT NULL,
 	CONSTRAINT exchange_instrument_pk PRIMARY KEY (exchange_instrument_id)
 
 );
@@ -1229,7 +1229,7 @@ CREATE UNIQUE INDEX currency_code_idx ON serenity.currency
 
 -- object: instrument_fk | type: CONSTRAINT --
 -- ALTER TABLE serenity.exchange_instrument DROP CONSTRAINT IF EXISTS instrument_fk CASCADE;
-ALTER TABLE serenity.exchange_instrument ADD CONSTRAINT instrument_fk FOREIGN KEY (instrument_id_instrument)
+ALTER TABLE serenity.exchange_instrument ADD CONSTRAINT instrument_fk FOREIGN KEY (instrument_id)
 REFERENCES serenity.instrument (instrument_id) MATCH FULL
 ON DELETE RESTRICT ON UPDATE CASCADE;
 -- ddl-end --

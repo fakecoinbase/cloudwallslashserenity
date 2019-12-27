@@ -281,11 +281,13 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 
 	<customidxs object-type="column">
-		<object name="exchange_id" index="2"/>
+		<object name="exchange_id" index="1"/>
+		<object name="instrument_id" index="2"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
 		<object name="exchange_fk" index="1"/>
+		<object name="instrument_fk" index="2"/>
 	</customidxs>
 </table>
 
@@ -1353,7 +1355,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 </index>
 
 <relationship name="instrument_has_many_exchange_instruments" type="rel1n" layer="0"
-	 src-col-pattern="{sc}_{st}"
+	 src-col-pattern="{sc}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
 	 custom-color="#a3236d"
