@@ -1,5 +1,3 @@
-from abc import ABC
-
 from cloudwall.serenity.model import TypeCode
 
 
@@ -20,11 +18,11 @@ class InstrumentType(TypeCode):
         super().__init__(type_id, type_code)
 
 
-class Instrument(ABC):
-    def __init__(self, instrument_id: int, instrument_code: str, instrument_type: InstrumentType):
+class Instrument:
+    def __init__(self, instrument_id: int, instrument_type: InstrumentType, instrument_code: str):
         self.instrument_id = instrument_id
-        self.instrument_code = instrument_code
         self.instrument_type = instrument_type
+        self.instrument_code = instrument_code
 
     def get_instrument_id(self) -> int:
         return self.instrument_id
@@ -36,30 +34,35 @@ class Instrument(ABC):
         return self.instrument_type
 
 
-class CashInstrument(Instrument):
-    def __init__(self, instrument_id: int, instrument_code: str, instrument_type: InstrumentType,
-                 cash_instrument_id: int, currency: Currency):
-        super().__init__(instrument_id, instrument_code, instrument_type)
+class CashInstrument:
+    def __init__(self, cash_instrument_id: int, instrument: Instrument, currency: Currency):
         self.cash_instrument_id = cash_instrument_id
+        self.instrument = instrument
         self.currency = currency
 
     def get_cash_instrument_id(self) -> int:
         return self.cash_instrument_id
 
+    def get_instrument(self) -> Instrument:
+        return self.instrument
+
     def get_currency(self) -> Currency:
         return self.currency
 
 
-class CurrencyPair(Instrument):
-    def __init__(self, instrument_id: int, instrument_code: str, instrument_type: InstrumentType, currency_pair_id: int,
+class CurrencyPair:
+    def __init__(self, currency_pair_id: int, instrument: Instrument,
                  base_currency: Currency, quote_currency: Currency):
-        super().__init__(instrument_id, instrument_code, instrument_type)
         self.currency_pair_id = currency_pair_id
+        self.instrument = instrument
         self.base_currency = base_currency
         self.quote_currency = quote_currency
 
     def get_currency_pair_id(self) -> int:
         return self.currency_pair_id
+
+    def get_instrument(self) -> Instrument:
+        return self.instrument
 
     def get_base_currency(self) -> Currency:
         return self.base_currency

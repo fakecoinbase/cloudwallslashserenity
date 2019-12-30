@@ -14,7 +14,7 @@ def backfill_symbol(symbol):
     cur.execute("SELECT instrument_id FROM serenity.instrument WHERE instrument_code = %s", (symbol,))
     instrument_id = cur.fetchone()[0]
 
-    cur.execute("SELECT mark_type_id FROM serenity.mark_type WHERE mark_code = %s", ("YahooDailyClose",))
+    cur.execute("SELECT mark_type_id FROM serenity.mark_type WHERE mark_type_code = %s", ("YahooDailyClose",))
     mark_type_id = cur.fetchone()[0]
 
     for index, row in marks.iterrows():
