@@ -28,13 +28,13 @@ SET search_path TO pg_catalog,public,serenity;
 CREATE TABLE serenity.exchange_trade (
 	exchange_trade_id bigint NOT NULL,
 	exchange_id integer NOT NULL,
+	instrument_id integer NOT NULL,
+	side_id smallint NOT NULL,
 	trade_id bigint NOT NULL,
-	trade_price decimal(24,10) NOT NULL,
-	quantity decimal(24,10) NOT NULL,
+	trade_price decimal(24,16) NOT NULL,
+	quantity decimal(24,16) NOT NULL,
 	is_auction_fill bool NOT NULL,
 	trade_time timestamp NOT NULL,
-	side_id smallint NOT NULL,
-	instrument_id integer NOT NULL,
 	CONSTRAINT exchange_trade_pk PRIMARY KEY (exchange_trade_id)
 
 );
@@ -94,16 +94,16 @@ INSERT INTO serenity.exchange (exchange_id, exchange_code) VALUES (E'3', E'Binan
 -- DROP TABLE IF EXISTS serenity.exchange_order CASCADE;
 CREATE TABLE serenity.exchange_order (
 	exchange_order_id integer NOT NULL DEFAULT nextval('serenity.exchange_order_seq'::regclass),
-	exchange_order_uuid varchar(64) NOT NULL,
-	price decimal(24,10),
-	quantity decimal(24,10) NOT NULL,
-	create_time timestamp NOT NULL,
+	exchange_id integer NOT NULL,
+	exchange_instrument_id integer NOT NULL,
+	order_type_id integer NOT NULL,
 	exchange_account_id integer NOT NULL,
 	side_id smallint NOT NULL,
-	order_type_id integer NOT NULL,
-	tif_id integer NOT NULL,
-	exchange_instrument_id integer NOT NULL,
-	exchange_id integer NOT NULL,
+	time_in_force_id integer NOT NULL,
+	exchange_order_uuid varchar(64) NOT NULL,
+	price decimal(24,16),
+	quantity decimal(24,16) NOT NULL,
+	create_time timestamp NOT NULL,
 	CONSTRAINT exchange_order_pk PRIMARY KEY (exchange_order_id)
 
 );
@@ -150,8 +150,8 @@ CREATE SEQUENCE serenity.exchange_account_seq
 -- DROP TABLE IF EXISTS serenity.exchange_account CASCADE;
 CREATE TABLE serenity.exchange_account (
 	exchange_account_id integer NOT NULL DEFAULT nextval('serenity.exchange_account_seq'::regclass),
-	exchange_account_num varchar(256) NOT NULL,
 	exchange_id integer NOT NULL,
+	exchange_account_num varchar(256) NOT NULL,
 	CONSTRAINT exchange_account_pk PRIMARY KEY (exchange_account_id)
 
 );
@@ -191,16 +191,16 @@ CREATE SEQUENCE serenity.fill_seq
 -- DROP TABLE IF EXISTS serenity."order" CASCADE;
 CREATE TABLE serenity."order" (
 	order_id integer NOT NULL DEFAULT nextval('serenity.order_seq'::regclass),
-	parent_order_id integer,
-	price decimal(24,10),
-	quantity decimal(24,10) NOT NULL,
-	create_time timestamp NOT NULL,
-	instrument_id integer NOT NULL,
-	tif_id integer NOT NULL,
 	order_type_id integer NOT NULL,
+	instrument_id integer NOT NULL,
 	side_id smallint NOT NULL,
-	destination_id integer NOT NULL,
 	trading_account_id integer NOT NULL,
+	time_in_force_id integer NOT NULL,
+	destination_id integer NOT NULL,
+	parent_order_id integer,
+	price decimal(24,16),
+	quantity decimal(24,16) NOT NULL,
+	create_time timestamp NOT NULL,
 	CONSTRAINT order_pk PRIMARY KEY (order_id)
 
 );
@@ -219,12 +219,12 @@ ON DELETE RESTRICT ON UPDATE CASCADE;
 -- DROP TABLE IF EXISTS serenity.exchange_fill CASCADE;
 CREATE TABLE serenity.exchange_fill (
 	exchange_fill_id integer NOT NULL DEFAULT nextval('serenity.exchange_fill_seq'::regclass),
-	fill_price decimal(24,10) NOT NULL,
-	quantity decimal(24,10) NOT NULL,
-	fees decimal(24,10) NOT NULL,
+	exchange_order_id integer NOT NULL,
+	fill_price decimal(24,16) NOT NULL,
+	quantity decimal(24,16) NOT NULL,
+	fees decimal(24,16) NOT NULL,
 	trade_id bigint NOT NULL,
 	create_time timestamp NOT NULL,
-	exchange_order_id integer NOT NULL,
 	CONSTRAINT exchange_fill_pk PRIMARY KEY (exchange_fill_id)
 
 );
@@ -264,8 +264,8 @@ CREATE SEQUENCE serenity.exchange_instrument_seq
 -- DROP TABLE IF EXISTS serenity.instrument CASCADE;
 CREATE TABLE serenity.instrument (
 	instrument_id integer NOT NULL DEFAULT nextval('serenity.instrument_seq'::regclass),
-	instrument_code varchar(32) NOT NULL,
 	instrument_type_id integer,
+	instrument_code varchar(32) NOT NULL,
 	CONSTRAINT instrument_pk PRIMARY KEY (instrument_id)
 
 );
@@ -354,8 +354,8 @@ CREATE SEQUENCE serenity.trading_account_seq
 -- DROP TABLE IF EXISTS serenity.trading_account CASCADE;
 CREATE TABLE serenity.trading_account (
 	trading_account_id integer NOT NULL DEFAULT nextval('serenity.trading_account_seq'::regclass),
-	trading_account_name varchar(256) NOT NULL,
 	portfolio_id integer NOT NULL,
+	trading_account_name varchar(256) NOT NULL,
 	CONSTRAINT trading_account_pk PRIMARY KEY (trading_account_id)
 
 );
@@ -366,24 +366,19 @@ CREATE TABLE serenity.trading_account (
 -- object: serenity.time_in_force | type: TABLE --
 -- DROP TABLE IF EXISTS serenity.time_in_force CASCADE;
 CREATE TABLE serenity.time_in_force (
-	tif_id integer NOT NULL,
-	tif_code varchar(32) NOT NULL,
-	CONSTRAINT time_in_force_pk PRIMARY KEY (tif_id)
+	time_in_force_id integer NOT NULL,
+	time_in_force_code varchar(32) NOT NULL,
+	CONSTRAINT time_in_force_pk PRIMARY KEY (time_in_force_id)
 
 );
 -- ddl-end --
 -- ALTER TABLE serenity.time_in_force OWNER TO postgres;
 -- ddl-end --
 
-INSERT INTO serenity.time_in_force (tif_id, tif_code) VALUES (E'1', E'Day');
--- ddl-end --
-INSERT INTO serenity.time_in_force (tif_id, tif_code) VALUES (E'2', E'GTC');
--- ddl-end --
-
 -- object: time_in_force_fk | type: CONSTRAINT --
 -- ALTER TABLE serenity."order" DROP CONSTRAINT IF EXISTS time_in_force_fk CASCADE;
-ALTER TABLE serenity."order" ADD CONSTRAINT time_in_force_fk FOREIGN KEY (tif_id)
-REFERENCES serenity.time_in_force (tif_id) MATCH FULL
+ALTER TABLE serenity."order" ADD CONSTRAINT time_in_force_fk FOREIGN KEY (time_in_force_id)
+REFERENCES serenity.time_in_force (time_in_force_id) MATCH FULL
 ON DELETE RESTRICT ON UPDATE CASCADE;
 -- ddl-end --
 
@@ -472,8 +467,8 @@ ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- object: time_in_force_fk | type: CONSTRAINT --
 -- ALTER TABLE serenity.exchange_order DROP CONSTRAINT IF EXISTS time_in_force_fk CASCADE;
-ALTER TABLE serenity.exchange_order ADD CONSTRAINT time_in_force_fk FOREIGN KEY (tif_id)
-REFERENCES serenity.time_in_force (tif_id) MATCH FULL
+ALTER TABLE serenity.exchange_order ADD CONSTRAINT time_in_force_fk FOREIGN KEY (time_in_force_id)
+REFERENCES serenity.time_in_force (time_in_force_id) MATCH FULL
 ON DELETE RESTRICT ON UPDATE CASCADE;
 -- ddl-end --
 
@@ -527,23 +522,23 @@ REFERENCES serenity.instrument_type (instrument_type_id) MATCH FULL
 ON DELETE SET NULL ON UPDATE CASCADE;
 -- ddl-end --
 
--- object: serenity.destrination_type | type: TABLE --
--- DROP TABLE IF EXISTS serenity.destrination_type CASCADE;
-CREATE TABLE serenity.destrination_type (
+-- object: serenity.destination_type | type: TABLE --
+-- DROP TABLE IF EXISTS serenity.destination_type CASCADE;
+CREATE TABLE serenity.destination_type (
 	destination_type_id integer NOT NULL,
 	destination_type_code varchar(32) NOT NULL,
 	CONSTRAINT destrination_type_pk PRIMARY KEY (destination_type_id)
 
 );
 -- ddl-end --
--- ALTER TABLE serenity.destrination_type OWNER TO postgres;
+-- ALTER TABLE serenity.destination_type OWNER TO postgres;
 -- ddl-end --
 
-INSERT INTO serenity.destrination_type (destination_type_id, destination_type_code) VALUES (E'1', E'Exchange');
+INSERT INTO serenity.destination_type (destination_type_id, destination_type_code) VALUES (E'1', E'Exchange');
 -- ddl-end --
-INSERT INTO serenity.destrination_type (destination_type_id, destination_type_code) VALUES (E'2', E'Internal');
+INSERT INTO serenity.destination_type (destination_type_id, destination_type_code) VALUES (E'2', E'Internal');
 -- ddl-end --
-INSERT INTO serenity.destrination_type (destination_type_id, destination_type_code) VALUES (E'3', E'Algo');
+INSERT INTO serenity.destination_type (destination_type_id, destination_type_code) VALUES (E'3', E'Algo');
 -- ddl-end --
 
 -- object: serenity.exchange_destination_seq | type: SEQUENCE --
@@ -589,11 +584,11 @@ ALTER TABLE serenity.currency_pair ADD CONSTRAINT currency_pair_uq UNIQUE (instr
 -- DROP TABLE IF EXISTS serenity.fill CASCADE;
 CREATE TABLE serenity.fill (
 	fill_id integer NOT NULL DEFAULT nextval('serenity.fill_seq'::regclass),
-	trade_id bigint NOT NULL,
-	fill_price decimal(24,10) NOT NULL,
-	quantity decimal(24,10) NOT NULL,
-	create_time timestamp NOT NULL,
 	order_id integer,
+	trade_id bigint NOT NULL,
+	fill_price decimal(24,16) NOT NULL,
+	quantity decimal(24,16) NOT NULL,
+	create_time timestamp NOT NULL,
 	CONSTRAINT fill_pk PRIMARY KEY (fill_id)
 
 );
@@ -639,10 +634,10 @@ ON DELETE RESTRICT ON UPDATE CASCADE;
 ALTER TABLE serenity.exchange_destination ADD CONSTRAINT exchange_exchange_destination_uq UNIQUE (exchange_id);
 -- ddl-end --
 
--- object: destrination_type_fk | type: CONSTRAINT --
--- ALTER TABLE serenity.destination DROP CONSTRAINT IF EXISTS destrination_type_fk CASCADE;
-ALTER TABLE serenity.destination ADD CONSTRAINT destrination_type_fk FOREIGN KEY (destination_type_id)
-REFERENCES serenity.destrination_type (destination_type_id) MATCH FULL
+-- object: destination_type_fk | type: CONSTRAINT --
+-- ALTER TABLE serenity.destination DROP CONSTRAINT IF EXISTS destination_type_fk CASCADE;
+ALTER TABLE serenity.destination ADD CONSTRAINT destination_type_fk FOREIGN KEY (destination_type_id)
+REFERENCES serenity.destination_type (destination_type_id) MATCH FULL
 ON DELETE SET NULL ON UPDATE CASCADE;
 -- ddl-end --
 
@@ -790,7 +785,7 @@ CREATE UNIQUE INDEX order_tyoe_code_idx ON serenity.order_type
 
 -- object: destination_type_code_idx | type: INDEX --
 -- DROP INDEX IF EXISTS serenity.destination_type_code_idx CASCADE;
-CREATE UNIQUE INDEX destination_type_code_idx ON serenity.destrination_type
+CREATE UNIQUE INDEX destination_type_code_idx ON serenity.destination_type
 	USING btree
 	(
 	  destination_type_code
@@ -820,7 +815,7 @@ CREATE UNIQUE INDEX instrument_type_code_idx ON serenity.instrument_type
 CREATE UNIQUE INDEX tif_code_idx ON serenity.time_in_force
 	USING btree
 	(
-	  tif_code
+	  time_in_force_code
 	);
 -- ddl-end --
 
@@ -877,7 +872,7 @@ CREATE TABLE serenity."position" (
 	instrument_id integer,
 	trading_account_id integer,
 	position_date date NOT NULL,
-	quantity decimal(24,10) NOT NULL,
+	quantity decimal(24,16) NOT NULL,
 	update_time timestamp NOT NULL,
 	CONSTRAINT position_pk PRIMARY KEY (position_id)
 
@@ -981,10 +976,10 @@ CREATE TABLE serenity.exchange_transfer (
 	exchange_transfer_method_id smallint,
 	exchange_transfer_type_id smallint,
 	exchange_transfer_destination_id integer NOT NULL,
-	currency_id_currency integer NOT NULL,
-	quantity decimal(24,10) NOT NULL,
+	currency_id integer NOT NULL,
+	quantity decimal(24,16) NOT NULL,
 	transfer_ref varchar(64),
-	cost_basis decimal(24,10),
+	cost_basis decimal(24,16),
 	transfer_time timestamp NOT NULL,
 	CONSTRAINT exchange_transfer_pk PRIMARY KEY (exchange_transfer_id)
 
@@ -995,7 +990,7 @@ CREATE TABLE serenity.exchange_transfer (
 
 -- object: currency_fk | type: CONSTRAINT --
 -- ALTER TABLE serenity.exchange_transfer DROP CONSTRAINT IF EXISTS currency_fk CASCADE;
-ALTER TABLE serenity.exchange_transfer ADD CONSTRAINT currency_fk FOREIGN KEY (currency_id_currency)
+ALTER TABLE serenity.exchange_transfer ADD CONSTRAINT currency_fk FOREIGN KEY (currency_id)
 REFERENCES serenity.currency (currency_id) MATCH FULL
 ON DELETE RESTRICT ON UPDATE CASCADE;
 -- ddl-end --
@@ -1166,8 +1161,7 @@ CREATE SEQUENCE serenity.mark_seq
 -- DROP TABLE IF EXISTS serenity.mark_type CASCADE;
 CREATE TABLE serenity.mark_type (
 	mark_type_id smallint NOT NULL,
-	mark_code varchar(32) NOT NULL,
-	snap_time time NOT NULL,
+	mark_type_code varchar(32) NOT NULL,
 	CONSTRAINT mark_type_pk PRIMARY KEY (mark_type_id)
 
 );
@@ -1175,7 +1169,7 @@ CREATE TABLE serenity.mark_type (
 -- ALTER TABLE serenity.mark_type OWNER TO postgres;
 -- ddl-end --
 
-INSERT INTO serenity.mark_type (mark_type_id, mark_code, snap_time) VALUES (E'1', E'YahooDailyClose', E'12:00:00');
+INSERT INTO serenity.mark_type (mark_type_id, mark_type_code) VALUES (E'1', E'YahooDailyClose');
 -- ddl-end --
 
 -- object: serenity.instrument_mark | type: TABLE --
@@ -1184,8 +1178,8 @@ CREATE TABLE serenity.instrument_mark (
 	mark_id integer NOT NULL DEFAULT nextval('serenity.mark_seq'::regclass),
 	instrument_id integer NOT NULL,
 	mark_type_id smallint NOT NULL,
+	mark decimal(24,16) NOT NULL,
 	mark_time timestamp NOT NULL,
-	mark decimal(24,10) NOT NULL,
 	CONSTRAINT instrument_mark_pk PRIMARY KEY (mark_id)
 
 );
@@ -1257,7 +1251,7 @@ ON DELETE RESTRICT ON UPDATE CASCADE;
 CREATE UNIQUE INDEX mark_code_idx ON serenity.mark_type
 	USING btree
 	(
-	  mark_code
+	  mark_type_code
 	);
 -- ddl-end --
 
