@@ -5,7 +5,6 @@ from typing import List
 
 from cloudwall.serenity.model import TypeCode
 from cloudwall.serenity.model.account import TradingAccount
-from cloudwall.serenity.model.exchange import Exchange
 from cloudwall.serenity.model.instrument import Instrument
 
 
@@ -24,12 +23,6 @@ class Destination(ABC):
 
     def get_destination_type(self):
         return self.destination_type
-
-
-class ExchangeDestination(Destination):
-    def __init__(self, destination_id: int, destination_type: DestinationType, exchange: Exchange):
-        super().__init__(destination_id, destination_type)
-        self.exchange = exchange
 
 
 class OrderType(TypeCode):
