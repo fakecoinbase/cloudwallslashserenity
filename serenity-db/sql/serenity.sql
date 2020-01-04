@@ -375,6 +375,19 @@ CREATE TABLE serenity.time_in_force (
 -- ALTER TABLE serenity.time_in_force OWNER TO postgres;
 -- ddl-end --
 
+INSERT INTO serenity.time_in_force (time_in_force_id, time_in_force_code) VALUES (E'1', E'Day');
+-- ddl-end --
+INSERT INTO serenity.time_in_force (time_in_force_id, time_in_force_code) VALUES (E'2', E'GTC');
+-- ddl-end --
+INSERT INTO serenity.time_in_force (time_in_force_id, time_in_force_code) VALUES (E'3', E'GTT');
+-- ddl-end --
+INSERT INTO serenity.time_in_force (time_in_force_id, time_in_force_code) VALUES (E'4', E'GTD');
+-- ddl-end --
+INSERT INTO serenity.time_in_force (time_in_force_id, time_in_force_code) VALUES (E'5', E'IOC');
+-- ddl-end --
+INSERT INTO serenity.time_in_force (time_in_force_id, time_in_force_code) VALUES (E'6', E'FOK');
+-- ddl-end --
+
 -- object: time_in_force_fk | type: CONSTRAINT --
 -- ALTER TABLE serenity."order" DROP CONSTRAINT IF EXISTS time_in_force_fk CASCADE;
 ALTER TABLE serenity."order" ADD CONSTRAINT time_in_force_fk FOREIGN KEY (time_in_force_id)
@@ -749,7 +762,7 @@ CREATE UNIQUE INDEX exchange_order_uuid_idx ON serenity.exchange_order
 
 -- object: trade_id_idx | type: INDEX --
 -- DROP INDEX IF EXISTS serenity.trade_id_idx CASCADE;
-CREATE UNIQUE INDEX trade_id_idx ON serenity.exchange_fill
+CREATE INDEX trade_id_idx ON serenity.exchange_fill
 	USING btree
 	(
 	  trade_id
@@ -973,9 +986,8 @@ CREATE SEQUENCE serenity.exchange_transfer_seq
 -- DROP TABLE IF EXISTS serenity.exchange_transfer CASCADE;
 CREATE TABLE serenity.exchange_transfer (
 	exchange_transfer_id integer NOT NULL DEFAULT nextval('serenity.exchange_transfer_seq'::regclass),
-	exchange_transfer_method_id smallint,
-	exchange_transfer_type_id smallint,
-	exchange_transfer_destination_id integer NOT NULL,
+	exchange_transfer_method_id smallint NOT NULL,
+	exchange_transfer_type_id smallint NOT NULL,
 	currency_id integer NOT NULL,
 	quantity decimal(24,16) NOT NULL,
 	transfer_ref varchar(64),
@@ -1016,7 +1028,7 @@ INSERT INTO serenity.exchange_transfer_method (exchange_transfer_method_id, exch
 -- ALTER TABLE serenity.exchange_transfer DROP CONSTRAINT IF EXISTS exchange_transfer_method_fk CASCADE;
 ALTER TABLE serenity.exchange_transfer ADD CONSTRAINT exchange_transfer_method_fk FOREIGN KEY (exchange_transfer_method_id)
 REFERENCES serenity.exchange_transfer_method (exchange_transfer_method_id) MATCH FULL
-ON DELETE SET NULL ON UPDATE CASCADE;
+ON DELETE RESTRICT ON UPDATE CASCADE;
 -- ddl-end --
 
 -- object: exchange_transfer_method_code_idx | type: INDEX --
@@ -1032,26 +1044,7 @@ CREATE UNIQUE INDEX exchange_transfer_method_code_idx ON serenity.exchange_trans
 -- ALTER TABLE serenity.exchange_transfer DROP CONSTRAINT IF EXISTS exchange_transfer_type_fk CASCADE;
 ALTER TABLE serenity.exchange_transfer ADD CONSTRAINT exchange_transfer_type_fk FOREIGN KEY (exchange_transfer_type_id)
 REFERENCES serenity.exchange_transfer_type (exchange_transfer_type_id) MATCH FULL
-ON DELETE SET NULL ON UPDATE CASCADE;
--- ddl-end --
-
--- object: serenity.exchange_transfer_destination_type | type: TABLE --
--- DROP TABLE IF EXISTS serenity.exchange_transfer_destination_type CASCADE;
-CREATE TABLE serenity.exchange_transfer_destination_type (
-	exchange_transfer_destination_type_id smallint NOT NULL,
-	exchange_transfer_destination_type_code varchar(32) NOT NULL,
-	CONSTRAINT exchange_transfer_destination_type_pk PRIMARY KEY (exchange_transfer_destination_type_id)
-
-);
--- ddl-end --
--- ALTER TABLE serenity.exchange_transfer_destination_type OWNER TO postgres;
--- ddl-end --
-
-INSERT INTO serenity.exchange_transfer_destination_type (exchange_transfer_destination_type_id, exchange_transfer_destination_type_code) VALUES (E'1', E'Exchange');
--- ddl-end --
-INSERT INTO serenity.exchange_transfer_destination_type (exchange_transfer_destination_type_id, exchange_transfer_destination_type_code) VALUES (E'2', E'Wallet');
--- ddl-end --
-INSERT INTO serenity.exchange_transfer_destination_type (exchange_transfer_destination_type_id, exchange_transfer_destination_type_code) VALUES (E'3', E'Bank');
+ON DELETE RESTRICT ON UPDATE CASCADE;
 -- ddl-end --
 
 -- object: serenity.exchange_transfer_destination_seq | type: SEQUENCE --
@@ -1068,36 +1061,6 @@ CREATE SEQUENCE serenity.exchange_transfer_destination_seq
 -- ALTER SEQUENCE serenity.exchange_transfer_destination_seq OWNER TO postgres;
 -- ddl-end --
 
--- object: serenity.exchange_transfer_destination | type: TABLE --
--- DROP TABLE IF EXISTS serenity.exchange_transfer_destination CASCADE;
-CREATE TABLE serenity.exchange_transfer_destination (
-	exchange_transfer_destination_id integer NOT NULL DEFAULT nextval('serenity.exchange_transfer_destination_seq'::regclass),
-	destination_name varchar(256) NOT NULL,
-	destination_address varchar(64) NOT NULL,
-	exchange_transfer_destination_type_id smallint NOT NULL,
-	CONSTRAINT exchange_transfer_destination_pk PRIMARY KEY (exchange_transfer_destination_id)
-
-);
--- ddl-end --
--- ALTER TABLE serenity.exchange_transfer_destination OWNER TO postgres;
--- ddl-end --
-
--- object: exchange_transfer_destination_fk | type: CONSTRAINT --
--- ALTER TABLE serenity.exchange_transfer DROP CONSTRAINT IF EXISTS exchange_transfer_destination_fk CASCADE;
-ALTER TABLE serenity.exchange_transfer ADD CONSTRAINT exchange_transfer_destination_fk FOREIGN KEY (exchange_transfer_destination_id)
-REFERENCES serenity.exchange_transfer_destination (exchange_transfer_destination_id) MATCH FULL
-ON DELETE RESTRICT ON UPDATE CASCADE;
--- ddl-end --
-
--- object: exchange_transfer_destination_type_code_idx | type: INDEX --
--- DROP INDEX IF EXISTS serenity.exchange_transfer_destination_type_code_idx CASCADE;
-CREATE UNIQUE INDEX exchange_transfer_destination_type_code_idx ON serenity.exchange_transfer_destination_type
-	USING btree
-	(
-	  exchange_transfer_destination_type_code
-	);
--- ddl-end --
-
 -- object: exchange_transfer_type_code_idx | type: INDEX --
 -- DROP INDEX IF EXISTS serenity.exchange_transfer_type_code_idx CASCADE;
 CREATE UNIQUE INDEX exchange_transfer_type_code_idx ON serenity.exchange_transfer_type
@@ -1105,13 +1068,6 @@ CREATE UNIQUE INDEX exchange_transfer_type_code_idx ON serenity.exchange_transfe
 	(
 	  exchange_transfer_type_code
 	);
--- ddl-end --
-
--- object: exchange_transfer_destination_type_fk | type: CONSTRAINT --
--- ALTER TABLE serenity.exchange_transfer_destination DROP CONSTRAINT IF EXISTS exchange_transfer_destination_type_fk CASCADE;
-ALTER TABLE serenity.exchange_transfer_destination ADD CONSTRAINT exchange_transfer_destination_type_fk FOREIGN KEY (exchange_transfer_destination_type_id)
-REFERENCES serenity.exchange_transfer_destination_type (exchange_transfer_destination_type_id) MATCH FULL
-ON DELETE RESTRICT ON UPDATE CASCADE;
 -- ddl-end --
 
 -- object: serenity.position_fill | type: TABLE --
