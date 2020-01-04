@@ -986,6 +986,7 @@ CREATE SEQUENCE serenity.exchange_transfer_seq
 -- DROP TABLE IF EXISTS serenity.exchange_transfer CASCADE;
 CREATE TABLE serenity.exchange_transfer (
 	exchange_transfer_id integer NOT NULL DEFAULT nextval('serenity.exchange_transfer_seq'::regclass),
+	exchange_id integer NOT NULL,
 	exchange_transfer_method_id smallint NOT NULL,
 	exchange_transfer_type_id smallint NOT NULL,
 	currency_id integer NOT NULL,
@@ -1228,6 +1229,23 @@ CREATE INDEX instrument_idx ON serenity.instrument_mark
 	USING btree
 	(
 	  instrument_id
+	);
+-- ddl-end --
+
+-- object: exchange_fk | type: CONSTRAINT --
+-- ALTER TABLE serenity.exchange_transfer DROP CONSTRAINT IF EXISTS exchange_fk CASCADE;
+ALTER TABLE serenity.exchange_transfer ADD CONSTRAINT exchange_fk FOREIGN KEY (exchange_id)
+REFERENCES serenity.exchange (exchange_id) MATCH FULL
+ON DELETE RESTRICT ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: exchange_transfer_ref_idx | type: INDEX --
+-- DROP INDEX IF EXISTS serenity.exchange_transfer_ref_idx CASCADE;
+CREATE UNIQUE INDEX exchange_transfer_ref_idx ON serenity.exchange_transfer
+	USING btree
+	(
+	  transfer_ref,
+	  exchange_id
 	);
 -- ddl-end --
 
