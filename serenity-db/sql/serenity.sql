@@ -1,6 +1,6 @@
 -- Database generated with pgModeler (PostgreSQL Database Modeler).
 -- pgModeler  version: 0.9.2_snapshot20191127
--- PostgreSQL version: 11.0
+-- PostgreSQL version: 12.0
 -- Project Site: pgmodeler.io
 -- Model Author: ---
 
@@ -991,7 +991,7 @@ CREATE TABLE serenity.exchange_transfer (
 	exchange_transfer_type_id smallint NOT NULL,
 	currency_id integer NOT NULL,
 	quantity decimal(24,16) NOT NULL,
-	transfer_ref varchar(64),
+	transfer_ref varchar(64) NOT NULL,
 	cost_basis decimal(24,16),
 	transfer_time timestamp NOT NULL,
 	CONSTRAINT exchange_transfer_pk PRIMARY KEY (exchange_transfer_id)
