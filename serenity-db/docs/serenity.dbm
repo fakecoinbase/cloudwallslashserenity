@@ -84,7 +84,8 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <![CDATA[exchange_id•exchange_code⸣
 1•CoinbasePro⸣
 2•Gemini⸣
-3•Binance]]>
+3•Binance⸣
+4•Coinbase]]>
 	</initial-data>
 </table>
 
@@ -908,6 +909,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 index-type="btree" factor="0">
 		<idxelement use-sorting="false">
 			<column name="exchange_account_num"/>
+		</idxelement>
+		<idxelement use-sorting="false">
+			<column name="exchange_id"/>
 		</idxelement>
 </index>
 

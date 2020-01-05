@@ -1,6 +1,6 @@
 -- Database generated with pgModeler (PostgreSQL Database Modeler).
 -- pgModeler  version: 0.9.2_snapshot20191127
--- PostgreSQL version: 12.0
+-- PostgreSQL version: 11.0
 -- Project Site: pgmodeler.io
 -- Model Author: ---
 
@@ -88,6 +88,8 @@ INSERT INTO serenity.exchange (exchange_id, exchange_code) VALUES (E'1', E'Coinb
 INSERT INTO serenity.exchange (exchange_id, exchange_code) VALUES (E'2', E'Gemini');
 -- ddl-end --
 INSERT INTO serenity.exchange (exchange_id, exchange_code) VALUES (E'3', E'Binance');
+-- ddl-end --
+INSERT INTO serenity.exchange (exchange_id, exchange_code) VALUES (E'4', E'Coinbase');
 -- ddl-end --
 
 -- object: serenity.exchange_order | type: TABLE --
@@ -783,7 +785,8 @@ CREATE UNIQUE INDEX exchange_code ON serenity.exchange
 CREATE UNIQUE INDEX exchange_account_num_idx ON serenity.exchange_account
 	USING btree
 	(
-	  exchange_account_num
+	  exchange_account_num,
+	  exchange_id
 	);
 -- ddl-end --
 
