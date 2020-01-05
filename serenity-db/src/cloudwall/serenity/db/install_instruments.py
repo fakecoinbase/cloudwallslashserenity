@@ -1,8 +1,7 @@
 import binance.client
 import coinbasepro
 import gemini
-from cloudwall.serenity.db import connect_serenity_db
-from cloudwall.serenity.db.refdata import InstrumentCache, TypeCodeCache
+from cloudwall.serenity.db import connect_serenity_db, InstrumentCache, TypeCodeCache
 
 conn = connect_serenity_db()
 conn.autocommit = True

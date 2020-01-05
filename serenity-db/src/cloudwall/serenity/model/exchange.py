@@ -124,6 +124,9 @@ class ExchangeFill:
     def get_exchange_fill_id(self) -> int:
         return self.exchange_fill_id
 
+    def set_exchange_fill_id(self, exchange_fill_id: int):
+        self.exchange_fill_id = exchange_fill_id
+
     def get_fill_price(self) -> Decimal:
         return self.fill_price
 
@@ -156,69 +159,52 @@ class ExchangeTransferType(TypeCode):
         super().__init__(type_id, type_code)
 
 
-class ExchangeTransferDestinationType(TypeCode):
-    def __init__(self, type_id: int, type_code: str):
-        super().__init__(type_id, type_code)
-
-
-class ExchangeTransferDestination:
-    def __init__(self, exchange_transfer_destination_id: int,
-                 exchange_transfer_destination_type: ExchangeTransferDestinationType,
-                 destination_name: str, destination_address: str):
-        self.exchange_transfer_destination_id = exchange_transfer_destination_id
-
-        self.exchange_transfer_destination_type = exchange_transfer_destination_type
-
-        self.destination_name = destination_name
-        self.destination_address = destination_address
-
-    def get_exchange_transfer_destination_id(self) -> int:
-        return self.exchange_transfer_destination_id
-
-    def get_exchange_transfer_destination_type(self) -> ExchangeTransferDestinationType:
-        return self.exchange_transfer_destination_type
-
-    def get_destination_name(self) -> str:
-        return self.destination_name
-
-    def get_destination_address(self) -> str:
-        return self.destination_address
-
-
 # noinspection DuplicatedCode
 class ExchangeTransfer:
-    def __init__(self, exchange_transfer_id: int, exchange_transfer_type: ExchangeTransferType,
-                 exchange_transfer_destination: ExchangeTransferDestination,
+    def __init__(self, exchange_transfer_id: int, exchange: Exchange, exchange_transfer_type: ExchangeTransferType,
                  exchange_transfer_method: ExchangeTransferMethod, currency: Currency, quantity: Decimal,
                  transfer_ref: str, transfer_time: datetime):
         self.exchange_transfer_id = exchange_transfer_id
 
+        self.exchange = exchange
         self.exchange_transfer_type = exchange_transfer_type
-        self.exchange_transfer_destination = exchange_transfer_destination
         self.exchange_transfer_method = exchange_transfer_method
         self.currency = currency
 
         self.quantity = quantity
         self.transfer_ref = transfer_ref
+        self.cost_basis = None
         self.transfer_time = transfer_time
 
     def get_exchange_transfer_id(self) -> int:
         return self.exchange_transfer_id
 
-    def get_exchange_transfer_type(self) -> ExchangeTransferType:
-        return self.exchange_transfer_type
+    def set_exchange_transfer_id(self, exchange_transfer_id: int):
+        self.exchange_transfer_id = exchange_transfer_id
 
-    def get_exchange_transfer_destination(self) -> ExchangeTransferDestination:
-        return self.exchange_transfer_destination
+    def get_exchange(self) -> Exchange:
+        return self.exchange
 
     def get_exchange_transfer_method(self) -> ExchangeTransferMethod:
         return self.exchange_transfer_method
+
+    def get_exchange_transfer_type(self) -> ExchangeTransferType:
+        return self.exchange_transfer_type
+
+    def get_currency(self) -> Currency:
+        return self.currency
 
     def get_quantity(self) -> Decimal:
         return self.quantity
 
     def get_transfer_ref(self) -> str:
         return self.transfer_ref
+
+    def get_cost_basis(self) -> Decimal:
+        return self.cost_basis
+
+    def set_cost_basis(self, cost_basis: Decimal):
+        self.cost_basis = cost_basis
 
     def get_transfer_time(self) -> datetime:
         return self.transfer_time
