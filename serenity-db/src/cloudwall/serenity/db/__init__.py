@@ -198,6 +198,9 @@ class InstrumentCache:
     def get_entity_by_id(self, klass, entity_id):
         return self.entity_by_id[klass][entity_id]
 
+    def get_entity_by_ak(self, klass, ak):
+        return self.entity_by_ak[klass][ak]
+
 
 class ExchangeEntityService:
     def __init__(self, cur, type_code_cache: TypeCodeCache, instrument_cache: InstrumentCache):
