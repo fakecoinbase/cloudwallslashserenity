@@ -61,16 +61,16 @@ class TradeAnalyzer:
                 for sell in self.trades[instrument_code]['Sell']:
                     self.trades[short]['Buy'].append({
                         'px': self.lookup_instrument_mark(short, sell['ts']),
-                        'qty': sell['qty'],
-                        'remaining': sell['remaining'],
+                        'qty': sell['qty'] * sell['px'],
+                        'remaining': sell['qty'] * sell['px'],
                         'fee': 0.0,
                         'ts': sell['ts']
                     })
 
                     self.trades[long]['Sell'].append({
                         'px': self.lookup_instrument_mark(long, sell['ts']),
-                        'qty': sell['qty'] * sell['px'],
-                        'remaining': sell['qty'] * sell['px'],
+                        'qty': sell['qty'],
+                        'remaining': sell['qty'],
                         'fee': 0.0,
                         'ts': sell['ts']
                     })
@@ -80,7 +80,7 @@ class TradeAnalyzer:
                     self.trades[long]['Buy'].append({
                         'px': self.lookup_instrument_mark(long, buy['ts']),
                         'qty': buy['qty'],
-                        'remaining': buy['remaining'],
+                        'remaining': buy['qty'],
                         'fee': 0.0,
                         'ts': buy['ts']
                     })
@@ -151,6 +151,7 @@ class TradeAnalyzer:
                     print("\t Cum. PnL: " + '${:,.2f}'.format(total_pnl).replace('$-', '-$'))
 
         print("\nOverall Profit/Loss: " + '${:,.2f}'.format(total_pnl).replace('$-', '-$'))
+        print("\nEst. Tax: " + '${:,.2f}'.format(total_pnl * decimal.Decimal(0.35)).replace('$-', '-$'))
 
 
 def generate_tax_report():
