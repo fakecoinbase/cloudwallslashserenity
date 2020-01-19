@@ -108,50 +108,68 @@ class TradeAnalyzer:
         else:
             return row[0]
 
-    def run_analysis(self, instrument_codes: list, tax_year: int):
-        total_pnl = decimal.Decimal(0.0)
+    def run_analysis(self, instrument_codes: list, tax_year: int, tax_rate: float):
+        with open('{}.txf'.format(tax_year), 'w') as txf_file:
+            print("V042", file=txf_file)
+            print("ASerenity", file=txf_file)
+            print("D {}".format(datetime.now().date().strftime('%m/%d/%Y')), file=txf_file)
+            print("^", file=txf_file)
 
-        for instrument_code in instrument_codes:
-            all_trades = self.trades[instrument_code]
-            sells = (all_trades['Sell'])
+            total_pnl = decimal.Decimal(0.0)
 
-            for sell in sells:
-                proceeds = sell['qty'] * sell['px']
-                in_tax_year = datetime(tax_year, 1, 1) < sell['ts'] < datetime(tax_year, 12, 31)
-                if in_tax_year:
-                    print("Sell " + instrument_code.split('-')[0] + " " + str(sell['qty']) + " @ " + str(sell['px']) +
-                          " on " + str(sell['ts'].date()) + "; sale yielded " + '${:,.2f}'.format(proceeds))
+            for instrument_code in instrument_codes:
+                all_trades = self.trades[instrument_code]
+                sells = (all_trades['Sell'])
 
-                cost_basis = decimal.Decimal(0.0)
-                last_buy = None
-                for candidate_buy in all_trades['Buy']:
-                    if candidate_buy['ts'] <= sell['ts'] \
-                            and candidate_buy['remaining'] > 0.0 \
-                            and sell['remaining'] > 0.0:
-                        if candidate_buy['remaining'] < sell['remaining']:
-                            qty_bought = candidate_buy['remaining']
-                            sell['remaining'] -= qty_bought
-                            candidate_buy['remaining'] = decimal.Decimal(0.0)
-                        else:
-                            qty_bought = sell['remaining']
-                            candidate_buy['remaining'] -= qty_bought
-                            sell['remaining'] = decimal.Decimal(0.0)
+                for sell in sells:
+                    proceeds = sell['qty'] * sell['px']
+                    in_tax_year = datetime(tax_year, 1, 1) < sell['ts'] < datetime(tax_year, 12, 31)
+                    if in_tax_year:
+                        print("Sell " + instrument_code.split('-')[0] + " " + str(sell['qty']) + " @ " +
+                              str(sell['px']) + " on " + str(sell['ts'].date()) +
+                              "; sale yielded " + '${:,.2f}'.format(proceeds))
 
-                        if qty_bought > sell['qty']:
-                            qty_bought = sell['qty']
+                    cost_basis = decimal.Decimal(0.0)
+                    last_buy = None
+                    for candidate_buy in all_trades['Buy']:
+                        if candidate_buy['ts'] <= sell['ts'] \
+                                and candidate_buy['remaining'] > 0.0 \
+                                and sell['remaining'] > 0.0:
+                            if candidate_buy['remaining'] < sell['remaining']:
+                                qty_bought = candidate_buy['remaining']
+                                sell['remaining'] -= qty_bought
+                                candidate_buy['remaining'] = decimal.Decimal(0.0)
+                            else:
+                                qty_bought = sell['remaining']
+                                candidate_buy['remaining'] -= qty_bought
+                                sell['remaining'] = decimal.Decimal(0.0)
 
-                        cost_basis += qty_bought * candidate_buy['px']
-                        last_buy = candidate_buy
-                if last_buy is not None and in_tax_year:
-                    trade_pnl = proceeds - cost_basis
-                    total_pnl += trade_pnl
-                    print("\t Buy date: " + str(last_buy['ts'].date()))
-                    print("\t Cost basis: ${:,.2f}".format(cost_basis))
-                    print("\t Profit/Loss: " + '${:,.2f}'.format(trade_pnl).replace('$-', '-$'))
-                    print("\t Cum. PnL: " + '${:,.2f}'.format(total_pnl).replace('$-', '-$'))
+                            if qty_bought > sell['qty']:
+                                qty_bought = sell['qty']
 
-        print("\nOverall Profit/Loss: " + '${:,.2f}'.format(total_pnl).replace('$-', '-$'))
-        print("\nEst. Tax: " + '${:,.2f}'.format(total_pnl * decimal.Decimal(0.35)).replace('$-', '-$'))
+                            cost_basis += qty_bought * candidate_buy['px']
+                            last_buy = candidate_buy
+                    if last_buy is not None and in_tax_year:
+                        trade_pnl = proceeds - cost_basis
+                        total_pnl += trade_pnl
+                        print("\t Buy date: " + str(last_buy['ts'].date()))
+                        print("\t Cost basis: ${:,.2f}".format(cost_basis))
+                        print("\t Profit/Loss: " + '${:,.2f}'.format(trade_pnl).replace('$-', '-$'))
+                        print("\t Cum. PnL: " + '${:,.2f}'.format(total_pnl).replace('$-', '-$'))
+
+                        print("TD", file=txf_file)
+                        print("N712", file=txf_file)
+                        print("C1", file=txf_file)
+                        print("L1", file=txf_file)
+                        print("P{}".format(str(sell['qty']) + " " + instrument_code.split('-')[0]), file=txf_file)
+                        print("D{}".format(sell['ts'].date().strftime('%m/%d/%Y')), file=txf_file)
+                        print("D{}".format(last_buy['ts'].date().strftime('%m/%d/%Y')), file=txf_file)
+                        print("${:.2f}".format(cost_basis), file=txf_file)
+                        print("${:.2f}".format(proceeds), file=txf_file)
+                        print("^", file=txf_file)
+
+            print("\nOverall Profit/Loss: " + '${:,.2f}'.format(total_pnl).replace('$-', '-$'))
+            print("Est. Tax: " + '${:,.2f}'.format(total_pnl * decimal.Decimal(tax_rate)).replace('$-', '-$'))
 
 
 def generate_tax_report():
@@ -161,7 +179,7 @@ def generate_tax_report():
     instrument_cache = InstrumentCache(cur, type_code_cache)
 
     analyzer = TradeAnalyzer(cur, type_code_cache, instrument_cache)
-    analyzer.run_analysis(['BTC-USD', 'ETH-USD'], 2019)
+    analyzer.run_analysis(['BTC-USD', 'ETH-USD'], 2019, 0.35)
 
 
 if __name__ == '__main__':
