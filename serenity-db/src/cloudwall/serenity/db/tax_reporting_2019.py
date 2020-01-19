@@ -1,4 +1,5 @@
 import decimal
+from datetime import datetime
 
 import fire
 
@@ -59,67 +60,97 @@ class TradeAnalyzer:
                 # for each sell, buy short instrument and sell long instrument
                 for sell in self.trades[instrument_code]['Sell']:
                     self.trades[short]['Buy'].append({
-                        'px': 0.0,
+                        'px': self.lookup_instrument_mark(short, sell['ts']),
                         'qty': sell['qty'],
                         'remaining': sell['remaining'],
                         'fee': 0.0,
-                        'ts': sell['ts'],
+                        'ts': sell['ts']
                     })
 
                     self.trades[long]['Sell'].append({
-                        'px': 0.0,
+                        'px': self.lookup_instrument_mark(long, sell['ts']),
                         'qty': sell['qty'] * sell['px'],
-                        'remaining': sell['remaining'],
+                        'remaining': sell['qty'] * sell['px'],
                         'fee': 0.0,
-                        'ts': sell['ts'],
+                        'ts': sell['ts']
                     })
-
-                    print("Added buy & sell trades at " + str(sell['ts']) + " for Sell of " + instrument_code)
 
                 # for each buy, buy long instrument and sell short instrument
                 for buy in self.trades[instrument_code]['Buy']:
                     self.trades[long]['Buy'].append({
-                        'px': 0.0,
+                        'px': self.lookup_instrument_mark(long, buy['ts']),
                         'qty': buy['qty'],
                         'remaining': buy['remaining'],
                         'fee': 0.0,
-                        'ts': buy['ts'],
+                        'ts': buy['ts']
                     })
 
                     self.trades[short]['Sell'].append({
-                        'px': 0.0,
+                        'px': self.lookup_instrument_mark(short, buy['ts']),
                         'qty': buy['qty'] * buy['px'],
-                        'remaining': buy['remaining'],
+                        'remaining': buy['qty'] * buy['px'],
                         'fee': 0.0,
-                        'ts': buy['ts'],
+                        'ts': buy['ts']
                     })
-
-                    print("Added buy & sell trades at " + str(buy['ts']) + " for Buy of " + instrument_code)
 
         # re-sort buys and sells by ts
         for instrument_code in list(self.trades):
             self.trades[instrument_code]['Buy'] = sorted(self.trades[instrument_code]['Buy'], key=lambda k: k['ts'])
             self.trades[instrument_code]['Sell'] = sorted(self.trades[instrument_code]['Sell'], key=lambda k: k['ts'])
 
-    def run_analysis(self, instrument_code):
-        all_trades = self.trades[instrument_code]
-        sells = (all_trades['Sell'])
+    def lookup_instrument_mark(self, instrument_code: str, timestamp: datetime):
+        instrument = self.instrument_cache.get_entity_by_ak(Instrument, instrument_code)
+        self.cur.execute("SELECT mark FROM serenity.instrument_mark WHERE mark_time = %s AND instrument_id = %s",
+                         (timestamp.date(), instrument.get_instrument_id()))
+        row = self.cur.fetchone()
+        if row is None:
+            return 0.0
+        else:
+            return row[0]
 
-        for sell in sells:
-            print("Sell " + instrument_code.split('-')[0] + " " + str(sell['qty']) + " @ " + str(sell['px']) +
-                  " (" + str(sell['ts']) + ")")
-            for candidate_buy in all_trades['Buy']:
-                if candidate_buy['ts'] <= sell['ts'] and candidate_buy['remaining'] > 0.0 and sell['remaining'] > 0.0:
-                    if candidate_buy['remaining'] < sell['remaining']:
-                        sell['remaining'] -= candidate_buy['remaining']
-                        candidate_buy['remaining'] = decimal.Decimal(0.0)
-                    else:
-                        candidate_buy['remaining'] -= sell['remaining']
-                        sell['remaining'] = decimal.Decimal(0.0)
+    def run_analysis(self, instrument_codes: list, tax_year: int):
+        total_pnl = decimal.Decimal(0.0)
 
-                    print("\t Buy " + str(candidate_buy['qty']) + " @ " + str(candidate_buy['px']) +
-                          " (" + str(candidate_buy['ts']) + "); buy remaining: " + str(candidate_buy['remaining']) +
-                          "; sell remaining: " + str(sell['remaining']))
+        for instrument_code in instrument_codes:
+            all_trades = self.trades[instrument_code]
+            sells = (all_trades['Sell'])
+
+            for sell in sells:
+                proceeds = sell['qty'] * sell['px']
+                in_tax_year = datetime(tax_year, 1, 1) < sell['ts'] < datetime(tax_year, 12, 31)
+                if in_tax_year:
+                    print("Sell " + instrument_code.split('-')[0] + " " + str(sell['qty']) + " @ " + str(sell['px']) +
+                          " on " + str(sell['ts'].date()) + "; sale yielded " + '${:,.2f}'.format(proceeds))
+
+                cost_basis = decimal.Decimal(0.0)
+                last_buy = None
+                for candidate_buy in all_trades['Buy']:
+                    if candidate_buy['ts'] <= sell['ts'] \
+                            and candidate_buy['remaining'] > 0.0 \
+                            and sell['remaining'] > 0.0:
+                        if candidate_buy['remaining'] < sell['remaining']:
+                            qty_bought = candidate_buy['remaining']
+                            sell['remaining'] -= qty_bought
+                            candidate_buy['remaining'] = decimal.Decimal(0.0)
+                        else:
+                            qty_bought = sell['remaining']
+                            candidate_buy['remaining'] -= qty_bought
+                            sell['remaining'] = decimal.Decimal(0.0)
+
+                        if qty_bought > sell['qty']:
+                            qty_bought = sell['qty']
+
+                        cost_basis += qty_bought * candidate_buy['px']
+                        last_buy = candidate_buy
+                if last_buy is not None and in_tax_year:
+                    trade_pnl = proceeds - cost_basis
+                    total_pnl += trade_pnl
+                    print("\t Buy date: " + str(last_buy['ts'].date()))
+                    print("\t Cost basis: ${:,.2f}".format(cost_basis))
+                    print("\t Profit/Loss: " + '${:,.2f}'.format(trade_pnl).replace('$-', '-$'))
+                    print("\t Cum. PnL: " + '${:,.2f}'.format(total_pnl).replace('$-', '-$'))
+
+        print("\nOverall Profit/Loss: " + '${:,.2f}'.format(total_pnl).replace('$-', '-$'))
 
 
 def generate_tax_report():
@@ -129,7 +160,7 @@ def generate_tax_report():
     instrument_cache = InstrumentCache(cur, type_code_cache)
 
     analyzer = TradeAnalyzer(cur, type_code_cache, instrument_cache)
-    analyzer.run_analysis('BTC-USD')
+    analyzer.run_analysis(['BTC-USD', 'ETH-USD'], 2019)
 
 
 if __name__ == '__main__':
