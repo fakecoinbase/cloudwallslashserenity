@@ -18,6 +18,15 @@ services:
             - /mnt/raid/data/behemoth:/behemoth
         depends_on:
             - scheduler
+    phemex_mdrecorder:
+        build:
+            context: .
+            dockerfile: ./docker/phemex_mdrecorder/Dockerfile
+        container_name: "phemex_mdrecorder"
+        volumes:
+            - /mnt/raid/data/behemoth:/behemoth
+        depends_on:
+            - scheduler
     scheduler:
         build:
             context: .

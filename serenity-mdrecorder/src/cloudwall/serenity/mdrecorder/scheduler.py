@@ -13,6 +13,7 @@ from pathlib import Path
 from tornado.ioloop import IOLoop
 
 
+# noinspection DuplicatedCode
 def upload_coinbase_ticks_daily():
     func_logger = logging.getLogger(__name__)
     upload_date = datetime.datetime.utcnow().date() - datetime.timedelta(1)
@@ -93,6 +94,48 @@ def upload_binance_ticks_daily():
     func_logger.info("inserted {} records".format(len(df)))
 
 
+# noinspection DuplicatedCode
+def upload_phemex_ticks_daily():
+    func_logger = logging.getLogger(__name__)
+    upload_date = datetime.datetime.utcnow().date() - datetime.timedelta(1)
+
+    symbol = 'BTC-USD'
+    journal = Journal(Path('/behemoth/journals/PHEMEX_TRADES/' + symbol))
+    reader = journal.create_reader(upload_date)
+    length = reader.get_length()
+    records = []
+    while reader.get_pos() < length:
+        time = reader.read_double()
+        sequence = reader.read_long()
+        trade_id = reader.read_long()
+        product_id = reader.read_string()
+        side = 'buy' if reader.read_short() == 0 else 'sell'
+        size = reader.read_double()
+        price = reader.read_double()
+
+        record = {
+            'time': datetime.datetime.fromtimestamp(time),
+            'sequence': sequence,
+            'trade_id': trade_id,
+            'product_id': product_id,
+            'side': side,
+            'size': size,
+            'price': price
+        }
+        records.append(record)
+
+    func_logger.info("uploading journaled Phemex ticks to Behemoth for UTC date " + str(upload_date))
+    df = pd.DataFrame(records)
+    df.set_index('time', inplace=True)
+    func_logger.info("extracted {} trade records".format(len(df)))
+
+    tickstore = LocalTickstore(Path('/behemoth/db/PHEMEX_TRADES'), 'time')
+    tickstore.insert(symbol, BiTimestamp(upload_date), df)
+    tickstore.close()
+
+    func_logger.info("inserted {} records".format(len(df)))
+
+
 if __name__ == '__main__':
     init_logging()
 
@@ -101,7 +144,8 @@ if __name__ == '__main__':
     scheduler.add_executor(TornadoExecutor())
 
     scheduler.add_job(upload_coinbase_ticks_daily, CronTrigger(hour=0, minute=15, second=0, timezone='UTC'))
-    scheduler.add_job(upload_binance_ticks_daily, CronTrigger(hour=0, minute=15, second=10, timezone='UTC'))
+    scheduler.add_job(upload_binance_ticks_daily, CronTrigger(hour=0, minute=15, second=5, timezone='UTC'))
+    scheduler.add_job(upload_phemex_ticks_daily, CronTrigger(hour=0, minute=15, second=10, timezone='UTC'))
     scheduler.start()
 
     # Execution will block here until Ctrl+C (Ctrl+Break on Windows) is pressed.
