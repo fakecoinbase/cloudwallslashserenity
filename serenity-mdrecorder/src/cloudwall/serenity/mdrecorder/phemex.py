@@ -40,7 +40,7 @@ class PhemexSubscriber(WebsocketSubscriber):
                 self.appender.write_double(float(trade[2]))
 
 
-def subscribe_phemex_trades(journal_path: str = '/behemoth/journals/PHEMEX_TRADES/BTC-USD'):
+def subscribe_phemex_trades(journal_path: str = '/behemoth/journals/PHEMEX_TRADES/BTCUSD'):
     logger = logging.getLogger(__name__)
 
     journal = Journal(Path(journal_path))

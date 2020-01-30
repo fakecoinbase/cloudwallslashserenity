@@ -99,7 +99,7 @@ def upload_phemex_ticks_daily():
     func_logger = logging.getLogger(__name__)
     upload_date = datetime.datetime.utcnow().date() - datetime.timedelta(1)
 
-    symbol = 'BTC-USD'
+    symbol = 'BTCUSD'
     journal = Journal(Path('/behemoth/journals/PHEMEX_TRADES/' + symbol))
     reader = journal.create_reader(upload_date)
     length = reader.get_length()

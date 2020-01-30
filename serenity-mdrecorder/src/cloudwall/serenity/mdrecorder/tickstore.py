@@ -219,8 +219,9 @@ class DataFrameIndex:
             self.df.update(all_versions)
 
     def flush(self):
-        self.df.to_hdf(str(self.index_path), self.table_name, mode='w', append=False, complevel=9, complib='blosc')
-        self._mark_dirty(False)
+        if self.dirty:
+            self.df.to_hdf(str(self.index_path), self.table_name, mode='w', append=False, complevel=9, complib='blosc')
+            self._mark_dirty(False)
 
     def _mark_dirty(self, dirty=True):
         self.dirty = dirty
