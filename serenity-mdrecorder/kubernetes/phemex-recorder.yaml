@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phemex-recorder
+  labels:
+    app: phemex-recorder
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: phemex-recorder
+  template:
+    metadata:
+      labels:
+        app: phemex-recorder
+    spec:
+      containers:
+        - name: phemex-recorder
+          image: kdowney1974/serenity-mdrecorder:v1
+          command: ["python"]
+          args: ["cloudwall/serenity/mdrecorder/phemex.py"]
+          volumeMounts:
+            - mountPath: /behemoth
+              name: behemoth 
+      volumes:
+        - name: behemoth
+          persistentVolumeClaim:
+            claimName: behemoth-pv-claim
