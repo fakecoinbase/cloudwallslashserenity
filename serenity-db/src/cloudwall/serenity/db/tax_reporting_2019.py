@@ -5,7 +5,7 @@ import fire
 
 from cloudwall.serenity.db import connect_serenity_db, TypeCodeCache, InstrumentCache
 from cloudwall.serenity.model.exchange import ExchangeInstrument
-from cloudwall.serenity.model.instrument import Instrument, CurrencyPair, Currency
+from cloudwall.serenity.model.instrument import Instrument, Currency
 from cloudwall.serenity.model.order import Side
 
 
