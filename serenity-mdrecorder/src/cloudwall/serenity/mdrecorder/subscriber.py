@@ -3,7 +3,9 @@ import json
 import logging
 from abc import ABC
 
+from tau.core import MutableSignal, NetworkScheduler
 from tornado import httputil, httpclient, websocket
+import websockets
 
 from cloudwall.serenity.mdrecorder.journal import Journal
 from tornado.ioloop import IOLoop, PeriodicCallback
@@ -94,3 +96,10 @@ class WebsocketSubscriber(ABC):
     @abc.abstractmethod
     def _on_message_json(self, msg):
         pass
+
+
+async def subscribe_trades(uri: str, subscribe_msg: dict, messages: MutableSignal, scheduler: NetworkScheduler):
+    async with websockets.connect(uri) as sock:
+        await sock.send(json.dumps(subscribe_msg))
+        while True:
+            scheduler.schedule_update(messages, await sock.recv())
