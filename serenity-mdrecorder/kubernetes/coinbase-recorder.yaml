@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: coinbase-recorder
+  labels:
+    app: coinbase-recorder
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: coinbase-recorder
+  template:
+    metadata:
+      labels:
+        app: coinbase-recorder
+    spec:
+      containers:
+        - name: coinbase-recorder
+          image: kdowney1974/serenity-mdrecorder:v1
+          command: ["python"]
+          args: ["cloudwall/serenity/mdrecorder/coinbase.py"]
+          volumeMounts:
+            - mountPath: /behemoth
+              name: behemoth 
+      volumes:
+        - name: behemoth
+          persistentVolumeClaim:
+            claimName: behemoth-pv-claim

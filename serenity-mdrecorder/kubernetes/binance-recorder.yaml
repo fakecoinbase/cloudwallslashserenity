@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: binance-recorder
+  labels:
+    app: binance-recorder
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: binance-recorder
+  template:
+    metadata:
+      labels:
+        app: binance-recorder
+    spec:
+      containers:
+        - name: binance-recorder
+          image: kdowney1974/serenity-mdrecorder:v1
+          command: ["python"]
+          args: ["cloudwall/serenity/mdrecorder/binance.py"]
+          volumeMounts:
+            - mountPath: /behemoth
+              name: behemoth 
+      volumes:
+        - name: behemoth
+          persistentVolumeClaim:
+            claimName: behemoth-pv-claim
