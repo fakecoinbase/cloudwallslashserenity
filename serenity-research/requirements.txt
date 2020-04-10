@@ -1,6 +1,7 @@
-beakerx
 cufflinks
 dask
+ipywidgets
+jupyterlab<2.0.0
 jupyterlab-git
 pandas
 py4j
