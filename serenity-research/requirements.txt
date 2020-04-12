@@ -1,5 +1,6 @@
 cufflinks
 dask
+hmmlearn
 ipywidgets
 jupyterlab<2.0.0
 jupyterlab-git
