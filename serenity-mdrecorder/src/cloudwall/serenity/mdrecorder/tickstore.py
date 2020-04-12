@@ -152,6 +152,9 @@ class DataFrameIndex:
         # selects don't work properly unless you remove duplicates
         self.df = self.df.loc[~self.df.index.duplicated(keep='first')]
 
+        # dirty the index
+        self._mark_dirty(True)
+
         return write_path
 
     def delete(self, symbol: str, as_at_date: datetime.date):
@@ -165,6 +168,9 @@ class DataFrameIndex:
             all_versions.loc[(all_versions['version'] == prev_version), 'end_time'] = start_time
 
             self.df.update(all_versions)
+
+            # dirty the index
+            self._mark_dirty(True)
 
     def reindex(self):
         self.index_path.unlink()
