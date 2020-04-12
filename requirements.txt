@@ -1,4 +1,5 @@
 APScheduler==3.6.3
+Pygments==2.6.1
 coinbasepro==0.2.1
 cufflinks==0.17.3
 dask==2.14.0
