@@ -94,59 +94,7 @@ class DataFrameIndex:
         self.dirty = False
 
         if not self.index_path.exists():
-            # initialize index; for backward compatibility support generating an index
-            # from directories and files only. in this mode we also rewrite the paths
-            # to support the bitemporal storage engine.
-            index_rows = []
-            splay_paths = list(base_path.rglob("*.h5"))
-            for path in splay_paths:
-                # extract date
-                parts = path.parts
-                year = int(parts[-4])
-                month = int(parts[-3])
-                day = int(parts[-2])
-                splay_date = datetime.date(year, month, day)
-
-                # extract symbol
-                filename = parts[-1]
-                symbol_search = re.search(r'(.*?)_(\d+)\.h5', filename)
-                if symbol_search:
-                    symbol = symbol_search.group(1)
-                    symbol_version = int(symbol_search.group(2))
-                else:
-                    # another backward compatibility step: if we don't have a version number
-                    # embedded in the filename rename the file to version zero. note we
-                    # only support 10K versions per symbol with this convention
-                    symbol_search = re.search(r'(.*)\.h5', filename)
-                    symbol = symbol_search.group(1)
-                    symbol_version = 0
-                    path.rename(Path(path.parent.joinpath(Path(symbol + '_0000.h5'))))
-
-                index_rows.append({'symbol': symbol,
-                                   'date': splay_date,
-                                   'start_time': BiTimestamp.start_as_of,
-                                   'end_time': BiTimestamp.latest_as_of,
-                                   'version': symbol_version,
-                                   'path': str(path)
-                                   })
-
-            # build a DataFrame with multi-level index and then save to compressed HDF5. since we will
-            # need to build the index after first rows inserted also capture whether it's an empty index.
-            if len(index_rows) > 0:
-                index_df = pd.DataFrame(index_rows)
-            else:
-                index_df = pd.DataFrame(columns=['symbol',
-                                                 'date',
-                                                 'start_time',
-                                                 'end_time',
-                                                 'version',
-                                                 'path'])
-
-            index_df.set_index(['symbol', 'date'], inplace=True)
-            self.df = index_df
-
-            self._mark_dirty()
-            self.flush()
+            self._build_index()
         else:
             # noinspection PyTypeChecker
             existing_index: pd.DataFrame = pd.read_hdf(str(self.index_path))
@@ -218,10 +166,69 @@ class DataFrameIndex:
 
             self.df.update(all_versions)
 
+    def reindex(self):
+        self.index_path.unlink()
+        self._build_index()
+
     def flush(self):
         if self.dirty:
             self.df.to_hdf(str(self.index_path), self.table_name, mode='w', append=False, complevel=9, complib='blosc')
             self._mark_dirty(False)
+
+    def _build_index(self):
+        # initialize index; for backward compatibility support generating an index
+        # from directories and files only. in this mode we also rewrite the paths
+        # to support the bitemporal storage engine.
+        index_rows = []
+        splay_paths = list(self.base_path.rglob("*.h5"))
+        for path in splay_paths:
+            # extract date
+            parts = path.parts
+            year = int(parts[-4])
+            month = int(parts[-3])
+            day = int(parts[-2])
+            splay_date = datetime.date(year, month, day)
+
+            # extract symbol
+            filename = parts[-1]
+            symbol_search = re.search(r'(.*?)_(\d+)\.h5', filename)
+            if symbol_search:
+                symbol = symbol_search.group(1)
+                symbol_version = int(symbol_search.group(2))
+            else:
+                # another backward compatibility step: if we don't have a version number
+                # embedded in the filename rename the file to version zero. note we
+                # only support 10K versions per symbol with this convention
+                symbol_search = re.search(r'(.*)\.h5', filename)
+                symbol = symbol_search.group(1)
+                symbol_version = 0
+                path.rename(Path(path.parent.joinpath(Path(symbol + '_0000.h5'))))
+
+            index_rows.append({'symbol': symbol,
+                               'date': splay_date,
+                               'start_time': BiTimestamp.start_as_of,
+                               'end_time': BiTimestamp.latest_as_of,
+                               'version': symbol_version,
+                               'path': str(path)
+                               })
+
+        # build a DataFrame with multi-level index and then save to compressed HDF5. since we will
+        # need to build the index after first rows inserted also capture whether it's an empty index.
+        if len(index_rows) > 0:
+            index_df = pd.DataFrame(index_rows)
+        else:
+            index_df = pd.DataFrame(columns=['symbol',
+                                             'date',
+                                             'start_time',
+                                             'end_time',
+                                             'version',
+                                             'path'])
+
+        index_df.set_index(['symbol', 'date'], inplace=True)
+        self.df = index_df
+
+        self._mark_dirty()
+        self.flush()
 
     def _mark_dirty(self, dirty=True):
         self.dirty = dirty
@@ -291,6 +298,9 @@ class LocalTickstore(Tickstore):
         # do the tick write, with blosc compression
         write_path.parent.mkdir(parents=True, exist_ok=True)
         ticks.to_hdf(str(write_path), 'ticks', mode='w', append=False, complevel=9, complib='blosc')
+
+    def reindex(self):
+        self.index.reindex()
 
     def delete(self, symbol: str, ts: BiTimestamp):
         self._check_closed('delete')
