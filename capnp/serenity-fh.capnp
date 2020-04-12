@@ -1,8 +1,5 @@
 @0x8fe87a03768154e9;
 
-using Cxx = import "c++.capnp";
-$Cxx.namespace("cloudwall::serenity");
-
 enum Side {
     buy @0;
     sell @1;
