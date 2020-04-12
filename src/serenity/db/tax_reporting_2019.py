@@ -3,10 +3,10 @@ from datetime import datetime
 
 import fire
 
-from cloudwall.serenity.db import connect_serenity_db, TypeCodeCache, InstrumentCache
-from cloudwall.serenity.model.exchange import ExchangeInstrument
-from cloudwall.serenity.model.instrument import Instrument, Currency
-from cloudwall.serenity.model.order import Side
+from serenity import connect_serenity_db, TypeCodeCache, InstrumentCache
+from serenity import ExchangeInstrument
+from serenity import Instrument, Currency
+from serenity import Side
 
 
 class TradeAnalyzer:

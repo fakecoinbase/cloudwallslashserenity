@@ -2,7 +2,7 @@ import datetime
 import numpy as np
 import pandas as pd
 
-from cloudwall.serenity.mdrecorder.tickstore import LocalTickstore, BiTimestamp
+from serenity.mdrecorder.tickstore import LocalTickstore, BiTimestamp
 from pathlib import Path
 from pytest_mock import MockFixture
 

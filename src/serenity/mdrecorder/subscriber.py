@@ -7,7 +7,7 @@ from tau.core import MutableSignal, NetworkScheduler
 from tornado import httputil, httpclient, websocket
 import websockets
 
-from cloudwall.serenity.mdrecorder.journal import Journal
+from serenity.mdrecorder.journal import Journal
 from tornado.ioloop import IOLoop, PeriodicCallback
 
 APPLICATION_JSON = 'application/json'

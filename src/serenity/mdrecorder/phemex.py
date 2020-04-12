@@ -9,9 +9,9 @@ from tau.core import MutableSignal, NetworkScheduler
 from tau.event import Do
 from tau.signal import Map, Filter
 
-from cloudwall.serenity.mdrecorder.journal import Journal
-from cloudwall.serenity.mdrecorder.subscriber import subscribe_trades
-from cloudwall.serenity.mdrecorder.utils import init_logging
+from serenity.mdrecorder.journal import Journal
+from serenity.mdrecorder.subscriber import subscribe_trades
+from serenity.mdrecorder.utils import init_logging
 from pathlib import Path
 
 

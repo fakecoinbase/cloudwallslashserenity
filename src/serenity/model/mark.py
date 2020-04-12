@@ -1,8 +1,8 @@
 from datetime import datetime
 from decimal import Decimal
 
-from cloudwall.serenity.model import TypeCode
-from cloudwall.serenity.model.instrument import Instrument
+from serenity import TypeCode
+from serenity import Instrument
 
 
 class MarkType(TypeCode):

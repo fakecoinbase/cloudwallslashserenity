@@ -6,9 +6,9 @@ from apscheduler.executors.tornado import TornadoExecutor
 from apscheduler.jobstores.memory import MemoryJobStore
 from apscheduler.schedulers.tornado import TornadoScheduler
 from apscheduler.triggers.cron import CronTrigger
-from cloudwall.serenity.mdrecorder.journal import Journal
-from cloudwall.serenity.mdrecorder.tickstore import LocalTickstore, BiTimestamp
-from cloudwall.serenity.mdrecorder.utils import init_logging
+from serenity.mdrecorder.journal import Journal
+from serenity.mdrecorder.tickstore import LocalTickstore, BiTimestamp
+from serenity.mdrecorder.utils import init_logging
 from pathlib import Path
 from tornado.ioloop import IOLoop
 

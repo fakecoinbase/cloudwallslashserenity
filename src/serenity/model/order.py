@@ -3,9 +3,9 @@ from datetime import datetime
 from decimal import Decimal
 from typing import List
 
-from cloudwall.serenity.model import TypeCode
-from cloudwall.serenity.model.account import TradingAccount
-from cloudwall.serenity.model.instrument import Instrument
+from serenity import TypeCode
+from serenity import TradingAccount
+from serenity import Instrument
 
 
 class DestinationType(TypeCode):

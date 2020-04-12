@@ -2,10 +2,10 @@ from datetime import datetime
 
 import fire
 
-from cloudwall.serenity.db import connect_serenity_db, ExchangeEntityService, TypeCodeCache, InstrumentCache
-from cloudwall.serenity.model.exchange import ExchangeAccount, ExchangeOrder, Exchange, ExchangeFill
-from cloudwall.serenity.model.instrument import InstrumentType
-from cloudwall.serenity.model.order import Side, OrderType, TimeInForce
+from serenity import connect_serenity_db, ExchangeEntityService, TypeCodeCache, InstrumentCache
+from serenity import ExchangeAccount, ExchangeOrder, Exchange, ExchangeFill
+from serenity import InstrumentType
+from serenity import Side, OrderType, TimeInForce
 
 
 def backfill_coinbase():

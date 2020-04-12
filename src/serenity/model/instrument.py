@@ -1,4 +1,4 @@
-from cloudwall.serenity.model import TypeCode
+from serenity import TypeCode
 
 
 class Currency:

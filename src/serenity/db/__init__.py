@@ -1,11 +1,11 @@
 import os
 import psycopg2
 
-from cloudwall.serenity.model.exchange import Exchange, ExchangeTransferMethod, ExchangeTransferType, \
+from serenity import Exchange, ExchangeTransferMethod, ExchangeTransferType, \
     ExchangeInstrument, ExchangeOrder, ExchangeAccount, ExchangeFill, ExchangeTransfer
-from cloudwall.serenity.model.instrument import InstrumentType, Instrument, Currency, CurrencyPair, CashInstrument
-from cloudwall.serenity.model.mark import MarkType
-from cloudwall.serenity.model.order import Side, OrderType, DestinationType, TimeInForce
+from serenity import InstrumentType, Instrument, Currency, CurrencyPair, CashInstrument
+from serenity import MarkType
+from serenity import Side, OrderType, DestinationType, TimeInForce
 
 
 def connect_serenity_db(hostname: str = os.getenv('POSTGRES_HOST', 'localhost'),

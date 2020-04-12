@@ -2,9 +2,9 @@ from datetime import date, datetime
 from decimal import Decimal
 from typing import List
 
-from cloudwall.serenity.model.account import TradingAccount
-from cloudwall.serenity.model.instrument import Instrument
-from cloudwall.serenity.model.order import Fill
+from serenity import TradingAccount
+from serenity import Instrument
+from serenity import Fill
 
 
 class Position:

@@ -1,6 +1,6 @@
 import yfinance
 
-from cloudwall.serenity.db import connect_serenity_db
+from serenity import connect_serenity_db
 
 conn = connect_serenity_db()
 cur = conn.cursor()

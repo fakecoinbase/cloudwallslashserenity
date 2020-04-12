@@ -1,9 +1,9 @@
 from datetime import datetime
 from decimal import Decimal
 
-from cloudwall.serenity.model import TypeCode
-from cloudwall.serenity.model.instrument import Instrument, Currency
-from cloudwall.serenity.model.order import OrderType, TimeInForce, Side, Destination, DestinationType
+from serenity import TypeCode
+from serenity import Instrument, Currency
+from serenity import OrderType, TimeInForce, Side, Destination, DestinationType
 
 
 class Exchange(TypeCode):

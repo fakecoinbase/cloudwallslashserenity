@@ -1,7 +1,7 @@
 import datetime
 import shutil
 
-from cloudwall.serenity.mdrecorder.journal import Journal
+from serenity.mdrecorder.journal import Journal
 from pathlib import Path
 
 

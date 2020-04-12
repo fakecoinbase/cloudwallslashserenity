@@ -2,10 +2,10 @@ import datetime
 import fire
 import logging
 
-from cloudwall.serenity.mdrecorder.journal import Journal
-from cloudwall.serenity.mdrecorder.subscriber import DEFAULT_KEEPALIVE_TIMEOUT_MILLIS, DEFAULT_CONNECT_TIMEOUT_SEC, \
+from serenity.mdrecorder.journal import Journal
+from serenity.mdrecorder.subscriber import DEFAULT_KEEPALIVE_TIMEOUT_MILLIS, DEFAULT_CONNECT_TIMEOUT_SEC, \
     DEFAULT_REQUEST_TIMEOUT_SEC, WebsocketSubscriber
-from cloudwall.serenity.mdrecorder.utils import init_logging
+from serenity.mdrecorder.utils import init_logging
 from pathlib import Path
 from tornado.ioloop import IOLoop
 

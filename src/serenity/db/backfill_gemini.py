@@ -3,11 +3,11 @@ from datetime import datetime
 import gemini
 import fire
 
-from cloudwall.serenity.db import connect_serenity_db, TypeCodeCache, InstrumentCache, ExchangeEntityService
-from cloudwall.serenity.model.exchange import ExchangeOrder, Exchange, ExchangeFill, ExchangeAccount, \
+from serenity import connect_serenity_db, TypeCodeCache, InstrumentCache, ExchangeEntityService
+from serenity import ExchangeOrder, Exchange, ExchangeFill, ExchangeAccount, \
     ExchangeTransferType, ExchangeTransferMethod, ExchangeTransfer
-from cloudwall.serenity.model.instrument import InstrumentType
-from cloudwall.serenity.model.order import OrderType, Side, TimeInForce
+from serenity import InstrumentType
+from serenity import OrderType, Side, TimeInForce
 
 
 def backfill_gemini(gemini_api_key: str, gemini_api_secret: str):

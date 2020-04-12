@@ -5,7 +5,7 @@ import datetime
 import fire
 import pandas as pd
 
-from cloudwall.serenity.mdrecorder.tickstore import Tickstore, LocalTickstore, BiTimestamp
+from serenity.mdrecorder.tickstore import Tickstore, LocalTickstore, BiTimestamp
 from datetime import date, datetime, timedelta
 from time import sleep
 
