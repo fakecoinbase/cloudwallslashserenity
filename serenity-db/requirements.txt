@@ -1,6 +1,0 @@
-coinbasepro==0.2.1
-fire==0.2.1
-gemini-python==0.2.0
-psycopg2==2.8.4
-python-binance==0.7.4
-yfinance==0.1.52
