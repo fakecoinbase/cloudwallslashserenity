@@ -1,4 +1,4 @@
-FROM python:3.8-slim-buster
+FROM python:3.7-slim-buster
 MAINTAINER Kyle F. Downey "kyle.downey@gmail.com"
 
 # copy the config file

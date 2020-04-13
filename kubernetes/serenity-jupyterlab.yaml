@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: serenity-jupyterlab
-          image: cloudwallcapital/serenity-jupyterlab:2020.04.12-2
+          image: cloudwallcapital/serenity-jupyterlab:2020.04.13-b10
           ports:
             - containerPort: 8888
           volumeMounts:
