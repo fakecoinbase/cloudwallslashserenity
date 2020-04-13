@@ -6,9 +6,10 @@ fire==0.3.1
 gemini-python==0.2.0
 hmmlearn==0.2.3
 numpy==1.18.2
-pandas==1.0.3
+pandas==0.25.3
+phemex==0.3.0
 psycopg2==2.8.5
-pytau==0.1.1
+pytau==0.2.0
 python-binance==0.7.5
 pytz==2019.3
 quandl==3.5.0
