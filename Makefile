@@ -1,5 +1,5 @@
 # all our targets are phony (no files to check).
-.PHONY: help build rebuild prune
+.PHONY: help build rebuild prune publish
 
 BUILD_NUMBER_FILE=build-number.txt
 
@@ -23,3 +23,7 @@ prune:
 	# clean all that is not actively used
 	docker system prune -af
 
+publish:
+	python3 setup.py sdist bdist_wheel
+	twine upload dist/*
+	rm -rf build dist .egg serenity-trading.egg-info

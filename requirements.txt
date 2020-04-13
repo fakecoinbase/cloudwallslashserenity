@@ -1,10 +1,8 @@
 APScheduler==3.6.3
 Pygments==2.6.1
 coinbasepro==0.2.1
-dask==2.14.0
 fire==0.3.1
 gemini-python==0.2.0
-hmmlearn==0.2.3
 numpy==1.18.2
 pandas==0.25.3
 phemex==0.3.0
@@ -12,7 +10,6 @@ psycopg2==2.8.5
 pytau==0.2.0
 python-binance==0.7.5
 pytz==2019.3
-quandl==3.5.0
 scipy==1.4.1
 tables==3.6.1
 tornado==6.0.4

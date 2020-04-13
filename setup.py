@@ -1,3 +1,57 @@
-from setuptools import setup, find_packages
+from glob import glob
+from os.path import splitext, basename
 
-setup(name="serenity-trading", version='0.1', packages=find_packages('src'))
+import setuptools
+
+with open('README.rst', 'r') as fh:
+    readme = fh.read()
+
+with open('HISTORY.rst', 'r') as f:
+    history = f.read()
+
+
+requires = [
+    'APScheduler',
+    'coinbasepro'
+    'fire',
+    'gemini-python'
+    'numpy',
+    'pandas==0.25.3',
+    'phemex',
+    'psycopg2',
+    'pytau',
+    'python-binance',
+    'pytz',
+    'scipy',
+    'tables',
+    'tornado',
+    'websockets',
+    'yfinance'
+]
+
+setuptools.setup(
+    name='serenity-trading',
+    version='0.0.1',
+    description='A Python cryptocurrency trading system.',
+    long_description=readme + '\n\n' + history,
+    long_description_content_type='text/x-rst',
+    license='MIT',
+    author='Kyle F. Downey',
+    author_email='kyle.downey@gmail.com',
+    url='https://github.com/cloudwall/serenity',
+    packages=setuptools.find_packages('src'),
+    package_dir={'': 'src'},
+    py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
+    include_package_data=True,
+    python_requires='>=3.7.x',
+    install_requires=requires,
+    classifiers=(
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Developers',
+        'Natural Language :: English',
+        'License :: OSI Approved :: MIT License',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.7'
+    ),
+)
