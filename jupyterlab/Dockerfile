@@ -13,7 +13,9 @@ COPY $PWD/requirements.txt /app/requirements.txt
 
 RUN pip install -r /app/requirements.txt && \
     jupyter labextension install @jupyterlab/git --no-build && \
+    jupyter labextension install @jupyter-widgets/jupyterlab-manager && \
     jupyter labextension install @jupyterlab/plotly-extension --no-build && \
+    jupyter labextension install beakerx-jupyterlab && \
     jupyter labextension install nbdime-jupyterlab --no-build && \
     jupyter serverextension enable --py jupyterlab_git && \
     jupyter lab build
