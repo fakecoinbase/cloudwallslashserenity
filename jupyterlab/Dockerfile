@@ -22,21 +22,10 @@ RUN pip install -r /app/requirements.txt && \
     jupyter labextension install @jupyterlab/git --no-build && \
     jupyter labextension install @jupyter-widgets/jupyterlab-manager && \
     jupyter labextension install @jupyterlab/plotly-extension --no-build && \
+    jupyter labextension install beakerx-jupyterlab && \
     jupyter labextension install nbdime-jupyterlab --no-build && \
-    jupyter serverextension enable --py jupyterlab_git
-
-# install latest beakerx labextensions
-WORKDIR /app/beakerx/js/lab
-RUN jupyter labextension install . --no-build
-
-WORKDIR /app/beakerx/js/lab-theme-dark
-RUN jupyter labextension install . --no-build
-
-WORKDIR /app/beakerx/js/lab-theme-light
-RUN jupyter labextension install . --no-build
-
-# complete the Jupyter Lab build
-RUN jupyter lab build
+    jupyter serverextension enable --py jupyterlab_git && \
+    jupyter lab build
 
 # set up a serenity user so we are not running under root
 RUN groupadd -r serenity && useradd -s /bin/bash --create-home --no-log-init -r -g serenity serenity
