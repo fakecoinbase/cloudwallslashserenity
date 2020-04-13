@@ -5,3 +5,4 @@ c.NotebookApp.open_browser = False
 c.NotebookApp.token = ''
 c.NotebookApp.password = ''
 c.NotebookApp.notebook_dir = "/home/serenity/dev/shadows"
+c.NotebookApp.terminado_settings = {'shell_command': ['/bin/bash']}
