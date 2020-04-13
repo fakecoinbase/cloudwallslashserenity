@@ -11,6 +11,7 @@ pandas==0.25.3
 pyspark==2.4.5
 pytz==2019.3
 quandl==3.5.0
+serenity-trading==0.0.2
 scipy==1.4.1
 tables==3.6.1
 yfinance==0.1.54
