@@ -20,7 +20,7 @@ RUN pip install -r /app/requirements.txt && \
     jupyter serverextension enable --py jupyterlab_git && \
     jupyter lab build
 
-RUN groupadd -r serenity && useradd --create-home --no-log-init -r -g serenity serenity
+RUN groupadd -r serenity && useradd -s /bin/bash --create-home --no-log-init -r -g serenity serenity
 
 USER serenity
 RUN mkdir -p /home/serenity/dev/shadows
