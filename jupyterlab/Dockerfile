@@ -7,16 +7,20 @@ RUN mkdir -p /etc/jupyter
 COPY $PWD/jupyter_notebook_config.py /etc/jupyter/jupyter_notebook_config.py
 
 # install dependencies for Git extension and JupyterLab build
-RUN apt update && apt install --yes git nodejs npm
+RUN apt-get update && apt-get install --yes git nodejs npm wget
 
 # install MiniConda so we can build our own BeakerX
 ENV CONDA_DIR=/opt/conda \
     MINICONDA_VERSION=4.8.2 \
     MINICONDA_MD5=87e77f097f6ebb5127c77662dfc3165e \
-    CONDA_VERSION=4.8.2
+    CONDA_VERSION=4.8.2 \
+    SHELL=/bin/bash
+ENV PATH=$CONDA_DIR/bin:$PATH
 
-RUN cd /tmp && \
-    wget --quiet https://repo.continuum.io/miniconda/Miniconda3-py37_${MINICONDA_VERSION}-Linux-x86_64.sh && \
+RUN mkdir -p $CONDA_DIR
+
+WORKDIR /tmp
+RUN wget --quiet https://repo.continuum.io/miniconda/Miniconda3-py37_${MINICONDA_VERSION}-Linux-x86_64.sh && \
     echo "${MINICONDA_MD5} *Miniconda3-py37_${MINICONDA_VERSION}-Linux-x86_64.sh" | md5sum -c - && \
     /bin/bash Miniconda3-py37_${MINICONDA_VERSION}-Linux-x86_64.sh -f -b -p $CONDA_DIR && \
     rm Miniconda3-py37_${MINICONDA_VERSION}-Linux-x86_64.sh && \
