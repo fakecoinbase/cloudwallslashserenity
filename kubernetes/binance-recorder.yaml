@@ -16,9 +16,9 @@ spec:
     spec:
       containers:
         - name: binance-recorder
-          image: kdowney1974/serenity-mdrecorder:v1
+          image: cloudwallcapital/serenity:2020.04.13-b6
           command: ["python"]
-          args: ["cloudwall/serenity/mdrecorder/binance.py"]
+          args: ["serenity/mdrecorder/binance.py"]
           volumeMounts:
             - mountPath: /behemoth
               name: behemoth 

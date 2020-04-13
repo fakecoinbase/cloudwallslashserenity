@@ -16,9 +16,9 @@ spec:
     spec:
       containers:
         - name: coinbase-recorder
-          image: kdowney1974/serenity-mdrecorder:v1
+          image: cloudwallcapital/serenity:2020.04.13-b6
           command: ["python"]
-          args: ["cloudwall/serenity/mdrecorder/coinbase.py"]
+          args: ["serenity/mdrecorder/coinbase.py"]
           volumeMounts:
             - mountPath: /behemoth
               name: behemoth 

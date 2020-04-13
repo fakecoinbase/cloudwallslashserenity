@@ -1,7 +1,7 @@
 # all our targets are phony (no files to check).
 .PHONY: help build rebuild prune
 
-BUILD_TAG=`date --rfc-3339=date`-1
+BUILD_NUMBER_FILE=build-number.txt
 
 # Regular Makefile part for buildpypi itself
 help:
@@ -13,11 +13,13 @@ help:
 	@echo ''
 
 build:
-	docker build --no-cache -t cloudwallcapital/serenity:$BUILD_TAG .
+	@echo $$(($$(cat $(BUILD_NUMBER_FILE)) + 1)) > $(BUILD_NUMBER_FILE)
+	docker build --no-cache -t cloudwallcapital/serenity:`date +%Y.%m.%d`-b`cat $(BUILD_NUMBER_FILE)` .
 
 push:
-	docker push cloudwallcapital/serenity:$BUILD_TAG
+	docker push cloudwallcapital/serenity:`date +%Y.%m.%d`-b`cat $(BUILD_NUMBER_FILE)`
 
 prune:
 	# clean all that is not actively used
 	docker system prune -af
+
