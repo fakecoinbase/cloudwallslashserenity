@@ -6,7 +6,7 @@ ipywidgets==7.5.1
 jupyterlab-git==0.10.0
 jupyterlab==1.2.9
 numpy==1.18.2
-pandas==1.0.3
+pandas==0.25.3
 pyspark==2.4.5
 pytz==2019.3
 quandl==3.5.0
