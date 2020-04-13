@@ -1,14 +1,10 @@
 APScheduler==3.6.3
 Pygments==2.6.1
 coinbasepro==0.2.1
-cufflinks==0.17.3
 dask==2.14.0
 fire==0.3.1
 gemini-python==0.2.0
 hmmlearn==0.2.3
-ipywidgets==7.5.1
-jupyterlab-git==0.10.0
-jupyterlab==1.2.9
 numpy==1.18.2
 pandas==1.0.3
 psycopg2==2.8.5
