@@ -23,7 +23,7 @@ steps:
     script: |
       # Run the unit tests in
       python -m tox
-    workingDirectory: '$(System.DefaultWorkingDirectory)/serenity'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/cloudwall/serenity'
 - task: PublishTestResults@2
   condition: succeededOrFailed()
   inputs:
@@ -32,5 +32,5 @@ steps:
 - task: PublishCodeCoverageResults@1
   inputs:
     codeCoverageTool: Cobertura
-    summaryFileLocation: '$(System.DefaultWorkingDirectory)/serenity/**/coverage.xml'
-    reportDirectory: '$(System.DefaultWorkingDirectory)/serenity/**/htmlcov'
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)/cloudwall/serenity/**/coverage.xml'
+    reportDirectory: '$(System.DefaultWorkingDirectory)/cloudwall/serenity/**/htmlcov'
