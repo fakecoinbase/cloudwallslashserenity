@@ -23,7 +23,7 @@ steps:
     script: |
       # Run the unit tests in
       python -m tox
-    workingDirectory: '$(System.DefaultWorkingDirectory)/serenity-mdrecorder'
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
 - task: PublishTestResults@2
   condition: succeededOrFailed()
   inputs:
@@ -32,5 +32,5 @@ steps:
 - task: PublishCodeCoverageResults@1
   inputs:
     codeCoverageTool: Cobertura
-    summaryFileLocation: '$(System.DefaultWorkingDirectory)/serenity-mdrecorder/**/coverage.xml'
-    reportDirectory: '$(System.DefaultWorkingDirectory)/serenity-mdrecorder/**/htmlcov'
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/coverage.xml'
+    reportDirectory: '$(System.DefaultWorkingDirectory)/**/htmlcov'
