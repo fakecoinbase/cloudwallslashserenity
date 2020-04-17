@@ -3,10 +3,10 @@ from datetime import datetime
 
 import fire
 
-from serenity import connect_serenity_db, TypeCodeCache, InstrumentCache
-from serenity import ExchangeInstrument
-from serenity import Instrument, Currency
-from serenity import Side
+from serenity.db import connect_serenity_db, TypeCodeCache, InstrumentCache
+from serenity.model.exchange import ExchangeInstrument
+from serenity.model.instrument import Instrument, Currency
+from serenity.model.order import Side
 
 
 class TradeAnalyzer:

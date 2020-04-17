@@ -1,10 +1,10 @@
 import coinbasepro
 import fire
 
-from serenity import connect_serenity_db, ExchangeEntityService, TypeCodeCache, InstrumentCache
-from serenity import ExchangeAccount, ExchangeOrder, Exchange, ExchangeFill
-from serenity import InstrumentType
-from serenity import Side, OrderType, TimeInForce
+from serenity.db import connect_serenity_db, ExchangeEntityService, TypeCodeCache, InstrumentCache
+from serenity.model.exchange import ExchangeAccount, ExchangeOrder, Exchange, ExchangeFill
+from serenity.model.instrument import InstrumentType
+from serenity.model.order import Side, OrderType, TimeInForce
 
 
 def backfill_coinbasepro(api_key: str, api_secret: str, api_passphrase: str):

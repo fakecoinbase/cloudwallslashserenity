@@ -1,7 +1,7 @@
 import binance.client
 import coinbasepro
 import gemini
-from serenity import connect_serenity_db, InstrumentCache, TypeCodeCache
+from serenity.db import connect_serenity_db, InstrumentCache, TypeCodeCache
 
 conn = connect_serenity_db()
 conn.autocommit = True
