@@ -11,7 +11,7 @@ from tau.signal import Map, Filter
 
 from serenity.mdrecorder.journal import Journal
 from serenity.mdrecorder.subscriber import subscribe_trades
-from serenity.mdrecorder.utils import init_logging
+from serenity.utils import init_logging
 from pathlib import Path
 
 

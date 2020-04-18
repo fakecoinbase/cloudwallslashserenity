@@ -2,9 +2,9 @@ from datetime import date, datetime
 from decimal import Decimal
 from typing import List
 
-from serenity import TradingAccount
-from serenity import Instrument
-from serenity import Fill
+from serenity.model.account import TradingAccount
+from serenity.model.instrument import Instrument
+from serenity.model.order import Fill
 
 
 class Position:

@@ -1,4 +1,4 @@
-from serenity import TypeCode
+from serenity.model import TypeCode
 
 
 class Currency:

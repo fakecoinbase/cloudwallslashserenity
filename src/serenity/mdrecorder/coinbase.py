@@ -5,7 +5,7 @@ import logging
 from serenity.mdrecorder.journal import Journal
 from serenity.mdrecorder.subscriber import DEFAULT_KEEPALIVE_TIMEOUT_MILLIS, DEFAULT_CONNECT_TIMEOUT_SEC, \
     DEFAULT_REQUEST_TIMEOUT_SEC, WebsocketSubscriber
-from serenity.mdrecorder.utils import init_logging
+from serenity.utils import init_logging
 from pathlib import Path
 from tornado.ioloop import IOLoop
 

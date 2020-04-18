@@ -1,8 +1,8 @@
 from datetime import datetime
 from decimal import Decimal
 
-from serenity import TypeCode
-from serenity import Instrument
+from serenity.model import TypeCode
+from serenity.model.instrument import Instrument
 
 
 class MarkType(TypeCode):
