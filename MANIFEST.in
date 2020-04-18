@@ -1,0 +1,25 @@
+include *.rst
+include *.txt
+include *.yml
+include Dockerfile
+include LICENSE
+include Makefile
+include tox.ini
+recursive-include capnp *.capnp
+recursive-include docs *.dbm
+recursive-include docs *.png
+recursive-include jupyterlab *.py
+recursive-include jupyterlab *.txt
+recursive-include jupyterlab Makefile
+recursive-include kubernetes *.yaml
+recursive-include sql *.sql
+recursive-include tests *.py
+recursive-include web *.editorconfig
+recursive-include web *.gitkeep
+recursive-include web *.html
+recursive-include web *.ico
+recursive-include web *.js
+recursive-include web *.json
+recursive-include web *.md
+recursive-include web *.scss
+recursive-include web *.ts
