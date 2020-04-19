@@ -16,7 +16,7 @@ requires = [
     'fire',
     'gemini-python',
     'numpy',
-    'pandas==0.25.3',
+    'pandas',
     'phemex',
     'psycopg2',
     'pytau',

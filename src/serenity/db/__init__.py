@@ -1,4 +1,6 @@
 import os
+from typing import List
+
 import psycopg2
 
 from serenity.model.exchange import Exchange, ExchangeTransferMethod, ExchangeTransferType, \
@@ -198,6 +200,14 @@ class InstrumentCache:
             self.entity_by_id[ExchangeInstrument][exchange_instrument_id] = exchange_instrument
             self.entity_by_ak[ExchangeInstrument][ak] = exchange_instrument
             return exchange_instrument
+
+    def get_all_exchange_instruments(self, exchange_symbol) -> List[ExchangeInstrument]:
+        instruments = []
+        instrument_map = self.entity_by_ak[ExchangeInstrument]
+        for instrument in instrument_map.values():
+            if instrument.get_exchange().get_type_code() == exchange_symbol:
+                instruments.append(instrument)
+        return instruments
 
     def get_entity_by_id(self, klass, entity_id):
         return self.entity_by_id[klass][entity_id]

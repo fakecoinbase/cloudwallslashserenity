@@ -1,4 +1,6 @@
 import datetime
+import logging
+
 import pandas as pd
 import re
 import shutil
@@ -87,6 +89,8 @@ class DataFrameIndex:
     HDF5- and Pandas-based multi-level index used by LocalTickstore.
     """
 
+    logger = logging.getLogger(__name__)
+
     def __init__(self, base_path: Path, index_path: Path, table_name: str):
         self.base_path = base_path
         self.index_path = index_path
@@ -94,6 +98,7 @@ class DataFrameIndex:
         self.dirty = False
 
         if not self.index_path.exists():
+            self.logger.info(f'rebuilding {self.index_path}')
             self._build_index()
         else:
             # noinspection PyTypeChecker
@@ -116,7 +121,7 @@ class DataFrameIndex:
         return selected
 
     def insert(self, symbol: str, as_at_date: datetime.date, create_write_path_func) -> Path:
-        # if there's at least one entry in the index for this (symbol, as_at_date
+        # if there's at least one entry in the index for this (symbol, as_at_date)
         # increment the version and set the start/end times such that the previous
         # version is logically deleted and the next version becomes latest
         if self.df.index.isin([(symbol, as_at_date)]).any():
@@ -178,6 +183,7 @@ class DataFrameIndex:
 
     def flush(self):
         if self.dirty:
+            self.logger.info(f'flushing index to {self.index_path}')
             self.df.to_hdf(str(self.index_path), self.table_name, mode='w', append=False, complevel=9, complib='blosc')
             self._mark_dirty(False)
 
@@ -208,12 +214,15 @@ class DataFrameIndex:
                 symbol_search = re.search(r'(.*)\.h5', filename)
                 symbol = symbol_search.group(1)
                 symbol_version = 0
-                path.rename(Path(path.parent.joinpath(Path(symbol + '_0000.h5'))))
+                path.rename(Path(path.parent.joinpath(Path(f'{symbol}_0000.h5'))))
 
+            # this will create an invalid index, which we will need to fix
+            start_time = BiTimestamp.start_as_of
+            end_time = BiTimestamp.latest_as_of
             index_rows.append({'symbol': symbol,
                                'date': splay_date,
-                               'start_time': BiTimestamp.start_as_of,
-                               'end_time': BiTimestamp.latest_as_of,
+                               'start_time': start_time,
+                               'end_time': end_time,
                                'version': symbol_version,
                                'path': str(path)
                                })
@@ -248,6 +257,8 @@ class LocalTickstore(Tickstore):
     Tickstore meant to run against local disk for maximum performance.
     """
 
+    logger = logging.getLogger(__name__)
+
     def __init__(self, base_path: Path, timestamp_column: str = 'date'):
         self.base_path = base_path.resolve()
         self.timestamp_column = timestamp_column
@@ -278,6 +289,7 @@ class LocalTickstore(Tickstore):
             loaded_dfs.append(pd.read_hdf(row['path']))
 
         # pass 2: select ticks matching the exact start/end timestamps
+        # noinspection PyTypeChecker
         all_ticks = pd.concat(loaded_dfs)
         time_mask = (all_ticks.index.get_level_values(self.timestamp_column) >= start) \
             & (all_ticks.index.get_level_values(self.timestamp_column) <= end)
@@ -294,10 +306,10 @@ class LocalTickstore(Tickstore):
         # compose a splay path based on YYYY/MM/DD, symbol and version and pass in as a functor
         # so it can be populated with the bitemporal version
         def create_write_path(version):
-            return self.base_path.joinpath('{}/{:02d}/{:02d}/{}_{:04d}.h5'.format(as_at_date.year,
-                                                                                  as_at_date.month,
-                                                                                  as_at_date.day,
-                                                                                  symbol, version))
+            path = f'{as_at_date.year}/{as_at_date.month:02d}/{as_at_date.day:02d}/{symbol}_{version:04d}.h5'
+            full_path = self.base_path.joinpath(path)
+            self.logger.info(f'writing new data file to {full_path}')
+            return full_path
 
         write_path = self.index.insert(symbol, as_at_date, create_write_path)
 
@@ -327,9 +339,6 @@ class LocalTickstore(Tickstore):
     def _check_closed(self, operation):
         if self.closed:
             raise Exception('unable to perform operation while closed: ' + operation)
-
-    def __del__(self):
-        self.close()
 
 
 class AzureBlobTickstore(Tickstore):

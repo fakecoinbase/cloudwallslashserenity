@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phemex-fh
+  labels:
+    app: phemex-fh
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: phemex-fh
+  template:
+    metadata:
+      labels:
+        app: phemex-fh
+    spec:
+      containers:
+        - name: phemex-fh
+          image: cloudwallcapital/serenity:2020.04.13-b6
+          command: ["python"]
+          args: ["serenity/fh/phemex_fh.py"]
+          volumeMounts:
+            - mountPath: /behemoth
+              name: behemoth 
+      volumes:
+        - name: behemoth
+          persistentVolumeClaim:
+            claimName: behemoth-pv-claim
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: phemex-md-upload
+spec:
+  schedule: "0 15 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: phemex-md-upload
+            image: cloudwallcapital/serenity:2020.04.13-b6
+            args: ["serenity/mdrecorder/phemex_upload.py"]
+          restartPolicy: OnFailure

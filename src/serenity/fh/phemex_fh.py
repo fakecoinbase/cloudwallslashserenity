@@ -1,8 +1,11 @@
 import asyncio
 import json
 import logging
+from datetime import datetime
+from pathlib import Path
 from typing import List
 
+import fire
 import websockets
 from phemex import PhemexConnection
 from tau.core import Signal, MutableSignal, NetworkScheduler, Event
@@ -14,6 +17,7 @@ from serenity.fh.feedhandler import FeedHandler, Feed, FeedHandlerRegistry, Feed
 from serenity.model.exchange import ExchangeInstrument
 from serenity.model.marketdata import Trade
 from serenity.model.order import Side
+from serenity.tickstore.journal import Journal
 from serenity.utils import init_logging, FlatMap, custom_asyncio_error_handler
 
 
@@ -153,7 +157,7 @@ class PhemexFeedHandler(FeedHandler):
             self.price_scaling[symbol] = price_scale
 
 
-if __name__ == '__main__':
+def main(instance_id: str = 'prod', journal_path: str = '/behemoth/journals/'):
     init_logging()
     logger = logging.getLogger(__name__)
 
@@ -163,25 +167,40 @@ if __name__ == '__main__':
 
     instr_cache = InstrumentCache(cur, TypeCodeCache(cur))
 
-    sched = NetworkScheduler()
+    scheduler = NetworkScheduler()
     registry = FeedHandlerRegistry()
-    fh = PhemexFeedHandler(sched, instr_cache)
+    fh = PhemexFeedHandler(scheduler, instr_cache)
     registry.register(fh)
 
     for instrument in fh.get_instruments():
-        feed = registry.get_feed(f'phemex:prod:{instrument.get_exchange_instrument_code()}')
+        feed = registry.get_feed(f'phemex:{instance_id}:{instrument.get_exchange_instrument_code()}')
 
         # subscribe to FeedState in advance so we know when the Feed is ready to subscribe trades
         class SubscribeTrades(Event):
             def __init__(self, trade_feed: Feed):
                 self.trade_feed = trade_feed
+                instrument_code = trade_feed.get_instrument().get_exchange_instrument_code()
+                self.journal = Journal(Path(f'{journal_path}/PHEMEX_TRADES/{instrument_code}'))
+                self.appender = self.journal.create_appender()
 
             def on_activate(self) -> bool:
                 if self.trade_feed.get_feed_state().get_value() == FeedState.LIVE:
                     trades = self.trade_feed.get_trades()
-                    Do(sched.get_network(), trades, lambda: logger.info(trades.get_value()))
+                    Do(scheduler.get_network(), trades, lambda: self.on_subscribe(trades.get_value()))
                 return False
-        sched.get_network().connect(feed.get_feed_state(), SubscribeTrades(feed))
+
+            def on_subscribe(self, trade):
+                logger.info(trade)
+
+                self.appender.write_double(datetime.utcnow().timestamp())
+                self.appender.write_long(trade.get_trade_id())
+                self.appender.write_long(trade.get_trade_id())
+                self.appender.write_string(trade.get_instrument().get_exchange_instrument_code())
+                self.appender.write_short(1 if trade.get_side().get_type_code() == 'Buy' else 0)
+                self.appender.write_double(trade.get_qty())
+                self.appender.write_double(trade.get_price())
+
+        scheduler.get_network().connect(feed.get_feed_state(), SubscribeTrades(feed))
 
         # async start the feed
         asyncio.ensure_future(feed.start())
@@ -191,3 +210,7 @@ if __name__ == '__main__':
 
     # go!
     asyncio.get_event_loop().run_forever()
+
+
+if __name__ == '__main__':
+    fire.Fire(main)
