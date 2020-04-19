@@ -18,7 +18,7 @@ spec:
         - name: phemex-recorder
           image: cloudwallcapital/serenity:2020.04.13-b6
           command: ["python"]
-          args: ["serenity/mdrecorder/phemex.py"]
+          args: ["serenity/mdrecorder/phemex_fh.py"]
           volumeMounts:
             - mountPath: /behemoth
               name: behemoth 

@@ -1,10 +1,22 @@
 import logging
 from abc import ABC, abstractmethod
+from enum import Enum
 from typing import List
 
 from tau.core import Signal
 
-from serenity.model.instrument import Instrument
+from serenity.model.exchange import ExchangeInstrument
+
+
+class FeedState(Enum):
+    """
+    Supported lifecycle states for a Feed object. Feeds always start in INIT state.
+    """
+
+    INIT = 1
+    STARTING = 2
+    LIVE = 3
+    STOPPED = 4
 
 
 class Feed(ABC):
@@ -12,7 +24,7 @@ class Feed(ABC):
     A marketdata feed with ability to subscribe to trades, quotes, etc..
     """
     @abstractmethod
-    def get_instrument(self) -> Instrument:
+    def get_instrument(self) -> ExchangeInstrument:
         """
         Gets the trading instrument for which we are feeding data.
         """
@@ -30,6 +42,21 @@ class Feed(ABC):
         """
         Gets the top-of-book quote for this instrument on the connected exchange.
         """
+        pass
+
+    @abstractmethod
+    def get_feed_state(self) -> Signal:
+        """
+        Gets a stream of FeedState enums that updates as the feed transitions between states.
+        """
+        pass
+
+    @abstractmethod
+    async def start(self):
+        """
+        Starts the subscription to the exchange
+        """
+        pass
 
 
 class FeedHandler(ABC):
@@ -52,7 +79,7 @@ class FeedHandler(ABC):
         pass
 
     @abstractmethod
-    def get_instruments(self) -> List[Instrument]:
+    def get_instruments(self) -> List[ExchangeInstrument]:
         """
         Gets the instruments supported by this feedhandler.
         """

@@ -11,3 +11,6 @@ class TypeCode(ABC):
 
     def get_type_code(self) -> str:
         return self.type_code
+
+    def __str__(self):
+        return f'{self.type_code}'

@@ -103,7 +103,7 @@ class InstrumentCache:
             quote_ccy = self.entity_by_id[Currency][row[3]]
             ccy_pair = CurrencyPair(currency_pair_id, instrument, base_ccy, quote_ccy)
             self.entity_by_id[CurrencyPair][currency_pair_id] = ccy_pair
-            self.entity_by_ak[CurrencyPair][(row[2], row[3])] = ccy_pair
+            self.entity_by_ak[CurrencyPair][(base_ccy, quote_ccy)] = ccy_pair
 
         self.cur.execute("SELECT exchange_instrument_id, instrument_id, exchange_id, exchange_instrument_code "
                          "FROM serenity.exchange_instrument")
@@ -115,6 +115,9 @@ class InstrumentCache:
             exch_instr = ExchangeInstrument(exchange_instrument_id, exchange, instrument, exchange_instrument_code)
             self.entity_by_id[ExchangeInstrument][exchange_instrument_id] = exch_instr
             self.entity_by_ak[ExchangeInstrument][(exchange.get_type_code(), exchange_instrument_code)] = exch_instr
+
+    def get_type_code_cache(self) -> TypeCodeCache:
+        return self.type_code_cache
 
     def get_or_create_instrument(self, code: str, instrument_type: InstrumentType) -> Instrument:
         if code in self.entity_by_ak[Instrument]:
@@ -164,7 +167,7 @@ class InstrumentCache:
     def get_or_create_currency_pair(self, base_ccy_code, quote_ccy_code) -> CurrencyPair:
         base_ccy = self.get_or_create_currency(base_ccy_code)
         quote_ccy = self.get_or_create_currency(quote_ccy_code)
-        pair = (base_ccy_code, quote_ccy_code)
+        pair = (base_ccy, quote_ccy)
         if pair in self.entity_by_ak[CurrencyPair]:
             return self.entity_by_ak[CurrencyPair][pair]
         else:

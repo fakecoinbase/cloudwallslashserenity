@@ -91,6 +91,8 @@ INSERT INTO serenity.exchange (exchange_id, exchange_code) VALUES (E'3', E'Binan
 -- ddl-end --
 INSERT INTO serenity.exchange (exchange_id, exchange_code) VALUES (E'4', E'Coinbase');
 -- ddl-end --
+INSERT INTO serenity.exchange (exchange_id, exchange_code) VALUES (E'5', E'Phemex');
+-- ddl-end --
 
 -- object: serenity.exchange_order | type: TABLE --
 -- DROP TABLE IF EXISTS serenity.exchange_order CASCADE;

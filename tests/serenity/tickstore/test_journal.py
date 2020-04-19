@@ -1,7 +1,7 @@
 import datetime
 import shutil
 
-from serenity.mdrecorder.journal import Journal
+from serenity.tickstore.journal import Journal
 from pathlib import Path
 
 

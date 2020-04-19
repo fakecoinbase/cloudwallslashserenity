@@ -2,7 +2,7 @@ from pathlib import Path
 
 import fire
 
-from serenity.mdrecorder.tickstore import LocalTickstore
+from serenity.tickstore.tickstore import LocalTickstore
 
 
 def tickstore_admin(action: str, db: str, staging_dir: str = '/mnt/raid/data/behemoth/db'):

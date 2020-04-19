@@ -1,9 +1,9 @@
 from datetime import datetime
 from decimal import Decimal
 
-from serenity import TypeCode
-from serenity import Instrument, Currency
-from serenity import OrderType, TimeInForce, Side, Destination, DestinationType
+from serenity.model import TypeCode
+from serenity.model.instrument import Instrument, Currency
+from serenity.model.order import OrderType, TimeInForce, Side, Destination, DestinationType
 
 
 class Exchange(TypeCode):
@@ -32,6 +32,9 @@ class ExchangeInstrument:
 
     def get_exchange_instrument_code(self) -> str:
         return self.exchange_instrument_code
+
+    def __str__(self):
+        return f'{self.exchange}[{self.exchange_instrument_code}]'
 
 
 class ExchangeAccount:

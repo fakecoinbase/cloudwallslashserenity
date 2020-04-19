@@ -2,7 +2,7 @@ import datetime
 import fire
 import logging
 
-from serenity.mdrecorder.journal import Journal
+from serenity.tickstore.journal import Journal
 from serenity.mdrecorder.subscriber import DEFAULT_KEEPALIVE_TIMEOUT_MILLIS, DEFAULT_CONNECT_TIMEOUT_SEC, \
     DEFAULT_REQUEST_TIMEOUT_SEC, WebsocketSubscriber
 from serenity.utils import init_logging
