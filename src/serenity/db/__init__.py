@@ -10,9 +10,9 @@ from serenity.model.mark import MarkType
 from serenity.model.order import Side, OrderType, DestinationType, TimeInForce
 
 
-def connect_serenity_db(hostname: str = os.getenv('POSTGRES_HOST', 'localhost'),
-                        port: int = os.getenv('POSTGRES_PORT', '30432'), username: str = 'postgres',
-                        password: str = os.getenv('POSTGRES_PASSWORD', None)):
+def connect_serenity_db(hostname: str = os.getenv('TIMESCALEDB_NODEPORT_SERVICE_HOST', 'localhost'),
+                        port: int = os.getenv('TIMESCALEDB_NODEPORT_SERVICE_PORT', '30432'),
+                        username: str = 'postgres', password: str = os.getenv('POSTGRES_PASSWORD', None)):
     return psycopg2.connect(host=hostname, port=port, dbname="serenity", user=username, password=password)
 
 
