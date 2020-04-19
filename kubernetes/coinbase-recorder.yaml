@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: coinbase-recorder
-          image: cloudwallcapital/serenity:2020.04.13-b6
+          image: cloudwallcapital/serenity:2020.04.19-b9
           command: ["python"]
           args: ["serenity/mdrecorder/coinbase.py"]
           volumeMounts:
