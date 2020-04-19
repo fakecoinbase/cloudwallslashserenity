@@ -6,3 +6,4 @@ include LICENSE
 include Makefile
 include tox.ini
 recursive-include capnp *.capnp
+recursive-exclude web *
