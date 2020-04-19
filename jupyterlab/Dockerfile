@@ -1,4 +1,4 @@
-FROM python:3.7-slim-buster
+FROM python:3.8-slim-buster
 MAINTAINER Kyle F. Downey "kyle.downey@gmail.com"
 
 # copy the config file
@@ -15,7 +15,6 @@ RUN pip install -r /app/requirements.txt && \
     jupyter labextension install @jupyterlab/git --no-build && \
     jupyter labextension install @jupyter-widgets/jupyterlab-manager && \
     jupyter labextension install @jupyterlab/plotly-extension --no-build && \
-    jupyter labextension install beakerx-jupyterlab && \
     jupyter labextension install nbdime-jupyterlab --no-build && \
     jupyter serverextension enable --py jupyterlab_git && \
     jupyter lab build
