@@ -38,7 +38,7 @@ kind: CronJob
 metadata:
   name: phemex-md-upload
 spec:
-  schedule: "0 15 * * *"
+  schedule: "@midnight"
   jobTemplate:
     spec:
       template:
@@ -46,6 +46,7 @@ spec:
           containers:
           - name: phemex-md-upload
             image: cloudwallcapital/serenity:2020.04.19-b9
+            command: ["python"]
             args: ["serenity/mdrecorder/phemex_upload.py"]
             env:
             - name: POSTGRES_PASSWORD
@@ -53,4 +54,11 @@ spec:
                 secretKeyRef:
                   name: database-secret-config
                   key: password
+            volumeMounts:
+            - mountPath: /behemoth
+              name: behemoth
           restartPolicy: OnFailure
+          volumes:
+            - name: behemoth
+              persistentVolumeClaim:
+                claimName: behemoth-pv-claim
