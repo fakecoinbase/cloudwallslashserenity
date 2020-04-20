@@ -107,8 +107,8 @@ class PhemexFeedHandler(FeedHandler):
             self.ws_uri = 'wss://phemex.com/ws'
             self.phemex = PhemexConnection()
         elif instance_id == 'test':
-            self.ws_uri = 'wss://testnet-api.phemex.com/ws'
-            self.phemex = PhemexConnection(api_url='https://testnet.phemex.com')
+            self.ws_uri = 'wss://testnet.phemex.com/ws'
+            self.phemex = PhemexConnection(api_url='https://testnet-api.phemex.com')
         else:
             raise ValueError(f'Unknown instance_id: {instance_id}')
 
