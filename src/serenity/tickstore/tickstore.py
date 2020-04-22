@@ -1,5 +1,6 @@
 import datetime
 import logging
+from typing import Tuple
 
 import pandas as pd
 import re
@@ -105,7 +106,7 @@ class DataFrameIndex:
             existing_index: pd.DataFrame = pd.read_hdf(str(self.index_path))
             self.df = existing_index
 
-    def select(self, symbol: str, start: datetime.datetime, end: datetime.datetime,
+    def select(self, symbol: str, start: datetime.date, end: datetime.date,
                as_of_time: datetime.datetime) -> pd.DataFrame:
         # short circuit if symbol missing
         if symbol not in self.df.index.get_level_values('symbol'):
@@ -124,17 +125,27 @@ class DataFrameIndex:
         # if there's at least one entry in the index for this (symbol, as_at_date)
         # increment the version and set the start/end times such that the previous
         # version is logically deleted and the next version becomes latest
-        if self.df.index.isin([(symbol, as_at_date)]).any():
-            all_versions = self.df.loc[[(symbol, as_at_date)]]
+        idx = pd.IndexSlice
+        self.df.sort_index(inplace=True)
+        try:
+            all_versions = self.df.loc[idx[symbol, as_at_date, :]]
+        except KeyError:
+            all_versions = pd.DataFrame()
 
+        if all_versions.any().any():
             start_time = datetime.datetime.utcnow()
             end_time = BiTimestamp.latest_as_of
 
-            prev_version = all_versions['version'][-1]
+            # this bit of awfulness is because sometimes self.df.loc[] returns
+            # a scalar and sometimes it returns a Tuple; I have no idea how to
+            # make it always return one or the other.
+            prev_version_ndx = all_versions.index.values[-1]
+            if isinstance(prev_version_ndx, Tuple):
+                prev_version = prev_version_ndx[2]
+            else:
+                prev_version = prev_version_ndx
             version = prev_version + 1
-            all_versions.loc[(all_versions['version'] == prev_version), 'end_time'] = start_time
-
-            self.df.update(all_versions)
+            self.df.loc[idx[symbol, as_at_date, prev_version], 'end_time'] = start_time
         else:
             start_time = BiTimestamp.start_as_of
             end_time = BiTimestamp.latest_as_of
@@ -142,20 +153,8 @@ class DataFrameIndex:
 
         write_path = create_write_path_func(version)
 
-        # was not able to figure out a way to insert into a MultiIndex without re-setting the
-        # index columns and de-duping but I suspect there is a nicer way to do the below
-        new_index_row = pd.DataFrame.from_dict({'symbol': [symbol],
-                                                'date': [as_at_date],
-                                                'start_time': [start_time],
-                                                'end_time': [end_time],
-                                                'version': [version],
-                                                'path': [str(write_path)]
-                                                })
-        new_index_row.set_index(['symbol', 'date'], inplace=True)
-        self.df = self.df.append(new_index_row)
-
-        # selects don't work properly unless you remove duplicates
-        self.df = self.df.loc[~self.df.index.duplicated(keep='first')]
+        path = str(write_path)
+        self.df.loc[idx[symbol, as_at_date, version], ['start_time', 'end_time', 'path']] = [start_time, end_time, path]
 
         # dirty the index
         self._mark_dirty(True)
@@ -163,16 +162,23 @@ class DataFrameIndex:
         return write_path
 
     def delete(self, symbol: str, as_at_date: datetime.date):
-        if self.df.index.isin([(symbol, as_at_date)]).any():
-            all_versions = self.df.loc[[(symbol, as_at_date)]]
+        idx = pd.IndexSlice
+        self.df.sort_index(inplace=True)
+        try:
+            all_versions = self.df.loc[idx[symbol, as_at_date, :]]
+        except KeyError:
+            all_versions = pd.DataFrame()
+
+        if all_versions.any().any():
             start_time = datetime.datetime.utcnow()
 
-            # logically delete by setting the most recent version to end now; note this means that deletes
-            # don't have a version number or row, so may want to think about this
-            prev_version = all_versions['version'][-1]
-            all_versions.loc[(all_versions['version'] == prev_version), 'end_time'] = start_time
-
-            self.df.update(all_versions)
+            # see note above in insert()
+            prev_version_ndx = all_versions.index.values[-1]
+            if isinstance(prev_version_ndx, Tuple):
+                prev_version = prev_version_ndx[2]
+            else:
+                prev_version = prev_version_ndx
+            self.df.loc[idx[symbol, as_at_date, prev_version], 'end_time'] = start_time
 
             # dirty the index
             self._mark_dirty(True)
@@ -239,7 +245,7 @@ class DataFrameIndex:
                                              'version',
                                              'path'])
 
-        index_df.set_index(['symbol', 'date'], inplace=True)
+        index_df.set_index(['symbol', 'date', 'version'], inplace=True)
         self.df = index_df
 
         self._mark_dirty()
@@ -279,7 +285,7 @@ class LocalTickstore(Tickstore):
         self._check_closed('select')
 
         # pass 1: grab the list of splays matching the start / end range that are valid for as_of_time
-        selected = self.index.select(symbol, start, end, as_of_time)
+        selected = self.index.select(symbol, start.date(), end.date(), as_of_time)
         if selected.empty:
             return selected
 
@@ -305,7 +311,7 @@ class LocalTickstore(Tickstore):
 
         # compose a splay path based on YYYY/MM/DD, symbol and version and pass in as a functor
         # so it can be populated with the bitemporal version
-        def create_write_path(version):
+        def create_write_path(version: int):
             path = f'{as_at_date.year}/{as_at_date.month:02d}/{as_at_date.day:02d}/{symbol}_{version:04d}.h5'
             full_path = self.base_path.joinpath(path)
             self.logger.info(f'writing new data file to {full_path}')

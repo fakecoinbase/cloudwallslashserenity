@@ -3,6 +3,11 @@
 Release History
 ---------------
 
+0.1.0 (TBD)
+++++++++++++++++++
+
+- Critical fixes for Tickstore bi-temporal index logic
+
 0.0.3 (2020-04-19)
 +++++++++++++++++++
 

@@ -7,6 +7,7 @@ from pathlib import Path
 from pytest_mock import MockFixture
 
 
+# noinspection DuplicatedCode
 def test_tickstore(mocker: MockFixture):
     ts_col_name = 'ts'
     tickstore = LocalTickstore(Path('./COINBASE_PRO_ONE_MIN_BINS'), timestamp_column=ts_col_name)
@@ -22,14 +23,29 @@ def test_tickstore(mocker: MockFixture):
         ts_index.name = ts_col_name
         ticks = pd.DataFrame(np.random.randint(0, 100, size=(100, 4)), columns=list('ABCD'), index=ts_index)
         tickstore.insert('BTC-USD', BiTimestamp(datetime.date(2019, 10, i+1)), ticks)
+        tickstore.insert('ETH-USD', BiTimestamp(datetime.date(2019, 10, i+1)), ticks)
+
+    # close and re-open
+    tickstore.close()
+    tickstore = LocalTickstore(Path('./COINBASE_PRO_ONE_MIN_BINS'), timestamp_column=ts_col_name)
 
     # because timestamps are random the number of matches is not deterministic. is there a better way to test this?
     df = tickstore.select('BTC-USD', start=datetime.datetime(2019, 10, 1), end=datetime.datetime(2019, 10, 15))
     assert df.size > 0
 
+    # create a 2nd version of all rows
+    for i in range(31):
+        start = pd.to_datetime('2019-10-1')
+        end = pd.to_datetime('2019-10-31')
+        ts_index = random_dates(start, end, 100)
+        ts_index.name = ts_col_name
+        ticks = pd.DataFrame(np.random.randint(0, 100, size=(100, 4)), columns=list('ABCD'), index=ts_index)
+        tickstore.insert('BTC-USD', BiTimestamp(datetime.date(2019, 10, i+1)), ticks)
+        tickstore.insert('ETH-USD', BiTimestamp(datetime.date(2019, 10, i+1)), ticks)
+
     # logically delete all
     for i in range(31):
-        tickstore.delete('BTC-USD', BiTimestamp(datetime.datetime(2019, 10, i+1)))
+        tickstore.delete('BTC-USD', BiTimestamp(datetime.date(2019, 10, i+1)))
 
     assert_empty(tickstore)
 
