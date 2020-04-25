@@ -1,5 +1,4 @@
 import json
-import logging
 
 import coinbasepro
 import fire
@@ -51,8 +50,6 @@ class CoinbaseProFeed(WebsocketFeed):
 
 
 class CoinbaseProFeedHandler(WebsocketFeedHandler):
-    logger = logging.getLogger(__name__)
-
     def __init__(self, scheduler: NetworkScheduler, instrument_cache: InstrumentCache, instance_id: str = 'prod'):
         if instance_id == 'prod':
             self.ws_uri = 'wss://ws-feed.pro.coinbase.com'

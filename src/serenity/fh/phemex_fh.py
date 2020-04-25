@@ -1,5 +1,4 @@
 import json
-import logging
 from typing import List
 
 import fire
@@ -60,8 +59,6 @@ class PhemexFeed(WebsocketFeed):
 
 
 class PhemexFeedHandler(WebsocketFeedHandler):
-    logger = logging.getLogger(__name__)
-
     def __init__(self, scheduler: NetworkScheduler, instrument_cache: InstrumentCache, instance_id: str = 'prod'):
         if instance_id == 'prod':
             self.ws_uri = 'wss://phemex.com/ws'

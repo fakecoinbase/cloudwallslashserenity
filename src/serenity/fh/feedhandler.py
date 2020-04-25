@@ -21,7 +21,7 @@ class FeedState(Enum):
     Supported lifecycle states for a Feed object. Feeds always start in INIT state.
     """
 
-    INIT = 1
+    INITIALIZING = 1
     STARTING = 2
     LIVE = 3
     STOPPED = 4
@@ -81,7 +81,7 @@ class WebsocketFeed(Feed):
         self.trades = None
         self.quotes = None
 
-        self.feed_state = MutableSignal(FeedState.INIT)
+        self.feed_state = MutableSignal(FeedState.INITIALIZING)
 
     def get_instrument(self) -> ExchangeInstrument:
         return self.instrument
