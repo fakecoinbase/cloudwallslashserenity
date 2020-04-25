@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import List, Set
+from typing import List
 
 from tau.core import Signal, MutableSignal, NetworkScheduler, Event
 from tau.event import Do
@@ -16,9 +16,9 @@ from serenity.tickstore.journal import Journal
 from serenity.utils import init_logging, custom_asyncio_error_handler
 
 
-class FeedState(Enum):
+class FeedHandlerState(Enum):
     """
-    Supported lifecycle states for a Feed object. Feeds always start in INIT state.
+    Supported lifecycle states for a FeedHandler. FeedHandlers always start in INITIALIZING state.
     """
 
     INITIALIZING = 1
@@ -27,81 +27,33 @@ class FeedState(Enum):
     STOPPED = 4
 
 
-class Feed(ABC):
+class Feed:
     """
     A marketdata feed with ability to subscribe to trades, quotes, etc..
     """
-    @abstractmethod
+
+    def __init__(self, instrument: ExchangeInstrument, trades: Signal, quotes: Signal):
+        self.instrument = instrument
+        self.trades = trades
+        self.quotes = quotes
+
     def get_instrument(self) -> ExchangeInstrument:
         """
         Gets the trading instrument for which we are feeding data.
         """
-        pass
+        return self.instrument
 
-    @abstractmethod
     def get_trades(self) -> Signal:
         """
         Gets all trade prints for this instrument on the connected exchange.
         """
-        pass
+        return self.trades
 
-    @abstractmethod
     def get_quotes(self) -> Signal:
         """
         Gets the top-of-book quote for this instrument on the connected exchange.
         """
-        pass
-
-    @abstractmethod
-    def get_feed_state(self) -> Signal:
-        """
-        Gets a stream of FeedState enums that updates as the feed transitions between states.
-        """
-        pass
-
-    @abstractmethod
-    async def start(self):
-        """
-        Starts the subscription to the exchange
-        """
-        pass
-
-
-class WebsocketFeed(Feed):
-    def __init__(self, scheduler: NetworkScheduler, type_code_cache: TypeCodeCache,
-                 ws_uri: str, exch_instrument: ExchangeInstrument):
-        self.scheduler = scheduler
-        self.type_code_cache = type_code_cache
-        self.ws_uri = ws_uri
-        self.instrument = exch_instrument
-
-        self.buy_code = type_code_cache.get_by_code(Side, 'Buy')
-        self.sell_code = type_code_cache.get_by_code(Side, 'Sell')
-
-        self.trades = None
-        self.quotes = None
-
-        self.feed_state = MutableSignal(FeedState.INITIALIZING)
-
-    def get_instrument(self) -> ExchangeInstrument:
-        return self.instrument
-
-    def get_trades(self) -> Signal:
-        return self.trades
-
-    def get_quotes(self) -> Signal:
         return self.quotes
-
-    def get_feed_state(self) -> Signal:
-        return self.feed_state
-
-    async def start(self):
-        self.scheduler.schedule_update(self.feed_state, FeedState.STARTING)
-        await self._subscribe_trades_and_quotes()
-
-    @abstractmethod
-    async def _subscribe_trades_and_quotes(self):
-        pass
 
 
 class FeedHandler(ABC):
@@ -131,11 +83,25 @@ class FeedHandler(ABC):
         pass
 
     @abstractmethod
+    def get_state(self) -> Signal:
+        """
+        Gets a stream of FeedHandlerState enums that updates as the FeedHandler transitions between states.
+        """
+        pass
+
+    @abstractmethod
     def get_feed(self, uri: str) -> Feed:
         """
         Acquires a feed for the given URI of the form scheme:instance:instrument_id, e.g.
         phemex:prod:BTCUSD or coinbase:test:BTC-USD. Raises an exception if the scheme:instance
         portion does not match this FeedHandler.
+        """
+        pass
+
+    @abstractmethod
+    async def start(self):
+        """
+        Starts the subscription to the exchange
         """
         pass
 
@@ -147,18 +113,28 @@ class WebsocketFeedHandler(FeedHandler):
                  instance_id: str):
         self.scheduler = scheduler
         self.instrument_cache = instrument_cache
+        self.type_code_cache = instrument_cache.get_type_code_cache()
         self.instance_id = instance_id
+
+        self.buy_code = self.type_code_cache.get_by_code(Side, 'Buy')
+        self.sell_code = self.type_code_cache.get_by_code(Side, 'Sell')
 
         self.instruments = []
         self.known_instrument_ids = {}
         self.price_scaling = {}
         self._load_instruments()
 
+        self.state = MutableSignal()
+        self.scheduler.schedule_update(self.state, FeedHandlerState.INITIALIZING)
+
     def get_instance_id(self) -> str:
         return self.instance_id
 
     def get_instruments(self) -> List[ExchangeInstrument]:
         return self.instruments
+
+    def get_state(self) -> Signal:
+        return self.state
 
     def get_feed(self, uri: str) -> Feed:
         (scheme, instance_id, instrument_id) = uri.split(':')
@@ -170,15 +146,22 @@ class WebsocketFeedHandler(FeedHandler):
             raise ValueError(f'Unknown exchange Instrument: {instrument_id}')
         self.logger.info(f'Acquiring Feed for {uri}')
 
-        return self._create_feed(self.scheduler, self.instrument_cache.get_type_code_cache(),
-                                 self.known_instrument_ids[instrument_id])
+        return self._create_feed(self.known_instrument_ids[instrument_id])
+
+    async def start(self):
+        self.scheduler.schedule_update(self.state, FeedHandlerState.STARTING)
+        await self._subscribe_trades_and_quotes()
 
     @abstractmethod
-    def _create_feed(self, scheduler, type_code_cache: TypeCodeCache, instrument):
+    def _create_feed(self, instrument: ExchangeInstrument):
         pass
 
     @abstractmethod
     def _load_instruments(self):
+        pass
+
+    @abstractmethod
+    async def _subscribe_trades_and_quotes(self):
         pass
 
 
@@ -217,7 +200,7 @@ class FeedHandlerRegistry:
         return f'{feedhandler.get_uri_scheme()}:{feedhandler.get_instance_id()}'
 
 
-def ws_fh_main(create_fh, uri_scheme: str, instance_id: str, journal_path: str, db: str, include_symbols: Set = None):
+def ws_fh_main(create_fh, uri_scheme: str, instance_id: str, journal_path: str, db: str):
     init_logging()
     logger = logging.getLogger(__name__)
 
@@ -232,29 +215,30 @@ def ws_fh_main(create_fh, uri_scheme: str, instance_id: str, journal_path: str, 
     fh = create_fh(scheduler, instr_cache, instance_id)
     registry.register(fh)
 
+    # async start the feedhandler
+    asyncio.ensure_future(fh.start())
+
     for instrument in fh.get_instruments():
         symbol = instrument.get_exchange_instrument_code()
-        if include_symbols and symbol not in include_symbols:
-            logger.info(f'Skipping exchange symbol: {symbol}')
-            continue
-
-        feed = registry.get_feed(f'{uri_scheme}:{instance_id}:{symbol}')
 
         # subscribe to FeedState in advance so we know when the Feed is ready to subscribe trades
         class SubscribeTrades(Event):
-            def __init__(self, trade_feed: Feed):
-                self.trade_feed = trade_feed
-                instrument_code = trade_feed.get_instrument().get_exchange_instrument_code()
-                self.journal = Journal(Path(f'{journal_path}/{db}/{instrument_code}'))
-                self.appender = self.journal.create_appender()
+            def __init__(self, trade_symbol):
+                self.trade_symbol = trade_symbol
+                self.appender = None
 
             def on_activate(self) -> bool:
-                if self.trade_feed.get_feed_state().get_value() == FeedState.LIVE:
-                    trades = self.trade_feed.get_trades()
-                    Do(scheduler.get_network(), trades, lambda: self.on_subscribe(trades.get_value()))
+                if fh.get_state().get_value() == FeedHandlerState.LIVE:
+                    feed = registry.get_feed(f'{uri_scheme}:{instance_id}:{self.trade_symbol}')
+                    instrument_code = feed.get_instrument().get_exchange_instrument_code()
+                    journal = Journal(Path(f'{journal_path}/{db}/{instrument_code}'))
+                    self.appender = journal.create_appender()
+
+                    trades = feed.get_trades()
+                    Do(scheduler.get_network(), trades, lambda: self.on_trade_print(trades.get_value()))
                 return False
 
-            def on_subscribe(self, trade):
+            def on_trade_print(self, trade):
                 logger.info(trade)
 
                 self.appender.write_double(datetime.utcnow().timestamp())
@@ -265,10 +249,7 @@ def ws_fh_main(create_fh, uri_scheme: str, instance_id: str, journal_path: str, 
                 self.appender.write_double(trade.get_qty())
                 self.appender.write_double(trade.get_price())
 
-        scheduler.get_network().connect(feed.get_feed_state(), SubscribeTrades(feed))
-
-        # async start the feed
-        asyncio.ensure_future(feed.start())
+        scheduler.get_network().connect(fh.get_state(), SubscribeTrades(symbol))
 
     # crash out on any exception
     asyncio.get_event_loop().set_exception_handler(custom_asyncio_error_handler)
