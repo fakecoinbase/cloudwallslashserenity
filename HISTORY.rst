@@ -8,6 +8,7 @@ Release History
 
 - Refactored PhemexFeedHandler
 - Added CoinbaseProFeedHandler
+- Added BinanceFeedHandler
 - Critical fixes for Tickstore bi-temporal index logic
 - Upgraded to Tau 0.3.0
 

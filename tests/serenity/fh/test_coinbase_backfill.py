@@ -1,7 +1,7 @@
 import datetime
 from decimal import Decimal
 from datetime import date
-from serenity.mdrecorder.coinbase_backfill import backfill_coinbase_trades
+from serenity.fh.coinbasepro_backfill import backfill_coinbase_trades
 
 from pytest_mock import MockFixture
 

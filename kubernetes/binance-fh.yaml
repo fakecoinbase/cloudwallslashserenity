@@ -1,24 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: coinbase-recorder
+  name: binance-fh
   labels:
-    app: coinbase-recorder
+    app: binance-fh
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: coinbase-recorder
+      app: binance-fh
   template:
     metadata:
       labels:
-        app: coinbase-recorder
+        app: binance-fh
     spec:
       containers:
-        - name: coinbase-recorder
+        - name: binance-fh
           image: cloudwallcapital/serenity:2020.04.19-b9
           command: ["python"]
-          args: ["serenity/mdrecorder/coinbase.py"]
+          args: ["serenity/fh/binance_fh.py"]
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: database-secret-config
+                  key: password
           volumeMounts:
             - mountPath: /behemoth
               name: behemoth 

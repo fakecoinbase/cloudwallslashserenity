@@ -29,7 +29,8 @@ for product in cbp_client.get_products():
 
 # map all Binance products to exchange_instrument table
 binance_client = binance.client.Client()
-for product in binance_client.get_products()['data']:
+exchange_info = binance_client.get_exchange_info()
+for product in exchange_info['symbols']:
     symbol = product['symbol']
     base_ccy = product['baseAsset']
     quote_ccy = product['quoteAsset']
