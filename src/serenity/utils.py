@@ -1,6 +1,6 @@
 import logging
 
-from tau.core import Signal, NetworkScheduler, MutableSignal
+from tau.core import Signal, NetworkScheduler, MutableSignal, Event
 
 
 def init_logging():
@@ -20,29 +20,3 @@ def custom_asyncio_error_handler(loop, context):
     # force shutdown
     loop.stop()
 
-
-class FlatMap(Signal):
-    """
-    Transforming function that applies a Callable to incoming values and updates the output value.
-
-    .. seealso:: http://reactivex.io/documentation/operators/flatmap.html
-    """
-    def __init__(self, scheduler: NetworkScheduler, values: Signal):
-        super().__init__()
-        self.scheduler = scheduler
-        self.values = values
-        self.output = MutableSignal()
-        scheduler.get_network().connect(values, self)
-        scheduler.get_network().connect(self, self.output)
-
-    def get_output(self):
-        return self.output
-
-    def on_activate(self):
-        if self.values.is_valid():
-            next_values = self.values.get_value()
-            for next_value in next_values:
-                self.scheduler.schedule_update(self.output, next_value)
-            return True
-        else:
-            return False

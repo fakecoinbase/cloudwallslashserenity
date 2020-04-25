@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import List
+from typing import List, Set
 
 from tau.core import Signal, MutableSignal, NetworkScheduler, Event
 from tau.event import Do
@@ -217,7 +217,7 @@ class FeedHandlerRegistry:
         return f'{feedhandler.get_uri_scheme()}:{feedhandler.get_instance_id()}'
 
 
-def ws_fh_main(create_fh, uri_scheme: str, instance_id: str, journal_path: str, db: str):
+def ws_fh_main(create_fh, uri_scheme: str, instance_id: str, journal_path: str, db: str, include_symbols: Set = None):
     init_logging()
     logger = logging.getLogger(__name__)
 
@@ -233,7 +233,12 @@ def ws_fh_main(create_fh, uri_scheme: str, instance_id: str, journal_path: str, 
     registry.register(fh)
 
     for instrument in fh.get_instruments():
-        feed = registry.get_feed(f'{uri_scheme}:{instance_id}:{instrument.get_exchange_instrument_code()}')
+        symbol = instrument.get_exchange_instrument_code()
+        if include_symbols and symbol not in include_symbols:
+            logger.info(f'Skipping exchange symbol: {symbol}')
+            continue
+
+        feed = registry.get_feed(f'{uri_scheme}:{instance_id}:{symbol}')
 
         # subscribe to FeedState in advance so we know when the Feed is ready to subscribe trades
         class SubscribeTrades(Event):

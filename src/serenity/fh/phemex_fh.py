@@ -6,14 +6,12 @@ import fire
 import websockets
 from phemex import PhemexConnection
 from tau.core import MutableSignal, NetworkScheduler
-from tau.signal import Map, Filter
+from tau.signal import Filter, FlatMap, Map
 
 from serenity.db import TypeCodeCache, InstrumentCache
-from serenity.fh.feedhandler import FeedState, WebsocketFeedHandler, WebsocketFeed, \
-    ws_fh_main
+from serenity.fh.feedhandler import FeedState, WebsocketFeedHandler, WebsocketFeed, ws_fh_main
 from serenity.model.exchange import ExchangeInstrument
 from serenity.model.marketdata import Trade
-from serenity.utils import FlatMap
 
 
 class PhemexFeed(WebsocketFeed):
@@ -36,7 +34,7 @@ class PhemexFeed(WebsocketFeed):
         incr_messages = Filter(network, json_messages,
                                lambda x: x.get('type', None) == 'incremental')
         trade_lists = Map(network, incr_messages, lambda x: self._extract_trades(x))
-        self.trades = FlatMap(self.scheduler, trade_lists).get_output()
+        self.trades = FlatMap(self.scheduler, trade_lists)
 
         # self.trades is now valid, transition into LIVE state
         self.scheduler.schedule_update(self.feed_state, FeedState.LIVE)
@@ -56,7 +54,7 @@ class PhemexFeed(WebsocketFeed):
                 side = self.sell_code
             price = float(trade[2]) / pow(10, self.price_scale)
             qty = float(trade[3])
-            trade_list.append(Trade(self.get_instrument(), trade_id, side, qty, price))
+            trade_list.append(Trade(self.get_instrument(), trade_id, trade_id, side, qty, price))
 
         return trade_list
 
@@ -108,7 +106,7 @@ def create_fh(scheduler: NetworkScheduler, instrument_cache: InstrumentCache, in
 
 
 def main(instance_id: str = 'prod', journal_path: str = '/behemoth/journals/'):
-    ws_fh_main(create_fh, 'phemex', instance_id, journal_path, 'PHEMEX_TRADES')
+    ws_fh_main(create_fh, PhemexFeedHandler.get_uri_scheme(), instance_id, journal_path, 'PHEMEX_TRADES')
 
 
 if __name__ == '__main__':

@@ -3,10 +3,13 @@
 Release History
 ---------------
 
-0.1.0 (TBD)
+0.1.0 (2020-04-25)
 ++++++++++++++++++
 
+- Refactored PhemexFeedHandler
+- Added CoinbaseProFeedHandler
 - Critical fixes for Tickstore bi-temporal index logic
+- Upgraded to Tau 0.3.0
 
 0.0.3 (2020-04-19)
 +++++++++++++++++++
