@@ -145,7 +145,7 @@ class DataFrameIndex:
             else:
                 prev_version = prev_version_ndx
             version = prev_version + 1
-            self.df.loc[idx[symbol, as_at_date, prev_version], 'end_time'] = start_time
+            self.df.loc[idx[symbol, pd.to_datetime(as_at_date), prev_version], 'end_time'] = start_time
         else:
             start_time = BiTimestamp.start_as_of
             end_time = BiTimestamp.latest_as_of
@@ -154,7 +154,8 @@ class DataFrameIndex:
         write_path = create_write_path_func(version)
 
         path = str(write_path)
-        self.df.loc[idx[symbol, as_at_date, version], ['start_time', 'end_time', 'path']] = [start_time, end_time, path]
+        self.df.loc[idx[symbol, pd.to_datetime(as_at_date), version], ['start_time', 'end_time', 'path']] = \
+            [start_time, end_time, path]
 
         # dirty the index
         self._mark_dirty(True)
