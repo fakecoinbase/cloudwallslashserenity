@@ -105,14 +105,15 @@ class PhemexFeedHandler(WebsocketFeedHandler):
             network.connect(trades, TradeScheduler(self, trades))
 
             # noinspection PyShadowingNames
-            async def do_subscribe(subscribe_msg, messages):
+            async def do_subscribe(instrument, subscribe_msg, messages):
                 async with websockets.connect(self.ws_uri) as sock:
                     subscribe_msg_txt = json.dumps(subscribe_msg)
+                    self.logger.info(f'sending subscription request for {instrument.get_exchange_instrument_code()}')
                     await sock.send(subscribe_msg_txt)
                     while True:
                         self.scheduler.schedule_update(messages, await sock.recv())
 
-            asyncio.ensure_future(do_subscribe(subscribe_msg, messages))
+            asyncio.ensure_future(do_subscribe(instrument, subscribe_msg, messages))
 
         # we are now live
         self.scheduler.schedule_update(self.state, FeedHandlerState.LIVE)

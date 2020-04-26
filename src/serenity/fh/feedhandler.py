@@ -124,8 +124,8 @@ class WebsocketFeedHandler(FeedHandler):
         self.price_scaling = {}
         self._load_instruments()
 
-        self.state = MutableSignal()
-        self.scheduler.schedule_update(self.state, FeedHandlerState.INITIALIZING)
+        self.state = MutableSignal(FeedHandlerState.INITIALIZING)
+        self.scheduler.get_network().graph.add_node(self.state)
 
     def get_instance_id(self) -> str:
         return self.instance_id
@@ -215,9 +215,6 @@ def ws_fh_main(create_fh, uri_scheme: str, instance_id: str, journal_path: str, 
     fh = create_fh(scheduler, instr_cache, instance_id)
     registry.register(fh)
 
-    # async start the feedhandler
-    asyncio.ensure_future(fh.start())
-
     for instrument in fh.get_instruments():
         symbol = instrument.get_exchange_instrument_code()
 
@@ -236,7 +233,7 @@ def ws_fh_main(create_fh, uri_scheme: str, instance_id: str, journal_path: str, 
 
                     trades = feed.get_trades()
                     Do(scheduler.get_network(), trades, lambda: self.on_trade_print(trades.get_value()))
-                return False
+                return True
 
             def on_trade_print(self, trade):
                 logger.info(trade)
@@ -250,6 +247,9 @@ def ws_fh_main(create_fh, uri_scheme: str, instance_id: str, journal_path: str, 
                 self.appender.write_double(trade.get_price())
 
         scheduler.get_network().connect(fh.get_state(), SubscribeTrades(symbol))
+
+    # async start the feedhandler
+    asyncio.ensure_future(fh.start())
 
     # crash out on any exception
     asyncio.get_event_loop().set_exception_handler(custom_asyncio_error_handler)
