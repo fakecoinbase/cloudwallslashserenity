@@ -114,8 +114,8 @@ class DataFrameIndex:
 
         # find all dates in range where as_of_time is between start_time and end_time
         symbol_data = self.df.loc[symbol]
-        mask = (symbol_data.index.get_level_values('date') >= start) \
-            & (symbol_data.index.get_level_values('date') <= end) \
+        mask = (symbol_data.index.get_level_values('date') >= pd.to_datetime(start)) \
+            & (symbol_data.index.get_level_values('date') <= pd.to_datetime(end)) \
             & (symbol_data['start_time'] <= as_of_time) \
             & (symbol_data['end_time'] >= as_of_time)
         selected = self.df.loc[symbol][mask]
