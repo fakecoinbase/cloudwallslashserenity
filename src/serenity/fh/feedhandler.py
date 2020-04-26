@@ -233,7 +233,7 @@ def ws_fh_main(create_fh, uri_scheme: str, instance_id: str, journal_path: str, 
 
                     trades = feed.get_trades()
                     Do(scheduler.get_network(), trades, lambda: self.on_trade_print(trades.get_value()))
-                return True
+                return False
 
             def on_trade_print(self, trade):
                 logger.info(trade)

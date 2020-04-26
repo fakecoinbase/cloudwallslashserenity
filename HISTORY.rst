@@ -3,6 +3,11 @@
 Release History
 ---------------
 
+0.1.2 (2020-04-26)
+++++++++++++++++++
+
+- Upgraded to Tau 0.3.1 to pick up critical bug fix
+
 0.1.1 (2020-04-26)
 ++++++++++++++++++
 
