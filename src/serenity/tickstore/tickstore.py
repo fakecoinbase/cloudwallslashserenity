@@ -1,13 +1,15 @@
 import datetime
 import logging
-from typing import Tuple
-
-import pandas as pd
+import os.path
 import re
 import shutil
 
 from abc import ABC, abstractmethod
+from collections import defaultdict
 from pathlib import Path
+from typing import Tuple
+
+import pandas as pd
 
 
 class BiTimestamp:
@@ -199,7 +201,9 @@ class DataFrameIndex:
         # from directories and files only. in this mode we also rewrite the paths
         # to support the bitemporal storage engine.
         index_rows = []
+        tmp_path_index = defaultdict(list)
         splay_paths = list(self.base_path.rglob("*.h5"))
+        splay_paths.sort()
         for path in splay_paths:
             # extract date
             parts = path.parts
@@ -215,24 +219,44 @@ class DataFrameIndex:
                 symbol = symbol_search.group(1)
                 symbol_version = int(symbol_search.group(2))
             else:
-                # another backward compatibility step: if we don't have a version number
-                # embedded in the filename rename the file to version zero. note we
-                # only support 10K versions per symbol with this convention
-                symbol_search = re.search(r'(.*)\.h5', filename)
-                symbol = symbol_search.group(1)
-                symbol_version = 0
-                path.rename(Path(path.parent.joinpath(Path(f'{symbol}_0000.h5'))))
+                raise IOError(f'{filename} does not match $SYMBOL_$VERSION.h5')
 
-            # this will create an invalid index, which we will need to fix
-            start_time = BiTimestamp.start_as_of
-            end_time = BiTimestamp.latest_as_of
-            index_rows.append({'symbol': symbol,
-                               'date': splay_date,
-                               'start_time': start_time,
-                               'end_time': end_time,
-                               'version': symbol_version,
-                               'path': str(path)
-                               })
+            # for portability use mtime as ctime is not reliably mapped to creation time on UNIX
+            last_mod_time = datetime.datetime.utcfromtimestamp(os.path.getmtime(str(path)))
+
+            tmp_path_index[(symbol, splay_date)].append((symbol_version, str(path), last_mod_time))
+
+        for (symbol, splay_date), versions in tmp_path_index.items():
+            for ndx, version_entry in enumerate(versions):
+                symbol_version = version_entry[0]
+                path = version_entry[1]
+                last_mod_time = version_entry[2]
+
+                # the very first version starts at start of time, while every other
+                # version starts when the version was created (last modified); we are
+                # assuming here that versions are immutable, so all bets are off if
+                # you go back in time and edit a version
+                if ndx == 0:
+                    start_time = BiTimestamp.start_as_of
+                else:
+                    start_time = last_mod_time
+
+                # the very last version ends at end of time, while every other version
+                # ends when the next version starts
+                if ndx == (len(versions) - 1):
+                    end_time = BiTimestamp.latest_as_of
+                else:
+                    end_time = versions[ndx + 1][2]
+
+                # create the row for the DataFrame in dict format so we can
+                # efficiently build the DataFrame all at once
+                index_rows.append({'symbol': symbol,
+                                   'date': splay_date,
+                                   'start_time': start_time,
+                                   'end_time': end_time,
+                                   'version': symbol_version,
+                                   'path': path
+                                   })
 
         # build a DataFrame with multi-level index and then save to compressed HDF5. since we will
         # need to build the index after first rows inserted also capture whether it's an empty index.
