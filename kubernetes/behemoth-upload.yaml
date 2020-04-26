@@ -10,7 +10,7 @@ spec:
         spec:
           containers:
           - name: behemoth-md-upload
-            image: cloudwallcapital/serenity:2020.04.25-b12
+            image: cloudwallcapital/serenity:2020.04.26-b13
             command: ["python"]
             args: ["serenity/fh/behemoth_upload.py"]
             env:

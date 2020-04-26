@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: phemex-fh
-          image: cloudwallcapital/serenity:2020.04.25-b12
+          image: cloudwallcapital/serenity:2020.04.26-b13
           command: ["python"]
           args: ["serenity/fh/coinbasepro_fh.py"]
           env:
