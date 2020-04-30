@@ -104,18 +104,24 @@ class Journal:
             os.write(mmap_file.fileno(), struct.pack('B', 0) * self.max_size)
             mmap_file.flush()
 
-        mm = MMap(self._mmap_file(mmap_file, size_multiple))
         if mode == 'w+b':
             # store a zero length
+            mm = MMap(self._mmap_file(mmap_file, size_multiple))
             mm.update_length()
         elif mode == 'a+b':
-            # move the pointer to the end
-            mm.seek_end()
-            pos = mm.get_pos()
+            # if necessary extend the file before memory mapping
             if size_multiple > 1:
                 self.logger.info(f'extending journal file to {size_multiple * self.max_size} bytes')
                 os.truncate(str(mmap_path), size_multiple * self.max_size)
+
+            # memory map and move the pointer to the end
+            mm = MMap(self._mmap_file(mmap_file, size_multiple))
+            mm.seek_end()
+            pos = mm.get_pos()
+
             self.logger.info(f'recovering journal file from {mmap_path}; starting at position {pos}')
+        else:
+            raise ValueError(f'undefined mode: {mode}')
 
         return mm
 
