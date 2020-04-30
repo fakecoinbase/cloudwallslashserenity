@@ -7,7 +7,7 @@ import struct
 from pathlib import Path
 
 
-DEFAULT_MAX_JOURNAL_SIZE = 128 * 1024 * 1024  # 128MB
+DEFAULT_MAX_JOURNAL_SIZE = 64 * 1024 * 1024  # 64MB
 
 
 class NoSpaceException(Exception):
@@ -86,7 +86,7 @@ class Journal:
     def create_appender(self, date: datetime.date = datetime.datetime.utcnow().date()):
         return JournalAppender(self, self._get_mmap(date, 'a+b'), date)
 
-    def _get_mmap(self, date: datetime.date, mode: str) -> MMap:
+    def _get_mmap(self, date: datetime.date, mode: str, size_multiple: int = 1) -> MMap:
         mmap_path = self._get_mmap_path(date)
         if not mmap_path.exists():
             if mode != 'r+b':
@@ -100,11 +100,11 @@ class Journal:
         mmap_file = mmap_path.open(mode=mode)
         if mode == 'w+b':
             # zero-fill the entire memory-map file before memory-mapping it
-            self.logger.info('initializing journal file at {}'.format(mmap_path))
+            self.logger.info(f'initializing journal file at {mmap_path}')
             os.write(mmap_file.fileno(), struct.pack('B', 0) * self.max_size)
             mmap_file.flush()
 
-        mm = MMap(self._mmap_file(mmap_file))
+        mm = MMap(self._mmap_file(mmap_file, size_multiple))
         if mode == 'w+b':
             # store a zero length
             mm.update_length()
@@ -112,12 +112,15 @@ class Journal:
             # move the pointer to the end
             mm.seek_end()
             pos = mm.get_pos()
-            self.logger.info('recovering journal file from {}; starting at position {}'.format(mmap_path, pos))
+            if size_multiple > 1:
+                self.logger.info(f'extending journal file to {size_multiple * self.max_size} bytes')
+                os.truncate(str(mmap_path), size_multiple * self.max_size)
+            self.logger.info(f'recovering journal file from {mmap_path}; starting at position {pos}')
 
         return mm
 
-    def _mmap_file(self, mmap_file):
-        return mmap.mmap(mmap_file.fileno(), self.max_size)
+    def _mmap_file(self, mmap_file, size_multiple=1):
+        return mmap.mmap(mmap_file.fileno(), self.max_size * size_multiple)
 
     def _get_mmap_path(self, date: datetime.date):
         return self.base_path.joinpath(Path('%4d%02d%02d/journal.dat' % (date.year, date.month, date.day)))
@@ -189,6 +192,7 @@ class JournalAppender:
         self.mm = mm
         self.max_size = journal.max_size
         self.current_date = current_date
+        self.num_extents = 1
 
     def write_byte(self, value: int):
         assert value < 256
@@ -261,9 +265,12 @@ class JournalAppender:
 
         return self.mm
 
+    # noinspection PyProtectedMember
     def _check_space(self, add_length: int):
         if self.mm.get_pos() + add_length >= self.max_size:
-            raise NoSpaceException()
+            self.mm.close()
+            self.num_extents += 1
+            self.mm = self.journal._get_mmap(self.current_date, mode='a+b', size_multiple=self.num_extents)
 
     def __del__(self):
         self.close()
