@@ -86,7 +86,7 @@ class Journal:
     def create_appender(self, date: datetime.date = datetime.datetime.utcnow().date()):
         return JournalAppender(self, self._get_mmap(date, 'a+b'), date)
 
-    def _get_mmap(self, date: datetime.date, mode: str, size_multiple: int = 1) -> MMap:
+    def _get_mmap(self, date: datetime.date, mode: str, extending: bool = False) -> MMap:
         mmap_path = self._get_mmap_path(date)
         if not mmap_path.exists():
             if mode != 'r+b':
@@ -106,16 +106,16 @@ class Journal:
 
         if mode == 'w+b':
             # store a zero length
-            mm = MMap(self._mmap_file(mmap_file, size_multiple))
+            mm = MMap(self._mmap_file(mmap_file))
             mm.update_length()
         elif mode == 'a+b':
             # if necessary extend the file before memory mapping
-            if size_multiple > 1:
-                self.logger.info(f'extending journal file to {size_multiple * self.max_size} bytes')
-                os.truncate(str(mmap_path), size_multiple * self.max_size)
+            if extending:
+                self.logger.info(f'extending journal file to {self.max_size} bytes')
+                os.truncate(str(mmap_path), self.max_size)
 
             # memory map and move the pointer to the end
-            mm = MMap(self._mmap_file(mmap_file, size_multiple))
+            mm = MMap(self._mmap_file(mmap_file))
             mm.seek_end()
             pos = mm.get_pos()
 
@@ -275,8 +275,8 @@ class JournalAppender:
     def _check_space(self, add_length: int):
         if self.mm.get_pos() + add_length >= self.max_size:
             self.mm.close()
-            self.num_extents += 1
-            self.mm = self.journal._get_mmap(self.current_date, mode='a+b', size_multiple=self.num_extents)
+            self.max_size += DEFAULT_MAX_JOURNAL_SIZE
+            self.mm = self.journal._get_mmap(self.current_date, mode='a+b', extending=True)
 
     def __del__(self):
         self.close()
