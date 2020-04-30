@@ -7,7 +7,7 @@ import struct
 from pathlib import Path
 
 
-DEFAULT_MAX_JOURNAL_SIZE = 64 * 1024 * 1024  # 64MB
+DEFAULT_MAX_JOURNAL_SIZE = 128 * 1024 * 1024  # 128MB
 
 
 class NoSpaceException(Exception):
