@@ -125,8 +125,8 @@ class Journal:
 
         return mm
 
-    def _mmap_file(self, mmap_file, size_multiple=1):
-        return mmap.mmap(mmap_file.fileno(), self.max_size * size_multiple)
+    def _mmap_file(self, mmap_file):
+        return mmap.mmap(mmap_file.fileno(), self.max_size)
 
     def _get_mmap_path(self, date: datetime.date):
         return self.base_path.joinpath(Path('%4d%02d%02d/journal.dat' % (date.year, date.month, date.day)))
