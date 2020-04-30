@@ -3,6 +3,13 @@
 Release History
 ---------------
 
+0.1.3 (2020-04-30)
+++++++++++++++++++
+
+- Upgraded to Tau 0.4.0
+- Cleaned up requirements.txt; removed tornado & APScheduler
+
+
 0.1.2 (2020-04-26)
 ++++++++++++++++++
 

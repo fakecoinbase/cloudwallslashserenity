@@ -11,7 +11,6 @@ with open('HISTORY.rst', 'r') as f:
 
 
 requires = [
-    'APScheduler',
     'coinbasepro',
     'fire',
     'gemini-python',
@@ -24,14 +23,13 @@ requires = [
     'pytz',
     'scipy',
     'tables',
-    'tornado',
     'websockets',
     'yfinance'
 ]
 
 setuptools.setup(
     name='serenity-trading',
-    version='0.1.2',
+    version='0.1.3',
     description='A Python cryptocurrency trading system.',
     long_description=readme + '\n\n' + history,
     long_description_content_type='text/x-rst',
