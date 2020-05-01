@@ -120,6 +120,8 @@ class Journal:
             pos = mm.get_pos()
 
             self.logger.info(f'recovering journal file from {mmap_path}; starting at position {pos}')
+        elif mode == 'r+b':
+            mm = MMap(self._mmap_file(mmap_file))
         else:
             raise ValueError(f'undefined mode: {mode}')
 

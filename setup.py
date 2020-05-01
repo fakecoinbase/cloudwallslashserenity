@@ -29,7 +29,7 @@ requires = [
 
 setuptools.setup(
     name='serenity-trading',
-    version='0.1.4',
+    version='0.2.0',
     description='A Python cryptocurrency trading system.',
     long_description=readme + '\n\n' + history,
     long_description_content_type='text/x-rst',

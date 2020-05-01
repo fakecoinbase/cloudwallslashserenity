@@ -3,10 +3,10 @@
 Release History
 ---------------
 
-0.1.4 (2020-04-30)
+0.2.0 (TBD)
 ++++++++++++++++++
 
-- Doubled default journal max size
+- Supported extending mmap journal files on-the-fly
 
 0.1.3 (2020-04-30)
 ++++++++++++++++++
