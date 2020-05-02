@@ -17,26 +17,16 @@ strategy:
 
 steps:
 - task: UsePythonVersion@0
-  displayName: 'Use Python $(python.version)'
   inputs:
     versionSpec: '$(python.version)'
-- script: python -m pip install --upgrade pip && python -m pip install tox
-  displayName: 'Install tox'
-- task: Bash@3
-  displayName: 'Run tox automation testing'
-  inputs:
-    targetType: 'inline'
-    script: |
-      # Run the unit tests in
-      python -m tox
-    workingDirectory: '$(System.DefaultWorkingDirectory)'
-- task: PublishTestResults@2
-  condition: succeededOrFailed()
-  inputs:
-    testResultsFiles: '**/test-*.xml'
-    testRunTitle: 'Publish test results for Python $(python.version)'
-- task: PublishCodeCoverageResults@1
-  inputs:
-    codeCoverageTool: Cobertura
-    summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/coverage.xml'
-    reportDirectory: '$(System.DefaultWorkingDirectory)/**/htmlcov'
+  displayName: 'Use Python $(python.version)'
+
+- script: |
+    python -m pip install --upgrade pip
+    pip install -r requirements.txt
+  displayName: 'Install dependencies'
+
+- script: |
+    pip install pytest pytest-azurepipelines pytest-cov
+    PYTHONPATH=src/ pytest tests/ --cov src/ --cov-report html
+  displayName: 'Test and report coverage with pytest'
