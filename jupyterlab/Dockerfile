@@ -9,6 +9,9 @@ COPY $PWD/jupyter_notebook_config.py /etc/jupyter/jupyter_notebook_config.py
 # install dependencies for Git extension and JupyterLab build as well as wheel build for postgresql client
 RUN apt-get update && apt-get install --yes git nodejs npm gcc libpq-dev
 
+# upgrade pip itself
+RUN python -m pip install --upgrade pip
+
 # install stock requirements and labextensions
 COPY $PWD/requirements.txt /app/requirements.txt
 RUN pip install -r /app/requirements.txt && \
