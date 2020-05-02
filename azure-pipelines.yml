@@ -27,6 +27,6 @@ steps:
   displayName: 'Install dependencies'
 
 - script: |
-    pip install pytest pytest-azurepipelines pytest-cov
+    pip install pytest pytest-azurepipelines pytest-cov pytest-mock
     PYTHONPATH=src/ pytest tests/ --cov src/ --cov-report html
   displayName: 'Test and report coverage with pytest'
