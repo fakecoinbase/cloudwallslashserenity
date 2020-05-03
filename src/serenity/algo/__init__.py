@@ -1,12 +1,10 @@
 from abc import ABC, abstractmethod
-from collections import Set
 from enum import Enum, auto
 
 from tau.core import Signal, NetworkScheduler, Network
 
 from serenity.db import InstrumentCache, TypeCodeCache
 from serenity.fh.feedhandler import FeedHandlerRegistry
-from serenity.model.exchange import ExchangeInstrument
 
 
 class StrategyState(Enum):

@@ -35,14 +35,14 @@ class Alpha1Trader(Event):
             big_print = self.strategy.big_prints.get_value()
             self.strategy.logger.info(f'Big print in spot market: {big_print}')
 
-            # 5 minute bin volumes dropping below EMWA
-            emwa = self.strategy.emwa.get_value()
+            # 5 minute bin volumes dropping below EWMA
+            ewma = self.strategy.ewma.get_value()
             volume = self.strategy.volume.get_value()
-            if self.strategy.volume.is_valid() and volume < emwa:
+            if self.strategy.volume.is_valid() and volume < ewma:
                 contract = Contract('BTCUSD')
                 if big_print.get_side().get_type_code() == 'Buy':
                     # enter short position with a stop-loss and a take-profit at +/- 5% last trade px
-                    self.logger.info(f'Going short, buy print of {big_print} BTC, EMWA={emwa}, volume={volume}')
+                    self.logger.info(f'Going short, buy print of {big_print} BTC, EWMA={ewma}, volume={volume}')
 
                     # create a market order for BTCUSD, "cross" (no leverage), sell / short
                     primary_order = self.order_factory.create_market_order(Side.SELL, self.strategy.trade_qty, contract)
@@ -66,7 +66,7 @@ class Alpha1Trader(Event):
                     self.open_orders.append(self.order_placer.submit(take_profit_cond))
                 else:
                     # enter long position with a stop-loss and a take-profit at +/- 5% last trade px
-                    self.logger.info(f'Going long, sell print of {big_print} BTC, EMWA={emwa}, volume={volume}')
+                    self.logger.info(f'Going long, sell print of {big_print} BTC, EWMA={ewma}, volume={volume}')
 
                     # create a market order for BTCUSD, "cross" (no leverage), buy / long
                     primary_order = self.order_factory.create_market_order(Side.BUY, self.strategy.trade_qty, contract)
@@ -114,7 +114,7 @@ class Alpha1(InvestmentStrategy):
         self.futures_trades = None
         self.ohlc_5min = None
         self.volume = None
-        self.emwa = None
+        self.ewma = None
         self.trader = None
 
     def get_instrument_universe(self) -> Set[ExchangeInstrument]:
@@ -166,19 +166,19 @@ class Alpha1(InvestmentStrategy):
         self.volume = Map(network, self.ohlc_5min, lambda x: x.volume)
 
         # track the exponentially weighted moving average of the futures volume
-        self.emwa = ExponentialMovingAverage(network, self.volume)
+        self.ewma = ExponentialMovingAverage(network, self.volume)
 
     def start(self):
         super().start()
 
         self.trader = Alpha1Trader(self.ctx.get_network(), self)
         self.ctx.get_network().connect(self.big_prints, self.trader)
-        self.ctx.get_network().connect(self.emwa, self.trader)
+        self.ctx.get_network().connect(self.ewma, self.trader)
 
     def stop(self):
         super().stop()
 
         self.trader.stop()
         self.ctx.get_network().disconnect(self.big_prints, self.trader)
-        self.ctx.get_network().disconnect(self.emwa, self.trader)
+        self.ctx.get_network().disconnect(self.ewma, self.trader)
         self.trader = None
