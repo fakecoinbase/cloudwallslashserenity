@@ -3,17 +3,19 @@
 Release History
 ---------------
 
-0.2.0 (TBD)
+0.2.0 (2020-05-02)
 ++++++++++++++++++
 
+- Started framing out algo engine API
 - Supported extending mmap journal files on-the-fly
+- Improved Azure DevOps integration, including Python 3.7/3.8 cross-build
+- Upgraded to Tau 0.4.3
 
 0.1.3 (2020-04-30)
 ++++++++++++++++++
 
 - Upgraded to Tau 0.4.0
 - Cleaned up requirements.txt; removed tornado & APScheduler
-
 
 0.1.2 (2020-04-26)
 ++++++++++++++++++

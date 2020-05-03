@@ -6,7 +6,7 @@ numpy==1.18.3
 pandas==1.0.3
 phemex==0.3.0
 psycopg2==2.8.5
-pytau==0.4.0
+pytau==0.4.3
 python-binance==0.7.5
 pytz==2020.1
 scipy==1.4.1

@@ -4,11 +4,10 @@ import pandas as pd
 
 from serenity.tickstore.tickstore import LocalTickstore, BiTimestamp
 from pathlib import Path
-from pytest_mock import MockFixture
 
 
 # noinspection DuplicatedCode
-def test_tickstore(mocker: MockFixture):
+def test_tickstore():
     ts_col_name = 'ts'
     tickstore = LocalTickstore(Path('./COINBASE_PRO_ONE_MIN_BINS'), timestamp_column=ts_col_name)
 

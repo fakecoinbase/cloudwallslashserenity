@@ -201,13 +201,16 @@ class InstrumentCache:
             self.entity_by_ak[ExchangeInstrument][ak] = exchange_instrument
             return exchange_instrument
 
-    def get_all_exchange_instruments(self, exchange_symbol) -> List[ExchangeInstrument]:
+    def get_all_exchange_instruments(self, exchange_code) -> List[ExchangeInstrument]:
         instruments = []
         instrument_map = self.entity_by_ak[ExchangeInstrument]
         for instrument in instrument_map.values():
-            if instrument.get_exchange().get_type_code() == exchange_symbol:
+            if instrument.get_exchange().get_type_code() == exchange_code:
                 instruments.append(instrument)
         return instruments
+
+    def get_exchange_instrument(self, exchange_code, exchange_symbol):
+        return self.get_entity_by_ak((exchange_code, exchange_symbol))
 
     def get_entity_by_id(self, klass, entity_id):
         return self.entity_by_id[klass][entity_id]

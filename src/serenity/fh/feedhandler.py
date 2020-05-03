@@ -2,7 +2,7 @@ import asyncio
 import logging
 from abc import ABC, abstractmethod
 from datetime import datetime
-from enum import Enum
+from enum import Enum, auto
 from pathlib import Path
 from typing import List
 
@@ -21,10 +21,10 @@ class FeedHandlerState(Enum):
     Supported lifecycle states for a FeedHandler. FeedHandlers always start in INITIALIZING state.
     """
 
-    INITIALIZING = 1
-    STARTING = 2
-    LIVE = 3
-    STOPPED = 4
+    INITIALIZING = auto()
+    STARTING = auto()
+    LIVE = auto()
+    STOPPED = auto()
 
 
 class Feed:
