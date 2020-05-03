@@ -13,7 +13,7 @@ strategies:
       - key: CONTRACT_TRADE_QTY
         value: 1000
       - key: BIG_PRINT_QTY
-        value: 0.0001
+        value: 10
       - key: PHEMEX_INSTANCE
         value-source: SYSTEM_ENV
       - key: PHEMEX_API_KEY

@@ -160,7 +160,7 @@ class Alpha1(InvestmentStrategy):
 
         # compute 5 minute bins for the futures market and extract the volume field
         self.futures_trades = self.futures_feed.get_trades()
-        buffer_5min = BufferWithTime(network, self.futures_trades, timedelta(seconds=5))
+        buffer_5min = BufferWithTime(network, self.futures_trades, timedelta(minutes=5))
         self.ohlc_5min = ComputeOHLC(network, buffer_5min)
         Do(network, self.ohlc_5min, lambda: self.logger.info(f'OHLC[5min]: {self.ohlc_5min.get_value()}'))
         self.volume = Map(network, self.ohlc_5min, lambda x: x.volume)
