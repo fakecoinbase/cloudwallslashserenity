@@ -7,12 +7,13 @@ environment:
     value-source: SYSTEM_ENV
 strategies:
   - name: Alpha1
-    module-path: alpha1.py
+    module: alpha1
+    strategy-class: Alpha1
     environment:
       - key: CONTRACT_TRADE_QTY
         value: 1000
       - key: BIG_PRINT_QTY
-        value: 10
+        value: 0.0001
       - key: PHEMEX_INSTANCE
         value-source: SYSTEM_ENV
       - key: PHEMEX_API_KEY
