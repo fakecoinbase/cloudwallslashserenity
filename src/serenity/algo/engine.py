@@ -10,10 +10,10 @@ from tau.core import NetworkScheduler
 
 from serenity.algo import StrategyContext
 from serenity.db import InstrumentCache, connect_serenity_db, TypeCodeCache
-from serenity.fh.binance_fh import BinanceFeedHandler
-from serenity.fh.coinbasepro_fh import CoinbaseProFeedHandler
-from serenity.fh.feedhandler import FeedHandlerRegistry
-from serenity.fh.phemex_fh import PhemexFeedHandler
+from serenity.marketdata.fh.binance_fh import BinanceFeedHandler
+from serenity.marketdata.fh.coinbasepro_fh import CoinbaseProFeedHandler
+from serenity.marketdata.fh.feedhandler import FeedHandlerRegistry, FeedHandlerMarketdataService
+from serenity.marketdata.fh.phemex_fh import PhemexFeedHandler
 from serenity.utils import init_logging, custom_asyncio_error_handler
 
 
@@ -95,7 +95,8 @@ class AlgoEngine:
                 module = importlib.import_module(module)
                 klass = getattr(module, strategy_class)
                 strategy_instance = klass()
-                ctx = StrategyContext(scheduler, instrument_cache, self.fh_registry, env.values)
+                md_service = FeedHandlerMarketdataService(scheduler.get_network(), self.fh_registry, instance_id)
+                ctx = StrategyContext(scheduler, instrument_cache, md_service, env.values)
                 self.strategies.append((strategy_instance, ctx))
 
     def start(self):

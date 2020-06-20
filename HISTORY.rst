@@ -3,6 +3,12 @@
 Release History
 ---------------
 
+0.3.0 (TBD)
+++++++++++++++++++
+
+- Added support for streaming Bollinger Band computation
+- Upgraded to Tau 0.5.0
+
 0.2.0 (2020-05-03)
 ++++++++++++++++++
 

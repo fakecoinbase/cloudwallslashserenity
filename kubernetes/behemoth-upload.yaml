@@ -12,7 +12,7 @@ spec:
           - name: behemoth-md-upload
             image: cloudwallcapital/serenity:2020.04.26-b13
             command: ["python"]
-            args: ["serenity/fh/behemoth_upload.py"]
+            args: ["serenity/marketdata/fh/behemoth_upload.py"]
             env:
             - name: POSTGRES_PASSWORD
               valueFrom:

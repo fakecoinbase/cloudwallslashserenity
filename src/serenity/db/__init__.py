@@ -210,7 +210,7 @@ class InstrumentCache:
         return instruments
 
     def get_exchange_instrument(self, exchange_code, exchange_symbol):
-        return self.get_entity_by_ak((exchange_code, exchange_symbol))
+        return self.get_entity_by_ak(ExchangeInstrument, (exchange_code, exchange_symbol))
 
     def get_entity_by_id(self, klass, entity_id):
         return self.entity_by_id[klass][entity_id]

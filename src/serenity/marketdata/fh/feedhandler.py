@@ -6,10 +6,12 @@ from enum import Enum, auto
 from pathlib import Path
 from typing import List
 
-from tau.core import Signal, MutableSignal, NetworkScheduler, Event
+from tau.core import Signal, MutableSignal, NetworkScheduler, Event, Network
 from tau.event import Do
+from tau.signal import Function
 
 from serenity.db import TypeCodeCache, InstrumentCache, connect_serenity_db
+from serenity.marketdata import MarketdataService, OrderBook, OrderBookSnapshot
 from serenity.model.exchange import ExchangeInstrument
 from serenity.model.order import Side
 from serenity.tickstore.journal import Journal
@@ -29,13 +31,14 @@ class FeedHandlerState(Enum):
 
 class Feed:
     """
-    A marketdata feed with ability to subscribe to trades, quotes, etc..
+    A marketdata feed with ability to subscribe to trades and quotes
     """
 
-    def __init__(self, instrument: ExchangeInstrument, trades: Signal, quotes: Signal):
+    def __init__(self, instrument: ExchangeInstrument, trades: Signal, order_book_events: Signal, order_books: Signal):
         self.instrument = instrument
         self.trades = trades
-        self.quotes = quotes
+        self.order_book_events = order_book_events
+        self.order_books = order_books
 
     def get_instrument(self) -> ExchangeInstrument:
         """
@@ -49,11 +52,18 @@ class Feed:
         """
         return self.trades
 
-    def get_quotes(self) -> Signal:
+    def get_order_book_events(self) -> Signal:
         """
-        Gets the top-of-book quote for this instrument on the connected exchange.
+        Gets a stream of OrderBookEvents. Note at this time there is no automatic snapshotting so you are
+        likely to get only OrderBookUpdate from here.
         """
-        return self.quotes
+        return self.order_book_events
+
+    def get_order_books(self) -> Signal:
+        """
+        Gets a stream of fully-built L2 OrderBook objects.
+        """
+        return self.order_books
 
 
 class FeedHandler(ABC):
@@ -201,6 +211,48 @@ class FeedHandlerRegistry:
     @staticmethod
     def _get_fh_key(feedhandler: FeedHandler) -> str:
         return f'{feedhandler.get_uri_scheme()}:{feedhandler.get_instance_id()}'
+
+
+class OrderBookBuilder(Function):
+    def __init__(self, network: Network, events: Signal):
+        super().__init__(network, events)
+        self.events = events
+        self.order_book = OrderBook([], [])
+
+    def _call(self):
+        if self.events.is_valid():
+            next_event = self.events.get_value()
+            if isinstance(next_event, OrderBookSnapshot):
+                self.order_book = OrderBook(next_event.get_bids(), next_event.get_asks())
+            else:
+                self.order_book.apply_order_book_update(next_event)
+
+            self._update(self.order_book)
+
+
+class FeedHandlerMarketdataService(MarketdataService):
+    """
+    MarketdataService implementation that uses embedded FeedHandler instances
+    via the FeedHandlerRegistry to subscribe to marketdata streams.
+    """
+
+    def __init__(self, network: Network, registry: FeedHandlerRegistry, instance_id: str = 'prod'):
+        self.network = network
+        self.registry = registry
+        self.instance_id = instance_id
+
+    def get_order_book_events(self, instrument: ExchangeInstrument) -> Signal:
+        return self.registry.get_feed(self.__get_feed_uri(instrument)).get_order_book_events()
+
+    def get_order_books(self, instrument: ExchangeInstrument) -> Signal:
+        return self.registry.get_feed(self.__get_feed_uri(instrument)).get_order_books()
+
+    def get_trades(self, instrument: ExchangeInstrument) -> Signal:
+        return self.registry.get_feed(self.__get_feed_uri(instrument)).get_trades()
+
+    def __get_feed_uri(self, instrument: ExchangeInstrument) -> str:
+        symbol = instrument.get_exchange_instrument_code()
+        return f'{instrument.get_exchange().get_type_code().lower()}:{self.instance_id}:{symbol}'
 
 
 def ws_fh_main(create_fh, uri_scheme: str, instance_id: str, journal_path: str, db: str):

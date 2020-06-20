@@ -10,9 +10,10 @@ from tau.core import MutableSignal, NetworkScheduler, Event, Signal
 from tau.signal import Filter, FlatMap, Map
 
 from serenity.db import InstrumentCache
-from serenity.fh.feedhandler import FeedHandlerState, WebsocketFeedHandler, ws_fh_main, Feed
+from serenity.marketdata.fh.feedhandler import FeedHandlerState, WebsocketFeedHandler, ws_fh_main, Feed, \
+    OrderBookBuilder
+from serenity.marketdata import Trade, OrderBookEvent, OrderBookSnapshot, OrderBookUpdate, BookLevel
 from serenity.model.exchange import ExchangeInstrument
-from serenity.model.marketdata import Trade
 
 
 class PhemexFeedHandler(WebsocketFeedHandler):
@@ -33,7 +34,8 @@ class PhemexFeedHandler(WebsocketFeedHandler):
         super().__init__(scheduler, instrument_cache, instance_id)
 
         self.instrument_trades = {}
-        self.instrument_quotes = {}
+        self.instrument_order_book_events = {}
+        self.instrument_order_books = {}
 
     @staticmethod
     def get_uri_scheme() -> str:
@@ -58,7 +60,8 @@ class PhemexFeedHandler(WebsocketFeedHandler):
 
     def _create_feed(self, instrument: ExchangeInstrument):
         symbol = instrument.get_exchange_instrument_code()
-        return Feed(instrument, self.instrument_trades[symbol], self.instrument_quotes[symbol])
+        return Feed(instrument, self.instrument_trades[symbol], self.instrument_order_book_events[symbol],
+                    self.instrument_order_books[symbol])
 
     # noinspection DuplicatedCode
     async def _subscribe_trades_and_quotes(self):
@@ -68,25 +71,26 @@ class PhemexFeedHandler(WebsocketFeedHandler):
             symbol = instrument.get_exchange_instrument_code()
 
             self.instrument_trades[symbol] = MutableSignal()
-            self.instrument_quotes[symbol] = MutableSignal()
+            self.instrument_order_book_events[symbol] = MutableSignal()
+            self.instrument_order_books[symbol] = OrderBookBuilder(network, self.instrument_order_book_events[symbol])
 
             # magic: inject the bare Signal into the graph so we can
             # fire events on it without any downstream connections
-            # yet made
             network.attach(self.instrument_trades[symbol])
-            network.attach(self.instrument_quotes[symbol])
+            network.attach(self.instrument_order_book_events[symbol])
+            network.attach(self.instrument_order_books[symbol])
 
-            subscribe_msg = {
+            trade_subscribe_msg = {
                 'id': 1,
                 'method': 'trade.subscribe',
                 'params': [symbol]
             }
 
-            messages = MutableSignal()
-            json_messages = Map(network, messages, lambda x: json.loads(x))
-            incr_messages = Filter(network, json_messages,
-                                   lambda x: x.get('type', None) == 'incremental')
-            trade_lists = Map(network, incr_messages, lambda x: self.__extract_trades(x))
+            trade_messages = MutableSignal()
+            trade_json_messages = Map(network, trade_messages, lambda x: json.loads(x))
+            trade_incr_messages = Filter(network, trade_json_messages,
+                                         lambda x: x.get('type', None) == 'incremental')
+            trade_lists = Map(network, trade_incr_messages, lambda x: self.__extract_trades(x))
             trades = FlatMap(self.scheduler, trade_lists)
 
             class TradeScheduler(Event):
@@ -107,16 +111,48 @@ class PhemexFeedHandler(WebsocketFeedHandler):
 
             network.connect(trades, TradeScheduler(self, trades))
 
+            orderbook_subscribe_msg = {
+                'id': 2,
+                'method': 'orderbook.subscribe',
+                'params': [symbol]
+            }
+
+            obe_messages = MutableSignal()
+            obe_json_messages = Map(network, obe_messages, lambda x: json.loads(x))
+            obe_json_messages = Filter(network, obe_json_messages,
+                                       lambda x: x.get('type', None) in ['incremental', 'snapshot'])
+            order_book_events = Map(network, obe_json_messages, lambda x: self.__extract_order_book_event(x))
+
+            class OrderBookEventScheduler(Event):
+                # noinspection PyShadowingNames
+                def __init__(self, fh: PhemexFeedHandler, order_book_events: Signal):
+                    self.fh = fh
+                    self.order_book_events = order_book_events
+
+                def on_activate(self) -> bool:
+                    if self.order_book_events.is_valid():
+                        obe = self.order_book_events.get_value()
+                        obe_symbol = obe.get_instrument().get_exchange_instrument_code()
+                        obe_signal = self.fh.instrument_order_book_events[obe_symbol]
+                        self.fh.scheduler.schedule_update(obe_signal, obe)
+                        return True
+                    else:
+                        return False
+
+            network.connect(order_book_events, OrderBookEventScheduler(self, order_book_events))
+
             # noinspection PyShadowingNames
-            async def do_subscribe(instrument, subscribe_msg, messages):
+            async def do_subscribe(instrument, subscribe_msg, messages, msg_type):
                 async with websockets.connect(self.ws_uri) as sock:
                     subscribe_msg_txt = json.dumps(subscribe_msg)
-                    self.logger.info(f'sending subscription request for {instrument.get_exchange_instrument_code()}')
+                    self.logger.info(f'sending {msg_type} subscription request for '
+                                     f'{instrument.get_exchange_instrument_code()}')
                     await sock.send(subscribe_msg_txt)
                     while True:
                         self.scheduler.schedule_update(messages, await sock.recv())
 
-            asyncio.ensure_future(do_subscribe(instrument, subscribe_msg, messages))
+            asyncio.ensure_future(do_subscribe(instrument, trade_subscribe_msg, trade_messages, 'trade'))
+            asyncio.ensure_future(do_subscribe(instrument, orderbook_subscribe_msg, obe_messages, 'order book'))
 
         # we are now live
         self.scheduler.schedule_update(self.state, FeedHandlerState.LIVE)
@@ -140,6 +176,32 @@ class PhemexFeedHandler(WebsocketFeedHandler):
             trade_list.append(Trade(instrument, trade_id, trade_id, side, qty, price))
 
         return trade_list
+
+    def __extract_order_book_event(self, msg) -> OrderBookEvent:
+        symbol = msg['symbol']
+        seq_num = msg['sequence']
+        msg_type = msg['type']
+
+        instrument = self.known_instrument_ids[symbol]
+        price_scale = self.price_scaling[symbol]
+
+        def to_book_level_list(px_qty_list):
+            book_levels = []
+            for px_qty in px_qty_list:
+                px = float(px_qty[0]) / pow(10, price_scale)
+                qty = px_qty[1]
+                book_levels.append(BookLevel(px, qty))
+            return book_levels
+
+        book = msg['book']
+        if msg_type == 'snapshot':
+            bids = to_book_level_list(book['bids'])
+            asks = to_book_level_list(book['asks'])
+            return OrderBookSnapshot(instrument, bids, asks, seq_num)
+        else:
+            bids = to_book_level_list(book['bids'])
+            asks = to_book_level_list(book['asks'])
+            return OrderBookUpdate(instrument, bids, asks, seq_num)
 
 
 def create_fh(scheduler: NetworkScheduler, instrument_cache: InstrumentCache, instance_id):

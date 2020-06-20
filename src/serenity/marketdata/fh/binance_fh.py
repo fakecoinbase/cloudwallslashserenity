@@ -8,9 +8,9 @@ from tau.core import MutableSignal, NetworkScheduler, Event
 from tau.signal import Map, Filter
 
 from serenity.db import InstrumentCache
-from serenity.fh.feedhandler import FeedHandlerState, WebsocketFeedHandler, ws_fh_main, Feed
+from serenity.marketdata.fh.feedhandler import FeedHandlerState, WebsocketFeedHandler, ws_fh_main, Feed
+from serenity.marketdata import Trade
 from serenity.model.exchange import ExchangeInstrument
-from serenity.model.marketdata import Trade
 
 
 class BinanceFeedHandler(WebsocketFeedHandler):

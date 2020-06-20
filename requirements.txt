@@ -3,10 +3,11 @@ coinbasepro==0.2.1
 fire==0.3.1
 gemini-python==0.2.0
 numpy==1.18.4
-pandas==1.0.3
+pandas==1.0.4
+pelican-fix==0.1.0
 phemex==0.3.0
 psycopg2==2.8.5
-pytau==0.4.3
+pytau==0.5.1
 python-binance==0.7.5
 pytz==2020.1
 pyyaml==5.3.1

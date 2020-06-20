@@ -18,7 +18,7 @@ spec:
         - name: phemex-fh
           image: cloudwallcapital/serenity:2020.04.26-b13
           command: ["python"]
-          args: ["serenity/fh/phemex_fh.py"]
+          args: ["serenity/marketdata/fh/phemex_fh.py"]
           env:
             - name: POSTGRES_PASSWORD
               valueFrom:

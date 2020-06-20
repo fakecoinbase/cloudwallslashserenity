@@ -4,7 +4,7 @@ from enum import Enum, auto
 from tau.core import Signal, NetworkScheduler, Network
 
 from serenity.db import InstrumentCache, TypeCodeCache
-from serenity.fh.feedhandler import FeedHandlerRegistry
+from serenity.marketdata import MarketdataService
 
 
 class StrategyState(Enum):
@@ -20,10 +20,10 @@ class StrategyContext:
     """
 
     def __init__(self, scheduler: NetworkScheduler, instrument_cache: InstrumentCache,
-                 fh_registry: FeedHandlerRegistry, env_vars: dict):
+                 md_service: MarketdataService, env_vars: dict):
         self.scheduler = scheduler
         self.instrument_cache = instrument_cache
-        self.fh_registry = fh_registry
+        self.md_service = md_service
         self.env_vars = env_vars
 
     def get_scheduler(self) -> NetworkScheduler:
@@ -38,8 +38,8 @@ class StrategyContext:
     def get_typecode_cache(self) -> TypeCodeCache:
         return self.get_instrument_cache().get_type_code_cache()
 
-    def get_feedhandler_registry(self) -> FeedHandlerRegistry:
-        return self.fh_registry
+    def get_marketdata_service(self) -> MarketdataService:
+        return self.md_service
 
     def getenv(self, key: str, default_value=None):
         if key in self.env_vars:
@@ -96,4 +96,3 @@ class InvestmentStrategy(Strategy):
         Gets the universe of exchange-traded instruments that this strategy trades.
         """
         pass
-

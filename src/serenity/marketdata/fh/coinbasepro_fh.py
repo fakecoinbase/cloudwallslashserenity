@@ -8,9 +8,9 @@ from tau.core import MutableSignal, NetworkScheduler, Event
 from tau.signal import Map, Filter
 
 from serenity.db import InstrumentCache
-from serenity.fh.feedhandler import FeedHandlerState, WebsocketFeedHandler, ws_fh_main, Feed
+from serenity.marketdata.fh.feedhandler import FeedHandlerState, WebsocketFeedHandler, ws_fh_main, Feed
+from serenity.marketdata import Trade
 from serenity.model.exchange import ExchangeInstrument
-from serenity.model.marketdata import Trade
 
 
 class CoinbaseProFeedHandler(WebsocketFeedHandler):
@@ -32,6 +32,7 @@ class CoinbaseProFeedHandler(WebsocketFeedHandler):
 
         self.instrument_trades = {}
         self.instrument_quotes = {}
+        self.instrument_order_books = {}
 
     @staticmethod
     def get_uri_scheme() -> str:
@@ -54,7 +55,8 @@ class CoinbaseProFeedHandler(WebsocketFeedHandler):
 
     def _create_feed(self, instrument: ExchangeInstrument):
         symbol = instrument.get_exchange_instrument_code()
-        return Feed(instrument, self.instrument_trades[symbol], self.instrument_quotes[symbol])
+        return Feed(instrument, self.instrument_trades[symbol], self.instrument_quotes[symbol],
+                    self.instrument_order_books[symbol])
 
     # noinspection DuplicatedCode
     async def _subscribe_trades_and_quotes(self):
@@ -67,12 +69,14 @@ class CoinbaseProFeedHandler(WebsocketFeedHandler):
 
             self.instrument_trades[symbol] = MutableSignal()
             self.instrument_quotes[symbol] = MutableSignal()
+            self.instrument_order_books[symbol] = MutableSignal()
 
             # magic: inject the bare Signal into the graph so we can
             # fire events on it without any downstream connections
             # yet made
             network.attach(self.instrument_trades[symbol])
             network.attach(self.instrument_quotes[symbol])
+            network.attach(self.instrument_order_books[symbol])
 
         subscribe_msg = {
             'type': 'subscribe',

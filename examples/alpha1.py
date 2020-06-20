@@ -41,7 +41,7 @@ class Alpha1Trader(Event):
             if self.strategy.volume.is_valid() and volume < ewma:
                 contract = Contract('BTCUSD')
                 if big_print.get_side().get_type_code() == 'Buy':
-                    # enter short position with a stop-loss and a take-profit at +/- 5% last trade px
+                    # enter short position with a stop-loss and a take-profit at +/- 0.5% last trade px
                     self.logger.info(f'Going short, buy print of {big_print} BTC, EWMA={ewma}, volume={volume}')
 
                     # create a market order for BTCUSD, "cross" (no leverage), sell / short
@@ -112,6 +112,7 @@ class Alpha1(InvestmentStrategy):
         self.futures_feed = None
         self.big_prints = None
         self.futures_trades = None
+        self.futures_book = None
         self.ohlc_5min = None
         self.volume = None
         self.ewma = None
@@ -146,24 +147,27 @@ class Alpha1(InvestmentStrategy):
 
         self.logger.info(f'Connected to Phemex {exchange_instance} instance')
 
-        self.spot_feed = ctx.fh_registry.get_feed(f'coinbasepro:{exchange_instance}:BTC-USD')
-        self.futures_feed = ctx.fh_registry.get_feed(f'phemex:{exchange_instance}:BTCUSD')
-
-        self.logger.info(f'Connected to spot & futures {exchange_instance} feeds')
-
         network = self.ctx.get_network()
 
         # scan the spot market for large trades
-        spot_trades = self.spot_feed.get_trades()
+        btc_usd_spot = self.ctx.get_instrument_cache().get_exchange_instrument('CoinbasePro', 'BTC-USD')
+        spot_trades = self.ctx.get_marketdata_service().get_trades(btc_usd_spot)
         Do(network, spot_trades, lambda: self.logger.info(f'Spot market trade: {spot_trades.get_value()}'))
         self.big_prints = Filter(network, spot_trades, lambda x: x.get_qty() >= big_print_qty)
 
         # compute 5 minute bins for the futures market and extract the volume field
-        self.futures_trades = self.futures_feed.get_trades()
+        btc_usd_future = self.ctx.get_instrument_cache().get_exchange_instrument('Phemex', 'BTCUSD')
+        self.futures_trades = self.ctx.get_marketdata_service().get_trades(btc_usd_future)
         buffer_5min = BufferWithTime(network, self.futures_trades, timedelta(minutes=5))
         self.ohlc_5min = ComputeOHLC(network, buffer_5min)
         Do(network, self.ohlc_5min, lambda: self.logger.info(f'OHLC[5min]: {self.ohlc_5min.get_value()}'))
         self.volume = Map(network, self.ohlc_5min, lambda x: x.volume)
+
+        # subscribe to top of book
+        self.futures_book = self.ctx.get_marketdata_service().get_order_books(btc_usd_future)
+        Do(network, self.futures_book, lambda: self.logger.info(f'Futures bid/ask: '
+                                                                f'{self.futures_book.get_value().get_best_bid()} / '
+                                                                f'{self.futures_book.get_value().get_best_ask()}'))
 
         # track the exponentially weighted moving average of the futures volume
         self.ewma = ExponentialMovingAverage(network, self.volume)
