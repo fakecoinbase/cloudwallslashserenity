@@ -20,14 +20,13 @@ def upload_main(behemoth_path: str = '/behemoth', days_back: int = 1):
     conn = connect_serenity_db()
     conn.autocommit = True
     cur = conn.cursor()
+    instr_cache = InstrumentCache(cur, TypeCodeCache(cur))
 
     exchanges = {
         'Phemex': 'PHEMEX_TRADES',
-        'CoinbasePro': 'COINBASE_PRO_TRADES',
-        'Binance': 'BINANCE_TRADES'
+        'CoinbasePro': 'COINBASE_PRO_TRADES'
     }
     for exchange, db in exchanges.items():
-        instr_cache = InstrumentCache(cur, TypeCodeCache(cur))
         for instrument in instr_cache.get_all_exchange_instruments(exchange):
             symbol = instrument.get_exchange_instrument_code()
             path = Path(f'{behemoth_path}/journals/{db}/{symbol}')

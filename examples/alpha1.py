@@ -12,6 +12,7 @@ from tau.signal import Filter, BufferWithTime, Map
 from serenity.algo import InvestmentStrategy, StrategyContext
 from serenity.model.exchange import ExchangeInstrument
 from serenity.signal.marketdata import ComputeOHLC
+from serenity.trading.connector.phemex_api import AccountOrderPositionSubscriber, WebsocketAuthenticator
 
 
 class Alpha1Trader(Event):
@@ -148,6 +149,11 @@ class Alpha1(InvestmentStrategy):
         self.logger.info(f'Connected to Phemex {exchange_instance} instance')
 
         network = self.ctx.get_network()
+
+        # subscribe to AOP messages
+        auth = WebsocketAuthenticator(api_key, api_secret)
+        aop_sub = AccountOrderPositionSubscriber(auth, ctx.get_scheduler(), exchange_instance)
+        aop_sub.start()
 
         # scan the spot market for large trades
         btc_usd_spot = self.ctx.get_instrument_cache().get_exchange_instrument('CoinbasePro', 'BTC-USD')

@@ -4,7 +4,7 @@ from uuid import uuid1
 
 from tau.core import Signal
 
-from serenity.model.instrument import Instrument
+from serenity.model.exchange import ExchangeInstrument
 
 
 class Side(Enum):
@@ -38,7 +38,7 @@ class Order:
     Base type for standard order types (limit and market).
     """
     @abstractmethod
-    def __init__(self, qty: float, instrument: Instrument, side: Side):
+    def __init__(self, qty: float, instrument: ExchangeInstrument, side: Side):
         self.qty = qty
         self.instrument = instrument
         self.side = side
@@ -52,7 +52,7 @@ class Order:
     def get_qty(self) -> float:
         return self.qty
 
-    def get_instrument(self) -> Instrument:
+    def get_instrument(self) -> ExchangeInstrument:
         return self.instrument
 
     def get_side(self) -> Side:
@@ -75,7 +75,7 @@ class LimitOrder(Order):
     """
     An order with a maximum (buy) or minimum (sell) price to trade.
     """
-    def __init__(self, price: float, qty: int, instrument: Instrument, side: Side,
+    def __init__(self, price: float, qty: int, instrument: ExchangeInstrument, side: Side,
                  time_in_force: TimeInForce = TimeInForce.GTC):
         super().__init__(qty, instrument, side)
         self.price = price
@@ -92,7 +92,7 @@ class MarketOrder(Order):
     """
     An order that executes at the prevailing market price.
     """
-    def __init__(self, qty: int, instrument: Instrument, side: Side):
+    def __init__(self, qty: int, instrument: ExchangeInstrument, side: Side):
         super().__init__(qty, instrument, side)
 
 
@@ -102,11 +102,11 @@ class OrderFactory:
     """
 
     @staticmethod
-    def create_market_order(side: Side, qty: int, instrument: Instrument) -> MarketOrder:
+    def create_market_order(side: Side, qty: int, instrument: ExchangeInstrument) -> MarketOrder:
         return MarketOrder(qty, instrument, side)
 
     @staticmethod
-    def create_limit_order(side: Side, qty: int, price: float, instrument: Instrument,
+    def create_limit_order(side: Side, qty: int, price: float, instrument: ExchangeInstrument,
                            time_in_force: TimeInForce = TimeInForce.GTC) -> LimitOrder:
         return LimitOrder(price, qty, instrument, side, time_in_force)
 
