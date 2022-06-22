@@ -2,7 +2,7 @@ Pygments==2.6.1
 coinbasepro==0.2.1
 fire==0.3.1
 gemini-python==0.2.0
-numpy==1.18.4
+numpy==1.22.0
 pandas==1.0.4
 pelican-fix==0.1.0
 phemex==0.3.0
